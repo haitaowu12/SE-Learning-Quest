@@ -276,7 +276,17 @@ export class LevelScene extends Phaser.Scene {
   }
 
   private renderQuiz(x: number, y: number, w: number, _h: number): void {
-    const config = this.levelData.config as { question: string; options: string[]; correctIndex: number };
+    const config = this.levelData.config as { question?: string; options?: string[]; correctIndex?: number } | undefined;
+
+    if (!config?.question || !config?.options || config.correctIndex === undefined) {
+      this.add.text(x + w / 2, y + _h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
     let selectedIndex = -1;
 
     this.add.text(x + w / 2, y + 20, config.question, {
@@ -338,8 +348,19 @@ export class LevelScene extends Phaser.Scene {
   }
 
   private renderMatch(x: number, y: number, w: number, h: number): void {
-    const config = this.levelData.config as { pairs: { need: string; capability: string }[] };
-    const shuffledCaps = [...config.pairs.map((p) => p.capability)].sort(() => Math.random() - 0.5);
+    const config = this.levelData.config as { pairs?: { need: string; capability: string }[] } | undefined;
+    
+    if (!config?.pairs) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+    
+    const pairs = config.pairs;
+    const shuffledCaps = [...pairs.map((p) => p.capability)].sort(() => Math.random() - 0.5);
     const matches: Record<string, string> = {};
 
     const col1X = x + 80;
@@ -347,7 +368,7 @@ export class LevelScene extends Phaser.Scene {
     const startY = y + 40;
     const rowHeight = 60;
 
-    config.pairs.forEach((pair, i) => {
+    pairs.forEach((pair, i) => {
       const rowY = startY + i * rowHeight;
       this.add.text(col1X, rowY, pair.need, {
         fontSize: '15px',
@@ -381,14 +402,24 @@ export class LevelScene extends Phaser.Scene {
     });
 
     this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = config.pairs.every((p) => matches[p.need] === p.capability);
+      const correct = pairs.every((p) => matches[p.need] === p.capability);
       this.checkAnswer(correct);
     });
   }
 
   private renderSelect(x: number, y: number, w: number, h: number): void {
-    const config = this.levelData.config as { items: { id: string; text: string }[] };
-    const correctAnswer = this.levelData.correctAnswer as string[];
+    const config = this.levelData.config as { items?: { id: string; text: string }[] } | undefined;
+    const correctAnswer = this.levelData.correctAnswer as string[] | undefined;
+    
+    if (!config?.items || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+    
     const selected = new Set<string>();
 
     const startY = y + 30;
@@ -441,8 +472,18 @@ export class LevelScene extends Phaser.Scene {
   }
 
   private renderSequence(x: number, y: number, w: number, h: number): void {
-    const config = this.levelData.config as { steps: string[] };
-    const correctAnswer = this.levelData.correctAnswer as string[];
+    const config = this.levelData.config as { steps?: string[] } | undefined;
+    const correctAnswer = this.levelData.correctAnswer as string[] | undefined;
+    
+    if (!config?.steps || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+    
     const currentOrder = [...config.steps].sort(() => Math.random() - 0.5);
 
     const startY = y + 30;
@@ -498,13 +539,24 @@ export class LevelScene extends Phaser.Scene {
   }
 
   private renderEdit(x: number, y: number, w: number, h: number): void {
-    const config = this.levelData.config as { statements: string[] };
+    const config = this.levelData.config as { statements?: string[] } | undefined;
+
+    if (!config?.statements) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
+    const statements = config.statements;
     const inputs: Record<string, Phaser.GameObjects.Text> = {};
 
     const startY = y + 30;
     const rowHeight = 80;
 
-    config.statements.forEach((stmt, i) => {
+    statements.forEach((stmt, i) => {
       const rowY = startY + i * rowHeight;
       this.add.text(x + 20, rowY, `Original: ${stmt}`, {
         fontSize: '13px',
@@ -538,7 +590,7 @@ export class LevelScene extends Phaser.Scene {
     });
 
     this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = config.statements.every((stmt) => {
+      const correct = statements.every((stmt) => {
         const userText = inputs[stmt].text;
         return userText !== 'Click to edit...' && userText.length > 20;
       });
@@ -547,14 +599,26 @@ export class LevelScene extends Phaser.Scene {
   }
 
   private renderBuild(x: number, y: number, w: number, h: number): void {
-    const config = this.levelData.config as { stages: string[]; methods: string[] };
-    const correctAnswer = this.levelData.correctAnswer as Record<string, string>;
+    const config = this.levelData.config as { stages?: string[]; methods?: string[] } | undefined;
+    const correctAnswer = this.levelData.correctAnswer as Record<string, string> | undefined;
+
+    if (!config?.stages || !config?.methods || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
+    const stages = config.stages;
+    const methods = config.methods;
     const selections: Record<string, string> = {};
 
     const startY = y + 30;
     const rowHeight = 60;
 
-    config.stages.forEach((stage, i) => {
+    stages.forEach((stage, i) => {
       const rowY = startY + i * rowHeight;
       this.add.text(x + 20, rowY, stage, {
         fontSize: '15px',
@@ -579,8 +643,8 @@ export class LevelScene extends Phaser.Scene {
 
       let methodIndex = 0;
       btn.on('pointerdown', () => {
-        methodIndex = (methodIndex + 1) % config.methods.length;
-        const method = config.methods[methodIndex];
+        methodIndex = (methodIndex + 1) % methods.length;
+        const method = methods[methodIndex];
         label.setText(method);
         label.setColor('#e2e8f0');
         selections[stage] = method;
@@ -588,22 +652,33 @@ export class LevelScene extends Phaser.Scene {
     });
 
     this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = config.stages.every((stage) => selections[stage] === correctAnswer[stage]);
+      const correct = stages.every((stage) => selections[stage] === correctAnswer[stage]);
       this.checkAnswer(correct);
     });
   }
 
   private renderDraw(x: number, y: number, w: number, h: number): void {
     // Simplified draw: classify elements as inside/outside
-    const config = this.levelData.config as { elements: string[] };
-    const correctAnswer = this.levelData.correctAnswer as { inside: string[]; outside: string[] };
+    const config = this.levelData.config as { elements?: string[] } | undefined;
+    const correctAnswer = this.levelData.correctAnswer as { inside?: string[]; outside?: string[] } | undefined;
+
+    if (!config?.elements || !correctAnswer?.inside || !correctAnswer?.outside) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Level data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
+    const elements = config.elements;
     const classifications: Record<string, 'inside' | 'outside'> = {};
 
     const startY = y + 30;
     const itemHeight = 45;
     const gap = 8;
 
-    config.elements.forEach((el, i) => {
+    elements.forEach((el, i) => {
       const itemY = startY + i * (itemHeight + gap);
       const btn = this.add.container(x + w / 2, itemY);
       const bg = this.add.graphics();
@@ -646,12 +721,15 @@ export class LevelScene extends Phaser.Scene {
       });
     });
 
+    const correctInside = correctAnswer.inside;
+    const correctOutside = correctAnswer.outside;
+
     this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const insideCorrect = correctAnswer.inside.every((el) => classifications[el] === 'inside');
-      const outsideCorrect = correctAnswer.outside.every((el) => classifications[el] === 'outside');
-      const noExtras = config.elements.every((el) => {
-        if (correctAnswer.inside.includes(el)) return classifications[el] === 'inside';
-        if (correctAnswer.outside.includes(el)) return classifications[el] === 'outside';
+      const insideCorrect = correctInside.every((el) => classifications[el] === 'inside');
+      const outsideCorrect = correctOutside.every((el) => classifications[el] === 'outside');
+      const noExtras = elements.every((el) => {
+        if (correctInside.includes(el)) return classifications[el] === 'inside';
+        if (correctOutside.includes(el)) return classifications[el] === 'outside';
         return true;
       });
       this.checkAnswer(insideCorrect && outsideCorrect && noExtras);
