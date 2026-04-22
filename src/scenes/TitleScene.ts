@@ -245,6 +245,8 @@ export class TitleScene extends Phaser.Scene {
     const gridStartX = -gridW / 2;
     const gridStartY = -halfH + 85;
 
+    this.achievementsPanel.add([panelBg, title, countText]);
+
     achievements.forEach((ach, i) => {
       const col = i % cols;
       const row = Math.floor(i / cols);
@@ -308,7 +310,7 @@ export class TitleScene extends Phaser.Scene {
       this.closeAchievements();
     });
 
-    this.achievementsPanel.add([panelBg, title, countText, closeBtn]);
+    this.achievementsPanel.add(closeBtn);
   }
 
   private closeAchievements(): void {
@@ -353,6 +355,8 @@ export class TitleScene extends Phaser.Scene {
       fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
+
+    this.settingsPanel.add([panelBg, title]);
 
     const settings = this.gameManager.getSettings();
 
@@ -482,7 +486,7 @@ export class TitleScene extends Phaser.Scene {
       this.closeSettings();
     });
 
-    this.settingsPanel.add([panelBg, title, closeBtn]);
+    this.settingsPanel.add(closeBtn);
   }
 
   private closeSettings(): void {

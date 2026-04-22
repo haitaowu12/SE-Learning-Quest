@@ -89,7 +89,10 @@ export class MapScene extends Phaser.Scene {
       this.renderCapstoneNode(capstonePos);
     }
 
-    this.renderCompetencyChart(width / 2, height * 0.8, 80);
+    const chartRadius = height < 400 ? 0 : height < 600 ? 50 : 65;
+    if (chartRadius > 0) {
+      this.renderCompetencyChart(width / 2, height * 0.78, chartRadius);
+    }
 
     this.createBackButton(80, height - 40);
 
@@ -124,6 +127,12 @@ export class MapScene extends Phaser.Scene {
     const numAxes = COMPETENCY_AXES.length;
     const angleStep = (2 * Math.PI) / numAxes;
     const startAngle = -Math.PI / 2;
+    const showLabels = radius >= 50;
+
+    const sepY = cy - radius - 40;
+    const sepGfx = this.add.graphics();
+    sepGfx.lineStyle(1, COLORS.border, 0.4);
+    sepGfx.lineBetween(cx - radius * 2, sepY, cx + radius * 2, sepY);
 
     const getPoint = (index: number, r: number): { x: number; y: number } => {
       const angle = startAngle + index * angleStep;
@@ -194,11 +203,13 @@ export class MapScene extends Phaser.Scene {
       const labelX = cx + (radius + labelOffset) * Math.cos(angle);
       const labelY = cy + (radius + labelOffset) * Math.sin(angle);
 
-      this.add.text(labelX, labelY, COMPETENCY_AXES[i].label, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
+      if (showLabels) {
+        this.add.text(labelX, labelY, COMPETENCY_AXES[i].label, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#94a3b8',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5);
+      }
     }
 
     this.add.text(cx, cy - radius - 30, 'Competency Profile', {
@@ -262,7 +273,7 @@ export class MapScene extends Phaser.Scene {
     const totalNodes = modules.length + (allModulesCompleted ? 1 : 0);
     const startX = width * 0.15;
     const endX = width * 0.85;
-    const y = height * 0.55;
+    const y = height * 0.38;
     const step = totalNodes > 1 ? (endX - startX) / (totalNodes - 1) : 0;
     const positions: { x: number; y: number }[] = [];
     for (let i = 0; i < totalNodes; i++) {
