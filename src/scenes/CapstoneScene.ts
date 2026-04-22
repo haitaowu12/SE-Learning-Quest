@@ -199,8 +199,18 @@ export class CapstoneScene extends Phaser.Scene {
   }
 
   private renderSelectPhase(x: number, y: number, w: number, h: number, phaseData: { config: Record<string, unknown>; correctAnswer: unknown }): void {
-    const config = phaseData.config as { items: { id: string; text: string }[] };
-    const correctAnswer = phaseData.correctAnswer as string[];
+    const config = phaseData.config as { items?: { id: string; text: string }[] } | undefined;
+    const correctAnswer = phaseData.correctAnswer as string[] | undefined;
+
+    if (!config?.items || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
     const selected = new Set<string>();
 
     const startY = y + 20;
@@ -258,14 +268,26 @@ export class CapstoneScene extends Phaser.Scene {
   }
 
   private renderBuildPhase(x: number, y: number, w: number, h: number, phaseData: { config: Record<string, unknown>; correctAnswer: unknown }): void {
-    const config = phaseData.config as { stages: string[]; methods: string[] };
-    const correctAnswer = phaseData.correctAnswer as Record<string, string>;
+    const config = phaseData.config as { stages?: string[]; methods?: string[] } | undefined;
+    const correctAnswer = phaseData.correctAnswer as Record<string, string> | undefined;
+
+    if (!config?.stages || !config?.methods || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
+    const stages = config.stages;
+    const methods = config.methods;
     const selections: Record<string, string> = {};
 
     const startY = y + 20;
     const rowHeight = 70;
 
-    config.stages.forEach((stage, i) => {
+    stages.forEach((stage, i) => {
       const rowY = startY + i * rowHeight;
       this.add.text(x + 20, rowY, stage, {
         fontSize: '16px',
@@ -290,8 +312,8 @@ export class CapstoneScene extends Phaser.Scene {
 
       let methodIndex = 0;
       btn.on('pointerdown', () => {
-        methodIndex = (methodIndex + 1) % config.methods.length;
-        const method = config.methods[methodIndex];
+        methodIndex = (methodIndex + 1) % methods.length;
+        const method = methods[methodIndex];
         label.setText(method);
         label.setColor('#e2e8f0');
         selections[stage] = method;
@@ -299,7 +321,7 @@ export class CapstoneScene extends Phaser.Scene {
     });
 
     this.createSmallButton(x + w / 2, y + h - 40, 'Submit', () => {
-      const correct = config.stages.every((stage) => selections[stage] === correctAnswer[stage]);
+      const correct = stages.every((stage) => selections[stage] === correctAnswer[stage]);
       if (correct) {
         this.phase++;
         this.renderPhase();
@@ -310,8 +332,18 @@ export class CapstoneScene extends Phaser.Scene {
   }
 
   private renderSequencePhase(x: number, y: number, w: number, h: number, phaseData: { config: Record<string, unknown>; correctAnswer: unknown }): void {
-    const config = phaseData.config as { steps: string[] };
-    const correctAnswer = phaseData.correctAnswer as string[];
+    const config = phaseData.config as { steps?: string[] } | undefined;
+    const correctAnswer = phaseData.correctAnswer as string[] | undefined;
+
+    if (!config?.steps || !correctAnswer) {
+      this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
+        fontSize: '18px',
+        color: '#ef4444',
+        fontFamily: 'sans-serif',
+      }).setOrigin(0.5);
+      return;
+    }
+
     const currentOrder = [...config.steps].sort(() => Math.random() - 0.5);
     const itemContainers: Phaser.GameObjects.Container[] = [];
 
