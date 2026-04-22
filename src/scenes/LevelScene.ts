@@ -1046,21 +1046,39 @@ export class LevelScene extends Phaser.Scene {
 
       container.add([bg, label]);
       container.setSize(poolItemWidth - 4, itemHeight);
-      container.setInteractive({ draggable: true });
 
       originalPositions[ii] = { x: itemX, y: itemY };
 
-      container.on('dragstart', () => {
+      let isDragging = false;
+      let dragStartPointerX = 0;
+      let dragStartPointerY = 0;
+      let dragStartItemX = 0;
+      let dragStartItemY = 0;
+
+      container.setInteractive({ useHandCursor: true });
+
+      container.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        isDragging = true;
         container.setDepth(100);
+        dragStartPointerX = pointer.x;
+        dragStartPointerY = pointer.y;
+        dragStartItemX = container.x;
+        dragStartItemY = container.y;
+        this.input.on('pointermove', onPointerMove);
       });
 
-      container.on('drag', (_pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-        container.x = dragX;
-        container.y = dragY;
-      });
+      const onPointerMove = (pointer: Phaser.Input.Pointer) => {
+        if (!isDragging) return;
+        container.x = dragStartItemX + (pointer.x - dragStartPointerX);
+        container.y = dragStartItemY + (pointer.y - dragStartPointerY);
+      };
 
-      container.on('dragend', () => {
+      const handleDrop = () => {
+        if (!isDragging) return;
+        isDragging = false;
         container.setDepth(0);
+        this.input.off('pointermove', onPointerMove);
+
         const itemCenterX = container.x + (poolItemWidth - 4) / 2;
         const itemCenterY = container.y + itemHeight / 2;
         const previousZone = placements[item.id];
@@ -1101,7 +1119,10 @@ export class LevelScene extends Phaser.Scene {
           container.x = originalPositions[ii].x;
           container.y = originalPositions[ii].y;
         }
-      });
+      };
+
+      container.on('pointerup', handleDrop);
+      container.on('pointerupoutside', handleDrop);
 
       this.contentContainer.add(container);
     });
