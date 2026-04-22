@@ -44,7 +44,8 @@ export class LevelScene extends Phaser.Scene {
       this.scene.start('MapScene');
       return;
     }
-    this.levelData = data;
+    this.levelData = JSON.parse(JSON.stringify(data)) as LevelData;
+    this.normalizeLevelData();
     this.startTime = Date.now();
     this.hintsUsed = 0;
     this.retries = 0;
@@ -156,6 +157,141 @@ export class LevelScene extends Phaser.Scene {
         this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId });
       }
     });
+  }
+
+  private normalizeLevelData(): void {
+    const config = this.levelData.config as Record<string, unknown>;
+    const answer = this.levelData.correctAnswer as Record<string, unknown>;
+    const type = this.levelData.type;
+
+    if (type === 'drag-drop') {
+      if (!config.items && config.stakeholders) {
+        const stakeholders = config.stakeholders as string[];
+        config.items = stakeholders.map(s => ({ id: s.replace(/\s/g, '_'), text: s }));
+        const catKeys = Object.keys(answer);
+        config.categories = catKeys.map(k => ({ id: k, label: k.replace(/([A-Z])/g, ' $1').trim() }));
+        const flat: Record<string, string> = {};
+        for (const [cat, items] of Object.entries(answer)) {
+          for (const item of items as string[]) {
+            flat[item.replace(/\s/g, '_')] = cat;
+          }
+        }
+        this.levelData.correctAnswer = flat;
+      } else if (!config.items && config.stakeholderReqs && config.systemReqs) {
+        config.items = (config.systemReqs as { id: string; text: string }[]).map(r => ({ id: r.id, text: r.text }));
+        config.categories = (config.stakeholderReqs as { id: string; text: string }[]).map(r => ({ id: r.id, label: r.text }));
+      } else if (!config.items && config.functions) {
+        const functions = config.functions as string[];
+        config.items = functions.map(f => ({ id: f.replace(/\s/g, '_'), text: f }));
+        const subsystems = Object.keys(answer);
+        config.categories = subsystems.map(s => ({ id: s, label: s }));
+        const flat: Record<string, string> = {};
+        for (const [subsys, funcs] of Object.entries(answer)) {
+          for (const fn of funcs as string[]) {
+            flat[fn.replace(/\s/g, '_')] = subsys;
+          }
+        }
+        this.levelData.correctAnswer = flat;
+      } else if (!config.items && config.risks) {
+        const risks = config.risks as string[];
+        config.items = risks.map(r => ({ id: r.replace(/\s/g, '_'), text: r }));
+        config.categories = [
+          { id: 'high_high', label: 'High P / High I' },
+          { id: 'high_low', label: 'High P / Low I' },
+          { id: 'low_high', label: 'Low P / High I' },
+          { id: 'low_low', label: 'Low P / Low I' },
+        ];
+        const flat: Record<string, string> = {};
+        for (const [risk, data] of Object.entries(answer)) {
+          const d = data as { probability: string; impact: string };
+          flat[risk.replace(/\s/g, '_')] = `${d.probability}_${d.impact}`;
+        }
+        this.levelData.correctAnswer = flat;
+      }
+    } else if (type === 'match') {
+      if (!config.pairs && config.requirements && config.methods) {
+        const pairs: { need: string; capability: string }[] = [];
+        for (const [req, method] of Object.entries(answer)) {
+          pairs.push({ need: req, capability: method as string });
+        }
+        config.pairs = pairs;
+      }
+    } else if (type === 'sequence') {
+      if (!config.steps && config.nodes) {
+        const loops = answer.loops as { nodes: string[]; type: string }[] | undefined;
+        if (loops && loops.length > 0) {
+          config.steps = config.nodes;
+          this.levelData.correctAnswer = loops[0].nodes;
+        }
+      }
+    } else if (type === 'edit') {
+      if (!config.statements && config.requirements) {
+        const reqs = config.requirements as { id: string; text: string }[] | string[];
+        if (typeof reqs[0] === 'object') {
+          const objReqs = reqs as { id: string; text: string }[];
+          config.statements = objReqs.map(r => r.text);
+          const ans = this.levelData.correctAnswer as Record<string, string>;
+          const mapped: Record<string, string> = {};
+          for (const r of objReqs) {
+            if (ans[r.id] !== undefined) {
+              mapped[r.text] = ans[r.id];
+            }
+          }
+          this.levelData.correctAnswer = mapped;
+        }
+      }
+    } else if (type === 'draw') {
+      if (!config.elements && config.subsystems) {
+        const subsystems = config.subsystems as string[];
+        const flows = answer.flows as { from: string; to: string; type: string; label: string }[] | undefined;
+        if (flows) {
+          const fromSet = new Set(flows.map(f => f.from));
+          config.elements = subsystems;
+          this.levelData.correctAnswer = {
+            inside: subsystems.filter(s => fromSet.has(s)),
+            outside: subsystems.filter(s => !fromSet.has(s)),
+          };
+        }
+      }
+    } else if (type === 'select') {
+      if (!config.items && config.requirements) {
+        const reqs = config.requirements as { name: string; max: number; valuePerUnit: number }[] | { id: string; text: string }[];
+        if (reqs.length > 0 && 'name' in reqs[0]) {
+          config.items = (reqs as { name: string; max: number }[]).map(r => ({ id: r.name, text: `${r.name} (max: ${r.max})` }));
+          const correctKeys = Object.entries(answer)
+            .filter(([, v]) => (v as number) > 0)
+            .map(([k]) => k);
+          this.levelData.correctAnswer = correctKeys;
+        } else if ('id' in reqs[0] && 'text' in reqs[0]) {
+          config.items = reqs as { id: string; text: string }[];
+        }
+      } else if (config.items && !Array.isArray(this.levelData.correctAnswer)) {
+        const items = config.items as { id: string; text: string }[];
+        if (items.length > 0 && typeof items[0] === 'string') {
+          config.items = (items as unknown as string[]).map(s => ({ id: s.replace(/\s/g, '_'), text: s }));
+        }
+      }
+    } else if (type === 'build') {
+      if (!config.stages && config.sections) {
+        config.stages = config.sections;
+        delete config.sections;
+      }
+      if (!config.methods && config.blocks) {
+        config.methods = config.blocks;
+        delete config.blocks;
+      }
+      const ans = this.levelData.correctAnswer as Record<string, unknown>;
+      if (ans) {
+        const firstValue = Object.values(ans)[0];
+        if (Array.isArray(firstValue)) {
+          const flat: Record<string, string> = {};
+          for (const [stage, methods] of Object.entries(ans)) {
+            flat[stage] = (methods as string[])[0] ?? '';
+          }
+          this.levelData.correctAnswer = flat;
+        }
+      }
+    }
   }
 
   private handleQuizKeyboard(event: KeyboardEvent): void {
