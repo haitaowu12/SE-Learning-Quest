@@ -13,6 +13,10 @@ interface AchievementDef {
   icon: string;
 }
 
+function hexColor(c: number): string {
+  return `#${c.toString(16).padStart(6, '0')}`;
+}
+
 export class TitleScene extends Phaser.Scene {
   private gameManager!: GameManager;
   private audioManager!: AudioManager | null;
@@ -22,6 +26,8 @@ export class TitleScene extends Phaser.Scene {
   private settingsPanel: Phaser.GameObjects.Container | null = null;
   private achievementsOverlay: Phaser.GameObjects.Graphics | null = null;
   private achievementsPanel: Phaser.GameObjects.Container | null = null;
+  private bgGraphics: Phaser.GameObjects.Graphics | null = null;
+  private bgCircles: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super({ key: 'TitleScene' });
@@ -32,54 +38,72 @@ export class TitleScene extends Phaser.Scene {
     this.audioManager = AudioManager.fromRegistry(this);
     this.focusedIndex = 0;
     this.menuButtons = [];
+    this.bgCircles = this.add.container();
 
     const width = this.scale.width;
     const height = this.scale.height;
 
-    const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1);
-    bg.fillRect(0, 0, width, height);
+    this.bgGraphics = this.add.graphics();
+    this.bgGraphics.fillStyle(COLORS.bg, 1);
+    this.bgGraphics.fillRect(0, 0, width, height);
 
-    for (let i = 0; i < 30; i++) {
-      const x = Phaser.Math.Between(0, width);
-      const y = Phaser.Math.Between(0, height);
-      const size = Phaser.Math.Between(2, 6);
-      const alpha = Phaser.Math.FloatBetween(0.1, 0.4);
-      const circle = this.add.circle(x, y, size, 0x0ea5e9, alpha);
+    for (let i = 0; i < 24; i++) {
+      const cx = Phaser.Math.Between(0, width);
+      const cy = Phaser.Math.Between(0, height);
+      const size = Phaser.Math.Between(2, 5);
+      const alpha = Phaser.Math.FloatBetween(0.06, 0.2);
+      const circle = this.add.circle(cx, cy, size, COLORS.primary, alpha);
+      this.bgCircles.add(circle);
       this.tweens.add({
         targets: circle,
-        y: y - Phaser.Math.Between(50, 150),
+        y: cy - Phaser.Math.Between(40, 120),
         alpha: 0,
-        duration: Phaser.Math.Between(2000, 4000),
+        duration: Phaser.Math.Between(3000, 5000),
         repeat: -1,
-        delay: Phaser.Math.Between(0, 2000),
+        yoyo: true,
+        delay: Phaser.Math.Between(0, 3000),
+        ease: 'Sine.easeInOut',
       });
     }
 
-    this.add.text(width / 2, height * 0.25, 'SE Learning Quest', {
-      fontSize: '64px',
-      color: '#f8fafc',
-      fontFamily: 'sans-serif',
+    const topGlow = this.add.graphics();
+    topGlow.fillGradientStyle(COLORS.primaryDim, COLORS.primaryDim, COLORS.bg, COLORS.bg, 0.08);
+    topGlow.fillRect(0, 0, width, height * 0.5);
+
+    this.add.text(width / 2, height * 0.2, 'SE Learning Quest', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.hero)}px`,
+      color: hexColor(COLORS.textBright),
+      fontFamily: FONT.heading,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, height * 0.25 + 60, 'Master Systems Engineering Through Play', {
-      fontSize: '24px',
-      color: '#94a3b8',
-      fontFamily: 'sans-serif',
+    this.add.text(width / 2, height * 0.2 + 55, 'Master Systems Engineering Through Play', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
+      color: hexColor(COLORS.textMuted),
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
     const progress = this.gameManager.getOverallProgress();
     if (progress.completedLevels > 0) {
-      this.add.text(width / 2, height * 0.4, `Progress: ${progress.percentage}% (${progress.completedLevels}/${progress.totalLevels} levels)`, {
-        fontSize: '18px',
-        color: '#0ea5e9',
-        fontFamily: 'sans-serif',
+      const pBarW = width * 0.4;
+      const pBarH = 6;
+      const pBarX = (width - pBarW) / 2;
+      const pBarY = height * 0.35;
+      const pFill = this.add.graphics();
+      pFill.fillStyle(COLORS.border, 1);
+      pFill.fillRoundedRect(pBarX, pBarY, pBarW, pBarH, RADIUS.xs);
+      pFill.fillStyle(COLORS.primary, 1);
+      pFill.fillRoundedRect(pBarX, pBarY, pBarW * progress.percentage / 100, pBarH, RADIUS.xs);
+
+      this.add.text(width / 2, pBarY + 18, `${progress.percentage}% complete · ${progress.completedLevels}/${progress.totalLevels} levels`, {
+        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+        color: hexColor(COLORS.textMuted),
+        fontFamily: FONT.family,
       }).setOrigin(0.5);
     }
 
-    const btnY = height * 0.55;
-    const btnSpacing = 70;
+    const btnY = height * 0.48;
+    const btnSpacing = 62;
 
     this.createButton(width / 2, btnY, 'Start Learning', () => {
       this.audioManager?.playSFX('sfx-click');
@@ -105,29 +129,23 @@ export class TitleScene extends Phaser.Scene {
       this.showSettings();
     });
 
-    this.add.text(width / 2, height - 30, 'Based on INCOSE SEHBv5, ISO 15288, EN 50126', {
-      fontSize: '12px',
-      color: '#64748b',
-      fontFamily: 'sans-serif',
+    this.add.text(width / 2, height - 20, 'Based on INCOSE SEHBv5 · ISO 15288 · EN 50126', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+      color: hexColor(COLORS.textDim),
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
     this.updateFocusVisual();
 
     this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
       if (this.achievementsPanel) {
-        if (event.key === 'Escape') {
-          this.closeAchievements();
-        }
+        if (event.key === 'Escape') this.closeAchievements();
         return;
       }
-
       if (this.settingsPanel) {
-        if (event.key === 'Escape') {
-          this.closeSettings();
-        }
+        if (event.key === 'Escape') this.closeSettings();
         return;
       }
-
       if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
         this.focusedIndex = (this.focusedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
         this.updateFocusVisual();
@@ -148,35 +166,33 @@ export class TitleScene extends Phaser.Scene {
     this.menuButtons.forEach((btn, i) => {
       btn.bg.clear();
       if (i === this.focusedIndex) {
-        btn.bg.fillStyle(0x0284c7, 1);
-        btn.bg.fillRoundedRect(-120, -25, 240, 50, 12);
-        btn.bg.lineStyle(3, 0x38bdf8, 1);
-        btn.bg.strokeRoundedRect(-120, -25, 240, 50, 12);
+        btn.bg.fillStyle(COLORS.primaryDim, 1);
+        btn.bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
+        btn.bg.lineStyle(2, COLORS.primaryHover, 0.8);
+        btn.bg.strokeRoundedRect(-110, -24, 220, 48, RADIUS.md);
       } else {
-        btn.bg.fillStyle(0x0ea5e9, 1);
-        btn.bg.fillRoundedRect(-120, -25, 240, 50, 12);
+        btn.bg.fillStyle(COLORS.primary, 1);
+        btn.bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
       }
     });
   }
 
   private createButton(x: number, y: number, text: string, callback: () => void): void {
     const btn = this.add.container(x, y);
-
     const bg = this.add.graphics();
-    bg.fillStyle(0x0ea5e9, 1);
-    bg.fillRoundedRect(-120, -25, 240, 50, 12);
+    bg.fillStyle(COLORS.primary, 1);
+    bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
 
     const label = this.add.text(0, 0, text, {
-      fontSize: '20px',
-      color: '#ffffff',
-      fontFamily: 'sans-serif',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
+      color: hexColor(COLORS.textBright),
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
     btn.add([bg, label]);
-    btn.setSize(240, 50);
-
-    btn.setInteractive(new Phaser.Geom.Rectangle(-120, -25, 240, 50), Phaser.Geom.Rectangle.Contains);
+    btn.setSize(220, 48);
+    btn.setInteractive(new Phaser.Geom.Rectangle(-110, -24, 220, 48), Phaser.Geom.Rectangle.Contains);
 
     const entry = { container: btn, bg, callback };
     this.menuButtons.push(entry);
@@ -186,11 +202,9 @@ export class TitleScene extends Phaser.Scene {
       this.updateFocusVisual();
       this.input.setDefaultCursor('pointer');
     });
-
     btn.on('pointerout', () => {
       this.input.setDefaultCursor('default');
     });
-
     btn.on('pointerdown', callback);
   }
 
@@ -200,52 +214,51 @@ export class TitleScene extends Phaser.Scene {
     const width = this.scale.width;
     const height = this.scale.height;
     const achievements = achievementsData as AchievementDef[];
-    const unlockedIds = this.gameManager.getProgress().achievements;
-    const unlockedCount = unlockedIds.length;
+    const unlockedCount = this.gameManager.getProgress().achievements.length;
 
     this.achievementsOverlay = this.add.graphics();
-    this.achievementsOverlay.fillStyle(0x000000, 0.7);
+    this.achievementsOverlay.fillStyle(COLORS.shadow, 0.75);
     this.achievementsOverlay.fillRect(0, 0, width, height);
     this.achievementsOverlay.setDepth(100);
 
     this.achievementsPanel = this.add.container(width / 2, height / 2);
     this.achievementsPanel.setDepth(101);
 
-    const panelW = 560;
-    const panelH = 540;
+    const panelW = 540;
+    const panelH = 500;
     const halfW = panelW / 2;
     const halfH = panelH / 2;
 
     const panelBg = this.add.graphics();
     panelBg.fillStyle(COLORS.panelBg, 1);
     panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
-    panelBg.lineStyle(2, COLORS.primary, 1);
+    panelBg.lineStyle(1, COLORS.border, 1);
     panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
 
     const title = this.add.text(0, -halfH + 30, 'Achievements', {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl)}px`,
-      color: '#f8fafc',
+      color: hexColor(COLORS.textBright),
+      fontFamily: FONT.heading,
+      fontStyle: 'bold',
+    }).setOrigin(0.5);
+
+    const countText = this.add.text(0, -halfH + 56, `${unlockedCount}/${achievements.length} Unlocked`, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: unlockedCount === achievements.length ? hexColor(COLORS.success) : hexColor(COLORS.primary),
       fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    const countText = this.add.text(0, -halfH + 58, `${unlockedCount}/${achievements.length} Unlocked`, {
-      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-      color: unlockedCount === achievements.length ? '#10b981' : '#0ea5e9',
-      fontFamily: FONT.family,
-      fontStyle: 'bold',
-    }).setOrigin(0.5);
+    this.achievementsPanel.add([panelBg, title, countText]);
 
     const cols = 3;
-    const cardW = 164;
-    const cardH = 88;
+    const cardW = 156;
+    const cardH = 84;
     const gapX = 12;
     const gapY = 10;
     const gridW = cols * cardW + (cols - 1) * gapX;
     const gridStartX = -gridW / 2;
-    const gridStartY = -halfH + 85;
-
-    this.achievementsPanel.add([panelBg, title, countText]);
+    const gridStartY = -halfH + 82;
 
     achievements.forEach((ach, i) => {
       const col = i % cols;
@@ -257,26 +270,26 @@ export class TitleScene extends Phaser.Scene {
       const card = this.add.container(cardX, cardY);
 
       const cardBg = this.add.graphics();
-      cardBg.fillStyle(isUnlocked ? 0x1e3a5f : 0x1a2332, 1);
-      cardBg.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.md);
-      cardBg.lineStyle(1, isUnlocked ? COLORS.primary : COLORS.border, isUnlocked ? 1 : 0.6);
-      cardBg.strokeRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.md);
+      cardBg.fillStyle(isUnlocked ? COLORS.primarySoft : COLORS.bgAlt, 1);
+      cardBg.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.sm);
+      cardBg.lineStyle(1, isUnlocked ? COLORS.primary : COLORS.border, isUnlocked ? 1 : 0.5);
+      cardBg.strokeRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.sm);
 
       const iconText = this.add.text(-cardW / 2 + 14, -cardH / 2 + 14, ach.icon, {
         fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
         fontFamily: FONT.family,
-      }).setAlpha(isUnlocked ? 1 : 0.35);
+      }).setAlpha(isUnlocked ? 1 : 0.3);
 
       const titleText = this.add.text(-cardW / 2 + 14, -cardH / 2 + 40, ach.title, {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-        color: isUnlocked ? '#f8fafc' : '#64748b',
+        color: isUnlocked ? hexColor(COLORS.text) : hexColor(COLORS.textDim),
         fontFamily: FONT.family,
         fontStyle: 'bold',
       });
 
       const descText = this.add.text(-cardW / 2 + 14, -cardH / 2 + 58, ach.description, {
         fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: isUnlocked ? '#94a3b8' : '#475569',
+        color: isUnlocked ? hexColor(COLORS.textMuted) : hexColor(COLORS.textDim),
         fontFamily: FONT.family,
         wordWrap: { width: cardW - 28 },
       });
@@ -285,14 +298,12 @@ export class TitleScene extends Phaser.Scene {
 
       if (!isUnlocked) {
         const lockOverlay = this.add.graphics();
-        lockOverlay.fillStyle(0x0f172a, 0.45);
-        lockOverlay.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.md);
-
+        lockOverlay.fillStyle(COLORS.bg, 0.5);
+        lockOverlay.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.sm);
         const lockIcon = this.add.text(0, -2, '🔒', {
           fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
           fontFamily: FONT.family,
         }).setOrigin(0.5);
-
         card.add([lockOverlay, lockIcon]);
       }
 
@@ -306,22 +317,13 @@ export class TitleScene extends Phaser.Scene {
       this.achievementsPanel!.add(card);
     });
 
-    const closeBtn = this.createSmallButton(0, halfH - 40, 'Close', () => {
-      this.closeAchievements();
-    });
-
+    const closeBtn = this.createSmallButton(0, halfH - 36, 'Close', () => this.closeAchievements());
     this.achievementsPanel.add(closeBtn);
   }
 
   private closeAchievements(): void {
-    if (this.achievementsOverlay) {
-      this.achievementsOverlay.destroy();
-      this.achievementsOverlay = null;
-    }
-    if (this.achievementsPanel) {
-      this.achievementsPanel.destroy();
-      this.achievementsPanel = null;
-    }
+    if (this.achievementsOverlay) { this.achievementsOverlay.destroy(); this.achievementsOverlay = null; }
+    if (this.achievementsPanel) { this.achievementsPanel.destroy(); this.achievementsPanel = null; }
   }
 
   private showSettings(): void {
@@ -331,138 +333,134 @@ export class TitleScene extends Phaser.Scene {
     const height = this.scale.height;
 
     this.settingsOverlay = this.add.graphics();
-    this.settingsOverlay.fillStyle(0x000000, 0.7);
+    this.settingsOverlay.fillStyle(COLORS.shadow, 0.75);
     this.settingsOverlay.fillRect(0, 0, width, height);
     this.settingsOverlay.setDepth(100);
 
-    this.settingsPanel = this.add.container(width / 2, height / 2);
-    this.settingsPanel.setDepth(101);
-
-    const panelW = 460;
-    const panelH = 480;
+    const panelW = 440;
+    const panelH = 460;
+    const panelX = width / 2;
+    const panelY = height / 2;
     const halfW = panelW / 2;
     const halfH = panelH / 2;
 
+    this.settingsPanel = this.add.container(panelX, panelY);
+    this.settingsPanel.setDepth(101);
+
     const panelBg = this.add.graphics();
-    panelBg.fillStyle(0x1e293b, 1);
-    panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, 16);
-    panelBg.lineStyle(2, 0x0ea5e9, 1);
-    panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, 16);
+    panelBg.fillStyle(COLORS.panelBg, 1);
+    panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
+    panelBg.lineStyle(1, COLORS.border, 1);
+    panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
 
     const title = this.add.text(0, -halfH + 30, 'Settings', {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl)}px`,
-      color: '#f8fafc',
-      fontFamily: FONT.family,
+      color: hexColor(COLORS.textBright),
+      fontFamily: FONT.heading,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
     this.settingsPanel.add([panelBg, title]);
 
     const settings = this.gameManager.getSettings();
-
     const applySettings = () => {
       this.gameManager.updateSettings(currentSettings);
       this.audioManager?.updateSettings(this.gameManager.getSettings());
     };
-
     const currentSettings = { ...settings };
 
-    const sliderStartY = -halfH + 80;
-    const sliderSpacing = 55;
-    const sliderTrackW = 240;
-    const sliderTrackH = 12;
-    const sliderLabelX = -halfW + 30;
-    const sliderTrackX = 40;
-    const sliderValueX = halfW - 40;
+    const sliderStartY = -halfH + 78;
+    const sliderSpacing = 52;
 
     const createSlider = (labelText: string, value: number, y: number, settingKey: 'masterVolume' | 'musicVolume' | 'sfxVolume') => {
-      const displayValue = Math.round(value * 100);
+      const trackH = 10;
+      const trackLeft = -halfW + 24;
+      const trackRight = halfW - 24 - 44;
+      const actualTrackW = trackRight - trackLeft;
 
-      const label = this.add.text(sliderLabelX, y, labelText, {
+      const label = this.add.text(-halfW + 24, y, labelText, {
         fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-        color: '#e2e8f0',
+        color: hexColor(COLORS.textSecondary),
         fontFamily: FONT.family,
+        fontStyle: '500',
       });
 
-      const valueText = this.add.text(sliderValueX, y, `${displayValue}`, {
+      const valueText = this.add.text(halfW - 24, y, `${Math.round(value * 100)}%`, {
         fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-        color: '#0ea5e9',
+        color: hexColor(COLORS.primary),
         fontFamily: FONT.family,
         fontStyle: 'bold',
       }).setOrigin(1, 0);
 
-      const trackY = y + 25;
+      const trackY = y + 24;
+
       const track = this.add.graphics();
-      track.fillStyle(0x334155, 1);
-      track.fillRoundedRect(sliderTrackX, trackY, sliderTrackW, sliderTrackH, 6);
+      track.fillStyle(COLORS.border, 1);
+      track.fillRoundedRect(trackLeft, trackY, actualTrackW, trackH, RADIUS.xs);
 
       const fill = this.add.graphics();
-      const fillW = value * sliderTrackW;
-      fill.fillStyle(0x0ea5e9, 1);
-      fill.fillRoundedRect(sliderTrackX, trackY, fillW, sliderTrackH, 6);
+      fill.fillStyle(COLORS.primary, 1);
+      fill.fillRoundedRect(trackLeft, trackY, value * actualTrackW, trackH, RADIUS.xs);
 
-      const handleX = sliderTrackX + value * sliderTrackW;
-      const handle = this.add.circle(handleX, trackY + sliderTrackH / 2, 10, 0xf8fafc);
-      handle.setStrokeStyle(2, 0x0ea5e9);
+      const handle = this.add.circle(trackLeft + value * actualTrackW, trackY + trackH / 2, 9, COLORS.textBright);
+      handle.setStrokeStyle(2, COLORS.primary);
 
-      const updateSlider = (newValue: number) => {
-        const clamped = Phaser.Math.Clamp(newValue, 0, 1);
+      const updateSlider = (fraction: number) => {
+        const clamped = Phaser.Math.Clamp(fraction, 0, 1);
         currentSettings[settingKey] = clamped;
         applySettings();
-
         fill.clear();
-        fill.fillStyle(0x0ea5e9, 1);
-        fill.fillRoundedRect(sliderTrackX, trackY, clamped * sliderTrackW, sliderTrackH, 6);
-
-        handle.setX(sliderTrackX + clamped * sliderTrackW);
-        valueText.setText(`${Math.round(clamped * 100)}`);
+        fill.fillStyle(COLORS.primary, 1);
+        fill.fillRoundedRect(trackLeft, trackY, clamped * actualTrackW, trackH, RADIUS.xs);
+        handle.setPosition(trackLeft + clamped * actualTrackW, trackY + trackH / 2);
+        valueText.setText(`${Math.round(clamped * 100)}%`);
       };
 
+      const trackZone = this.add.zone(trackLeft + actualTrackW / 2, trackY + trackH / 2, actualTrackW, 28);
+      trackZone.setInteractive();
+
+      trackZone.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        const fraction = (pointer.x - trackZone.x) / (actualTrackW / 2);
+        updateSlider(fraction);
+      });
+
       handle.setInteractive({ draggable: true });
-
-      const sliderHitArea = this.add.zone(sliderTrackX + sliderTrackW / 2, trackY + sliderTrackH / 2, sliderTrackW, sliderTrackH + 10);
-      sliderHitArea.setInteractive();
-
-      sliderHitArea.on('pointerdown', (_pointer: Phaser.Input.Pointer) => {
-        const localX = _pointer.x - (width / 2) - sliderTrackX;
-        updateSlider(Phaser.Math.Clamp(localX / sliderTrackW, 0, 1));
-      });
-
       handle.on('drag', (_pointer: Phaser.Input.Pointer, dragX: number) => {
-        const localX = dragX - (width / 2) - sliderTrackX;
-        updateSlider(Phaser.Math.Clamp(localX / sliderTrackW, 0, 1));
+        const fraction = (dragX - trackLeft) / actualTrackW;
+        updateSlider(fraction);
       });
 
-      this.settingsPanel!.add([label, valueText, track, fill, handle, sliderHitArea]);
+      this.settingsPanel!.add([label, valueText, track, fill, handle, trackZone]);
     };
 
     createSlider('Master Volume', currentSettings.masterVolume, sliderStartY, 'masterVolume');
     createSlider('Music Volume', currentSettings.musicVolume, sliderStartY + sliderSpacing, 'musicVolume');
     createSlider('SFX Volume', currentSettings.sfxVolume, sliderStartY + sliderSpacing * 2, 'sfxVolume');
 
-    const toggleStartY = sliderStartY + sliderSpacing * 3 + 10;
-    const toggleSpacing = 45;
+    const toggleStartY = sliderStartY + sliderSpacing * 3 + 8;
+    const toggleSpacing = 42;
 
     const createToggle = (labelText: string, value: boolean, y: number, settingKey: 'muted' | 'highContrast' | 'reducedMotion') => {
-      const label = this.add.text(sliderLabelX, y, labelText, {
+      const label = this.add.text(-halfW + 24, y, labelText, {
         fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-        color: '#e2e8f0',
+        color: hexColor(COLORS.textSecondary),
         fontFamily: FONT.family,
+        fontStyle: '500',
       });
 
-      const toggleX = halfW - 70;
-      const toggleW = 50;
-      const toggleH = 26;
+      const toggleW = 44;
+      const toggleH = 24;
+      const toggleX = halfW - 24 - toggleW - 10;
       const toggleBg = this.add.graphics();
-      const toggleKnob = this.add.circle(0, 0, 10, 0xf8fafc);
+      const toggleKnob = this.add.circle(0, 0, 9, COLORS.textBright);
 
       const drawToggle = (isOn: boolean) => {
         toggleBg.clear();
-        toggleBg.fillStyle(isOn ? 0x0ea5e9 : 0x475569, 1);
-        toggleBg.fillRoundedRect(toggleX, y + 2, toggleW, toggleH, 13);
+        toggleBg.fillStyle(isOn ? COLORS.primary : COLORS.border, 1);
+        toggleBg.fillRoundedRect(toggleX, y + 2, toggleW, toggleH, toggleH / 2);
         toggleKnob.setPosition(
-          isOn ? toggleX + toggleW - 13 : toggleX + 13,
-          y + 2 + toggleH / 2
+          isOn ? toggleX + toggleW - 12 : toggleX + 12,
+          y + 2 + toggleH / 2,
         );
       };
       drawToggle(value);
@@ -482,46 +480,38 @@ export class TitleScene extends Phaser.Scene {
     createToggle('High Contrast', currentSettings.highContrast, toggleStartY + toggleSpacing, 'highContrast');
     createToggle('Reduced Motion', currentSettings.reducedMotion, toggleStartY + toggleSpacing * 2, 'reducedMotion');
 
-    const closeBtn = this.createSmallButton(0, halfH - 40, 'Close', () => {
-      this.closeSettings();
-    });
-
+    const closeBtn = this.createSmallButton(0, halfH - 36, 'Close', () => this.closeSettings());
     this.settingsPanel.add(closeBtn);
   }
 
   private closeSettings(): void {
-    if (this.settingsOverlay) {
-      this.settingsOverlay.destroy();
-      this.settingsOverlay = null;
-    }
-    if (this.settingsPanel) {
-      this.settingsPanel.destroy();
-      this.settingsPanel = null;
-    }
+    if (this.settingsOverlay) { this.settingsOverlay.destroy(); this.settingsOverlay = null; }
+    if (this.settingsPanel) { this.settingsPanel.destroy(); this.settingsPanel = null; }
   }
 
   private createSmallButton(x: number, y: number, text: string, callback: () => void): Phaser.GameObjects.Container {
     const btn = this.add.container(x, y);
     const bg = this.add.graphics();
-    bg.fillStyle(0x475569, 1);
-    bg.fillRoundedRect(-50, -18, 100, 36, 8);
+    bg.fillStyle(COLORS.border, 1);
+    bg.fillRoundedRect(-46, -16, 92, 32, RADIUS.sm);
     const label = this.add.text(0, 0, text, {
       fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-      color: '#ffffff',
+      color: hexColor(COLORS.textSecondary),
       fontFamily: FONT.family,
+      fontStyle: '500',
     }).setOrigin(0.5);
     btn.add([bg, label]);
-    btn.setSize(100, 36);
-    btn.setInteractive(new Phaser.Geom.Rectangle(-50, -18, 100, 36), Phaser.Geom.Rectangle.Contains);
+    btn.setSize(92, 32);
+    btn.setInteractive(new Phaser.Geom.Rectangle(-46, -16, 92, 32), Phaser.Geom.Rectangle.Contains);
     btn.on('pointerover', () => {
       bg.clear();
-      bg.fillStyle(0x64748b, 1);
-      bg.fillRoundedRect(-50, -18, 100, 36, 8);
+      bg.fillStyle(COLORS.borderLight, 1);
+      bg.fillRoundedRect(-46, -16, 92, 32, RADIUS.sm);
     });
     btn.on('pointerout', () => {
       bg.clear();
-      bg.fillStyle(0x475569, 1);
-      bg.fillRoundedRect(-50, -18, 100, 36, 8);
+      bg.fillStyle(COLORS.border, 1);
+      bg.fillRoundedRect(-46, -16, 92, 32, RADIUS.sm);
     });
     btn.on('pointerdown', callback);
     return btn;
