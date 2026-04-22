@@ -1,0 +1,7 @@
+export const MODULE_COUNT = 5;
+export const LEVELS_PER_MODULE = 4;
+export const TOTAL_LEVELS = MODULE_COUNT * LEVELS_PER_MODULE;
+export const TIME_THRESHOLD_MS = 60000;
+export const HINT_DELAY_MS = 30000;
+export const TRANSITION_DURATION_MS = 300;
+export const FEEDBACK_DISPLAY_MS = 1500;

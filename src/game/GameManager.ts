@@ -1,12 +1,22 @@
 import type { PlayerProgress, ScenarioRecord } from '@/types/index.ts';
 import { SaveManager } from './SaveManager.ts';
+import { TOTAL_LEVELS } from '@/utils/constants.ts';
+import { LevelManager } from './LevelManager.ts';
 
 export class GameManager {
+  private static instance: GameManager | null = null;
   private progress: PlayerProgress;
 
-  constructor() {
+  private constructor() {
     const saved = SaveManager.load();
     this.progress = saved ?? SaveManager.createDefaultProgress(this.generatePlayerId());
+  }
+
+  static getInstance(): GameManager {
+    if (!GameManager.instance) {
+      GameManager.instance = new GameManager();
+    }
+    return GameManager.instance;
   }
 
   private generatePlayerId(): string {
@@ -37,9 +47,11 @@ export class GameManager {
       this.progress.levelScores[levelId] = score;
     }
 
+    this.progress.streak++;
+
     const record: ScenarioRecord = {
       timestamp: new Date().toISOString(),
-      module: this.progress.currentModule,
+      module: parseInt(levelId.split('_')[0], 10),
       levelId,
       score,
       hintsUsed,
@@ -51,10 +63,23 @@ export class GameManager {
   }
 
   advanceModule(moduleId: number): void {
+    const levelManager = LevelManager.getInstance();
+    const moduleLevels = levelManager.getModuleLevels(moduleId);
+    const allLevelsCompleted = moduleLevels.every((l) => (this.progress.levelScores[l.id] ?? 0) > 0);
+    if (!allLevelsCompleted) return;
+
     if (!this.progress.modulesCompleted.includes(moduleId)) {
       this.progress.modulesCompleted.push(moduleId);
     }
-    if (moduleId < 5) {
+
+    this.addAchievement(`module_${moduleId}_complete`);
+
+    const totalModules = levelManager.getModuleCount();
+    if (this.progress.modulesCompleted.length >= totalModules) {
+      this.addAchievement('all_modules');
+    }
+
+    if (moduleId < totalModules) {
       this.progress.currentModule = moduleId + 1;
     }
     this.save();
@@ -82,16 +107,7 @@ export class GameManager {
   }
 
   isLevelUnlocked(levelId: string): boolean {
-    const parts = levelId.split('_');
-    const moduleId = parseInt(parts[0], 10);
-    const levelNum = parseInt(parts[1], 10);
-
-    if (moduleId === 1 && levelNum === 1) return true;
-    if (levelNum === 1) {
-      return this.progress.modulesCompleted.includes(moduleId - 1);
-    }
-    const prevLevelId = `${moduleId}_${levelNum - 1}`;
-    return (this.progress.levelScores[prevLevelId] ?? 0) > 0;
+    return LevelManager.getInstance().isLevelUnlocked(levelId, this.progress);
   }
 
   isModuleCompleted(moduleId: number): boolean {
@@ -99,13 +115,21 @@ export class GameManager {
   }
 
   getOverallProgress(): { percentage: number; completedLevels: number; totalLevels: number } {
-    const totalLevels = 5 * 4; // 5 modules * 4 levels
     const completedLevels = Object.values(this.progress.levelScores).filter((s) => s > 0).length;
     return {
-      percentage: Math.round((completedLevels / totalLevels) * 100),
+      percentage: Math.round((completedLevels / TOTAL_LEVELS) * 100),
       completedLevels,
-      totalLevels,
+      totalLevels: TOTAL_LEVELS,
     };
+  }
+
+  getStreak(): number {
+    return this.progress.streak;
+  }
+
+  resetStreak(): void {
+    this.progress.streak = 0;
+    this.save();
   }
 
   getSettings() {

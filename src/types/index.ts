@@ -7,6 +7,7 @@ export interface PlayerProgress {
   scenarioHistory: ScenarioRecord[];
   competencyScores: Record<string, number>;
   levelScores: Record<string, number>;
+  streak: number;
   sessionStart: string;
   lastUpdated: string;
   settings: GameSettings;
@@ -72,6 +73,7 @@ export interface StandardRef {
   incose?: string;
   iso15288?: string;
   en50126?: string;
+  en50129?: string;
 }
 
 export interface ScoringRules {
@@ -94,6 +96,7 @@ export interface LevelData {
   hints: string[];
   correctAnswer: unknown;
   scoringRules: ScoringRules;
+  timeLimit?: number;
   config: Record<string, unknown>;
 }
 

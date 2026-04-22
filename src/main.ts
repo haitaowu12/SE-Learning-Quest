@@ -4,6 +4,7 @@ import { TitleScene } from './scenes/TitleScene.ts';
 import { MapScene } from './scenes/MapScene.ts';
 import { ModuleScene } from './scenes/ModuleScene.ts';
 import { LevelScene } from './scenes/LevelScene.ts';
+import { CapstoneScene } from './scenes/CapstoneScene.ts';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -15,14 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, TitleScene, MapScene, ModuleScene, LevelScene],
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { x: 0, y: 0 },
-      debug: false,
-    },
-  },
+  scene: [BootScene, TitleScene, MapScene, ModuleScene, LevelScene, CapstoneScene],
   audio: {
     disableWebAudio: false,
   },
