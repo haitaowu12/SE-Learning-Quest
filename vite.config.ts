@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
   base: '/SE-Learning-Quest/',
@@ -12,8 +13,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src',
-      '@assets': '/public/assets',
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './public/assets'),
     },
   },
   optimizeDeps: {

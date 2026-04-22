@@ -1,5 +1,5 @@
 import type { LevelData, LevelMeta, ModuleMeta, PlayerProgress } from '@/types/index.ts';
-import moduleData from '../../public/assets/data/modules.json';
+import moduleData from '@/data/modules.json';
 
 export class LevelManager {
   private modules: ModuleMeta[] = [];
