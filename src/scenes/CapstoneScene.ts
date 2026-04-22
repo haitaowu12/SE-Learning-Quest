@@ -1,10 +1,15 @@
 import * as Phaser from 'phaser';
 import { GameManager } from '@/game/GameManager.ts';
+import { LevelManager } from '@/game/LevelManager.ts';
 import { STANDARDS_REFS } from '@/utils/standardsRefs.ts';
+import { scaledWidth, scaledFontSize } from '@/utils/scaling.ts';
+import { COLORS, RADIUS, FONT } from '@/utils/designTokens.ts';
 
 export class CapstoneScene extends Phaser.Scene {
   private gameManager!: GameManager;
+  private levelManager!: LevelManager;
   private phase = 0;
+  private focusedIndex = 0;
   private capstoneData: {
     title: string;
     description: string;
@@ -24,10 +29,12 @@ export class CapstoneScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.gameManager = new GameManager();
+    this.gameManager = GameManager.getInstance();
+    this.levelManager = LevelManager.getInstance();
+    this.focusedIndex = 0;
 
-    // Check if all modules completed
-    const allCompleted = [1, 2, 3, 4, 5].every((m) => this.gameManager.isModuleCompleted(m));
+    const moduleCount = this.levelManager.getModuleCount();
+    const allCompleted = Array.from({ length: moduleCount }, (_, i) => i + 1).every((m) => this.gameManager.isModuleCompleted(m));
     if (!allCompleted) {
       this.scene.start('MapScene');
       return;
@@ -103,13 +110,16 @@ export class CapstoneScene extends Phaser.Scene {
 
   private renderPhase(): void {
     this.children.removeAll();
+    this.focusedIndex = 0;
 
     const width = this.scale.width;
     const height = this.scale.height;
 
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1);
+    bg.fillGradientStyle(COLORS.bg, COLORS.bg, COLORS.panelBg, COLORS.panelBg, 1);
     bg.fillRect(0, 0, width, height);
+
+    this.createBackButton(80, height - 40);
 
     if (!this.capstoneData || this.phase >= this.capstoneData.phases.length) {
       this.showCertificate();
@@ -118,51 +128,54 @@ export class CapstoneScene extends Phaser.Scene {
 
     const phaseData = this.capstoneData.phases[this.phase];
 
-    // Title bar
     const titleBar = this.add.graphics();
-    titleBar.fillStyle(0x1e293b, 1);
+    titleBar.fillStyle(COLORS.panelBg, 1);
     titleBar.fillRect(0, 0, width, 60);
 
     this.add.text(20, 30, `Capstone — ${phaseData.title}`, {
-      fontSize: '20px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
       color: '#f8fafc',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0, 0.5);
 
     this.add.text(width - 20, 30, `Phase ${this.phase + 1}/4`, {
-      fontSize: '14px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#94a3b8',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
     }).setOrigin(1, 0.5);
 
-    // Scenario
     const panelY = 80;
     const panel = this.add.graphics();
-    panel.fillStyle(0x1e293b, 0.8);
-    panel.fillRoundedRect(20, panelY, width - 40, 100, 8);
-    panel.lineStyle(1, 0x334155, 1);
-    panel.strokeRoundedRect(20, panelY, width - 40, 100, 8);
+    panel.fillStyle(COLORS.panelBg, 0.8);
+    panel.fillRoundedRect(20, panelY, width - 40, 100, RADIUS.sm);
+    panel.lineStyle(1, COLORS.border, 1);
+    panel.strokeRoundedRect(20, panelY, width - 40, 100, RADIUS.sm);
 
     this.add.text(40, panelY + 15, phaseData.scenario, {
-      fontSize: '14px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#e2e8f0',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       wordWrap: { width: width - 80 },
     });
 
     const refText = this.buildStandardRefText(phaseData.standardRef);
     this.add.text(40, panelY + 85, refText, {
-      fontSize: '11px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
       color: '#0ea5e9',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'italic',
     });
 
-    // Phase content
     const contentY = panelY + 120;
     const contentHeight = height - contentY - 80;
     this.renderPhaseContent(20, contentY, width - 40, contentHeight, phaseData);
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        this.scene.start('MapScene');
+      }
+    });
   }
 
   private buildStandardRefText(refs: { incose?: string; iso15288?: string; en50126?: string }): string {
@@ -204,14 +217,15 @@ export class CapstoneScene extends Phaser.Scene {
 
     if (!config?.items || !correctAnswer) {
       this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
-        fontSize: '18px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#ef4444',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0.5);
       return;
     }
 
     const selected = new Set<string>();
+    const itemBgs: Phaser.GameObjects.Graphics[] = [];
 
     const startY = y + 20;
     const itemHeight = 50;
@@ -221,27 +235,29 @@ export class CapstoneScene extends Phaser.Scene {
       const itemY = startY + i * (itemHeight + gap);
       const btn = this.add.container(x + w / 2, itemY);
       const bg = this.add.graphics();
-      bg.fillStyle(0x1e293b, 1);
-      bg.fillRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, 8);
-      bg.lineStyle(2, 0x334155, 1);
-      bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, 8);
+      bg.fillStyle(COLORS.panelBg, 1);
+      bg.fillRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
+      bg.lineStyle(2, COLORS.border, 1);
+      bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
 
       const checkbox = this.add.text(-w / 2 + 40, 0, '☐', {
-        fontSize: '20px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
         color: '#94a3b8',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0, 0.5);
 
       const label = this.add.text(-w / 2 + 70, 0, item.text, {
-        fontSize: '15px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.md - 1)}px`,
         color: '#e2e8f0',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
         wordWrap: { width: w - 120 },
       }).setOrigin(0, 0.5);
 
       btn.add([bg, checkbox, label]);
       btn.setSize(w - 40, itemHeight);
       btn.setInteractive(new Phaser.Geom.Rectangle(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight), Phaser.Geom.Rectangle.Contains);
+
+      itemBgs.push(bg);
 
       btn.on('pointerdown', () => {
         if (selected.has(item.id)) {
@@ -256,6 +272,25 @@ export class CapstoneScene extends Phaser.Scene {
       });
     });
 
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp') {
+        this.focusedIndex = (this.focusedIndex - 1 + config.items!.length) % config.items!.length;
+        this.updateSelectFocusVisual(itemBgs, config.items!.length);
+      } else if (event.key === 'ArrowDown') {
+        this.focusedIndex = (this.focusedIndex + 1) % config.items!.length;
+        this.updateSelectFocusVisual(itemBgs, config.items!.length);
+      } else if (event.key === 'Enter') {
+        const item = config.items![this.focusedIndex];
+        if (item) {
+          if (selected.has(item.id)) {
+            selected.delete(item.id);
+          } else {
+            selected.add(item.id);
+          }
+        }
+      }
+    });
+
     this.createSmallButton(x + w / 2, y + h - 40, 'Submit', () => {
       const correct = correctAnswer.every((id) => selected.has(id)) && selected.size === correctAnswer.length;
       if (correct) {
@@ -267,15 +302,27 @@ export class CapstoneScene extends Phaser.Scene {
     });
   }
 
+  private updateSelectFocusVisual(itemBgs: Phaser.GameObjects.Graphics[], _count: number): void {
+    const w = this.scale.width - 40;
+    const itemHeight = 50;
+    itemBgs.forEach((bg, i) => {
+      bg.clear();
+      bg.fillStyle(COLORS.panelBg, 1);
+      bg.fillRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
+      bg.lineStyle(i === this.focusedIndex ? 3 : 2, i === this.focusedIndex ? 0x38bdf8 : COLORS.border, 1);
+      bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
+    });
+  }
+
   private renderBuildPhase(x: number, y: number, w: number, h: number, phaseData: { config: Record<string, unknown>; correctAnswer: unknown }): void {
     const config = phaseData.config as { stages?: string[]; methods?: string[] } | undefined;
     const correctAnswer = phaseData.correctAnswer as Record<string, string> | undefined;
 
     if (!config?.stages || !config?.methods || !correctAnswer) {
       this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
-        fontSize: '18px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#ef4444',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0.5);
       return;
     }
@@ -290,27 +337,27 @@ export class CapstoneScene extends Phaser.Scene {
     stages.forEach((stage, i) => {
       const rowY = startY + i * rowHeight;
       this.add.text(x + 20, rowY, stage, {
-        fontSize: '16px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#f8fafc',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0, 0.5);
 
       const btn = this.add.container(x + w - 120, rowY);
       const bg = this.add.graphics();
-      bg.fillStyle(0x1e293b, 1);
-      bg.fillRoundedRect(-100, -20, 200, 40, 8);
-      bg.lineStyle(2, 0x334155, 1);
-      bg.strokeRoundedRect(-100, -20, 200, 40, 8);
+      bg.fillStyle(COLORS.panelBg, 1);
+      bg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
+      bg.lineStyle(2, COLORS.border, 1);
+      bg.strokeRoundedRect(-100, -20, 200, 40, RADIUS.sm);
       const label = this.add.text(0, 0, 'Select...', {
-        fontSize: '14px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
         color: '#94a3b8',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0.5);
       btn.add([bg, label]);
       btn.setSize(200, 40);
       btn.setInteractive(new Phaser.Geom.Rectangle(-100, -20, 200, 40), Phaser.Geom.Rectangle.Contains);
 
-      let methodIndex = 0;
+      let methodIndex = -1;
       btn.on('pointerdown', () => {
         methodIndex = (methodIndex + 1) % methods.length;
         const method = methods[methodIndex];
@@ -318,6 +365,14 @@ export class CapstoneScene extends Phaser.Scene {
         label.setColor('#e2e8f0');
         selections[stage] = method;
       });
+    });
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp') {
+        this.focusedIndex = (this.focusedIndex - 1 + stages.length) % stages.length;
+      } else if (event.key === 'ArrowDown') {
+        this.focusedIndex = (this.focusedIndex + 1) % stages.length;
+      }
     });
 
     this.createSmallButton(x + w / 2, y + h - 40, 'Submit', () => {
@@ -337,9 +392,9 @@ export class CapstoneScene extends Phaser.Scene {
 
     if (!config?.steps || !correctAnswer) {
       this.add.text(x + w / 2, y + h / 2, 'Error: Phase data incomplete', {
-        fontSize: '18px',
+        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#ef4444',
-        fontFamily: 'sans-serif',
+        fontFamily: FONT.family,
       }).setOrigin(0.5);
       return;
     }
@@ -359,15 +414,15 @@ export class CapstoneScene extends Phaser.Scene {
         const itemY = startY + i * (itemHeight + gap);
         const btn = this.add.container(x + w / 2, itemY);
         const bg = this.add.graphics();
-        bg.fillStyle(0x1e293b, 1);
-        bg.fillRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, 8);
-        bg.lineStyle(2, 0x334155, 1);
-        bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, 8);
+        bg.fillStyle(COLORS.panelBg, 1);
+        bg.fillRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
+        bg.lineStyle(2, COLORS.border, 1);
+        bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
 
         const label = this.add.text(0, 0, `${i + 1}. ${step}`, {
-          fontSize: '15px',
+          fontSize: `${scaledFontSize(this, FONT.sizes.md - 1)}px`,
           color: '#e2e8f0',
-          fontFamily: 'sans-serif',
+          fontFamily: FONT.family,
         }).setOrigin(0.5);
 
         btn.add([bg, label]);
@@ -387,6 +442,19 @@ export class CapstoneScene extends Phaser.Scene {
 
     renderItems();
 
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp') {
+        this.focusedIndex = (this.focusedIndex - 1 + currentOrder.length) % currentOrder.length;
+      } else if (event.key === 'ArrowDown') {
+        this.focusedIndex = (this.focusedIndex + 1) % currentOrder.length;
+      } else if (event.key === 'Enter') {
+        if (this.focusedIndex > 0) {
+          [currentOrder[this.focusedIndex], currentOrder[this.focusedIndex - 1]] = [currentOrder[this.focusedIndex - 1], currentOrder[this.focusedIndex]];
+          renderItems();
+        }
+      }
+    });
+
     this.createSmallButton(x + w / 2, y + h - 40, 'Submit', () => {
       const correct = currentOrder.every((step, i) => step === correctAnswer[i]);
       if (correct) {
@@ -401,12 +469,12 @@ export class CapstoneScene extends Phaser.Scene {
   private createSmallButton(x: number, y: number, text: string, callback: () => void): Phaser.GameObjects.Container {
     const btn = this.add.container(x, y);
     const bg = this.add.graphics();
-    bg.fillStyle(0x0ea5e9, 1);
-    bg.fillRoundedRect(-60, -20, 120, 40, 8);
+    bg.fillStyle(COLORS.primary, 1);
+    bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
     const label = this.add.text(0, 0, text, {
-      fontSize: '16px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: '#ffffff',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
     btn.add([bg, label]);
@@ -414,16 +482,49 @@ export class CapstoneScene extends Phaser.Scene {
     btn.setInteractive(new Phaser.Geom.Rectangle(-60, -20, 120, 40), Phaser.Geom.Rectangle.Contains);
     btn.on('pointerover', () => {
       bg.clear();
-      bg.fillStyle(0x0284c7, 1);
-      bg.fillRoundedRect(-60, -20, 120, 40, 8);
+      bg.fillStyle(COLORS.primaryHover, 1);
+      bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
     });
     btn.on('pointerout', () => {
       bg.clear();
-      bg.fillStyle(0x0ea5e9, 1);
-      bg.fillRoundedRect(-60, -20, 120, 40, 8);
+      bg.fillStyle(COLORS.primary, 1);
+      bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
     });
     btn.on('pointerdown', callback);
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && !this.capstoneData) return;
+    });
+
     return btn;
+  }
+
+  private createBackButton(x: number, y: number): void {
+    const btn = this.add.container(x, y);
+    const bg = this.add.graphics();
+    bg.fillStyle(COLORS.borderLight, 1);
+    bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
+    const label = this.add.text(0, 0, '← Map', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
+      color: '#ffffff',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
+    btn.add([bg, label]);
+    btn.setSize(120, 40);
+    btn.setInteractive(new Phaser.Geom.Rectangle(-60, -20, 120, 40), Phaser.Geom.Rectangle.Contains);
+    btn.on('pointerover', () => {
+      bg.clear();
+      bg.fillStyle(COLORS.borderHover, 1);
+      bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
+    });
+    btn.on('pointerout', () => {
+      bg.clear();
+      bg.fillStyle(COLORS.borderLight, 1);
+      bg.fillRoundedRect(-60, -20, 120, 40, RADIUS.sm);
+    });
+    btn.on('pointerdown', () => {
+      this.scene.start('MapScene');
+    });
   }
 
   private showRetry(): void {
@@ -438,23 +539,28 @@ export class CapstoneScene extends Phaser.Scene {
     const panel = this.add.container(width / 2, height / 2);
     panel.setDepth(201);
 
+    const panelW = scaledWidth(this, 400);
+    const panelH = 160;
+    const halfW = panelW / 2;
+    const halfH = panelH / 2;
+
     const panelBg = this.add.graphics();
-    panelBg.fillStyle(0x1e293b, 1);
-    panelBg.fillRoundedRect(-200, -80, 400, 160, 12);
-    panelBg.lineStyle(2, 0xef4444, 1);
-    panelBg.strokeRoundedRect(-200, -80, 400, 160, 12);
+    panelBg.fillStyle(COLORS.panelBg, 1);
+    panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
+    panelBg.lineStyle(2, COLORS.error, 1);
+    panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
 
     const title = this.add.text(0, -40, 'Not quite right', {
-      fontSize: '22px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.xl - 6)}px`,
       color: '#ef4444',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
     const msg = this.add.text(0, 0, 'Review your choices and try again.', {
-      fontSize: '14px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#e2e8f0',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       align: 'center',
     }).setOrigin(0.5);
 
@@ -479,64 +585,177 @@ export class CapstoneScene extends Phaser.Scene {
     const panel = this.add.container(width / 2, height / 2);
     panel.setDepth(201);
 
+    const panelW = scaledWidth(this, 600);
+    const panelH = 500;
+    const halfW = panelW / 2;
+    const halfH = panelH / 2;
+
     const panelBg = this.add.graphics();
-    panelBg.fillStyle(0x1e293b, 1);
-    panelBg.fillRoundedRect(-300, -250, 600, 500, 16);
-    panelBg.lineStyle(4, 0xf59e0b, 1);
-    panelBg.strokeRoundedRect(-300, -250, 600, 500, 16);
+    panelBg.fillStyle(COLORS.panelBg, 1);
+    panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
+    panelBg.lineStyle(4, COLORS.warning, 1);
+    panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
 
     const title = this.add.text(0, -200, '🏆 Congratulations!', {
-      fontSize: '36px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.xl + 8)}px`,
       color: '#f59e0b',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
     const subtitle = this.add.text(0, -150, 'You have completed the SE Learning Quest', {
-      fontSize: '18px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: '#e2e8f0',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
     const scoreText = this.add.text(0, -100, `Total Score: ${progress.totalScore}`, {
-      fontSize: '24px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.xl - 4)}px`,
       color: '#0ea5e9',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
     const completed = this.add.text(0, -60, `Levels Completed: ${Object.values(progress.levelScores).filter((s) => s > 0).length}/20`, {
-      fontSize: '16px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: '#94a3b8',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
     const achievements = this.add.text(0, -20, `Achievements: ${progress.achievements.length}`, {
-      fontSize: '16px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: '#94a3b8',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
     const certText = this.add.text(0, 40, 'Certificate of Completion\nSystems Engineering Fundamentals', {
-      fontSize: '16px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: '#e2e8f0',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
       align: 'center',
     }).setOrigin(0.5);
 
     const dateText = this.add.text(0, 100, `Completed: ${new Date().toLocaleDateString()}`, {
-      fontSize: '14px',
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#64748b',
-      fontFamily: 'sans-serif',
+      fontFamily: FONT.family,
     }).setOrigin(0.5);
 
-    const mapBtn = this.createSmallButton(0, 160, 'Back to Map', () => {
+    const downloadBtn = this.add.container(0, 160);
+    const dlBg = this.add.graphics();
+    dlBg.fillStyle(COLORS.primary, 1);
+    dlBg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
+    const dlLabel = this.add.text(0, 0, 'Download Certificate', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
+      color: '#ffffff',
+      fontFamily: FONT.family,
+      fontStyle: 'bold',
+    }).setOrigin(0.5);
+    downloadBtn.add([dlBg, dlLabel]);
+    downloadBtn.setSize(200, 40);
+    downloadBtn.setInteractive(new Phaser.Geom.Rectangle(-100, -20, 200, 40), Phaser.Geom.Rectangle.Contains);
+    downloadBtn.on('pointerover', () => {
+      dlBg.clear();
+      dlBg.fillStyle(COLORS.primaryHover, 1);
+      dlBg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
+    });
+    downloadBtn.on('pointerout', () => {
+      dlBg.clear();
+      dlBg.fillStyle(COLORS.primary, 1);
+      dlBg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
+    });
+    downloadBtn.on('pointerdown', () => {
+      this.downloadCertificate(progress.totalScore, Object.values(progress.levelScores).filter((s) => s > 0).length);
+    });
+
+    const mapBtn = this.createSmallButton(0, 210, 'Back to Map', () => {
       this.scene.start('MapScene');
     });
 
-    panel.add([panelBg, title, subtitle, scoreText, completed, achievements, certText, dateText, mapBtn]);
+    panel.add([panelBg, title, subtitle, scoreText, completed, achievements, certText, dateText, downloadBtn, mapBtn]);
 
-    // Award capstone achievement
     this.gameManager.addAchievement('capstone_complete');
+
+    this.input.keyboard?.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Escape' || event.key === 'Enter') {
+        this.scene.start('MapScene');
+      }
+    });
+  }
+
+  private downloadCertificate(totalScore: number, levelsCompleted: number): void {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+    gradient.addColorStop(0, '#0f172a');
+    gradient.addColorStop(1, '#1e293b');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 800, 600);
+
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.roundRect(20, 20, 760, 560, 20);
+    ctx.stroke();
+
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(35, 35, 730, 530, 14);
+    ctx.stroke();
+
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 42px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Certificate of Completion', 400, 130);
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '26px sans-serif';
+    ctx.fillText('Systems Engineering Fundamentals', 400, 185);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '18px sans-serif';
+    ctx.fillText('This certifies successful completion of the', 400, 260);
+    ctx.fillText('SE Learning Quest program', 400, 288);
+
+    ctx.fillStyle = '#0ea5e9';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText(`Total Score: ${totalScore}`, 400, 350);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '20px sans-serif';
+    ctx.fillText(`Levels Completed: ${levelsCompleted}/20`, 400, 390);
+
+    ctx.fillStyle = '#64748b';
+    ctx.font = '16px sans-serif';
+    ctx.fillText(`Date: ${new Date().toLocaleDateString()}`, 400, 450);
+
+    ctx.fillStyle = '#475569';
+    ctx.font = '14px sans-serif';
+    ctx.fillText('SE Learning Quest', 400, 540);
+
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SE_Learning_Quest_Certificate.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      const feedback = this.add.text(this.scale.width / 2, this.scale.height / 2 + 240, 'Certificate downloaded!', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
+        color: '#22c55e',
+        fontFamily: FONT.family,
+        fontStyle: 'bold',
+      }).setOrigin(0.5).setDepth(300);
+      this.time.delayedCall(2000, () => feedback.destroy());
+    }, 'image/png');
   }
 }

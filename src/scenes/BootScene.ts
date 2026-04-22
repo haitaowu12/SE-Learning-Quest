@@ -1,4 +1,7 @@
 import * as Phaser from 'phaser';
+import { AudioManager } from '@/components/AudioManager.ts';
+import { GameManager } from '@/game/GameManager.ts';
+import { TransitionManager } from '@/components/TransitionManager.ts';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -47,8 +50,6 @@ export class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
 
-    // Load assets
-    this.load.json('modules', 'assets/data/modules.json');
     this.load.image('title-bg', 'assets/backgrounds/title.png');
     this.load.image('map-bg', 'assets/backgrounds/map.png');
     this.load.image('btn-start', 'assets/ui/btn-start.png');
@@ -57,12 +58,7 @@ export class BootScene extends Phaser.Scene {
     this.load.image('particle', 'assets/ui/particle.png');
     this.load.image('avatar-player', 'assets/sprites/avatar-player.png');
     this.load.image('avatar-guide', 'assets/sprites/avatar-guide.png');
-    this.load.audio('bgm-title', 'assets/audio/bgm-title.ogg');
-    this.load.audio('sfx-click', 'assets/audio/sfx-click.ogg');
-    this.load.audio('sfx-correct', 'assets/audio/sfx-correct.ogg');
-    this.load.audio('sfx-wrong', 'assets/audio/sfx-wrong.ogg');
 
-    // Create placeholder textures if files missing
     this.load.on('loaderror', (file: Phaser.Loader.File) => {
       console.warn(`Asset load error: ${file.key}, generating placeholder`);
       this.createPlaceholderTexture(file.key, file.type);
@@ -70,7 +66,13 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.scene.start('TitleScene');
+    const gameManager = GameManager.getInstance();
+    const audioManager = new AudioManager(gameManager.getSettings());
+    this.registry.set('audioManager', audioManager);
+
+    TransitionManager.fadeOut(this, 300, () => {
+      this.scene.start('TitleScene');
+    });
   }
 
   private createPlaceholderTexture(key: string, type: string): void {

@@ -1,0 +1,65 @@
+{
+  "title": "The SE Challenge: Railway Signaling Subsystem",
+  "description": "Apply everything you have learned to design a railway signaling subsystem.",
+  "phases": [
+    {
+      "title": "Phase 1: Stakeholders & Requirements",
+      "scenario": "You are the lead SE for a new CBTC (Communications-Based Train Control) system. Identify stakeholders, define SMART requirements, and build a traceability matrix.",
+      "type": "select",
+      "config": {
+        "items": [
+          { "id": "sh1", "text": "Define stakeholder power/interest matrix" },
+          { "id": "sh2", "text": "Write SMART performance requirements" },
+          { "id": "sh3", "text": "Build stakeholder-to-requirement traceability" },
+          { "id": "sh4", "text": "Select verification methods for safety requirements" }
+        ]
+      },
+      "correctAnswer": ["sh1", "sh2", "sh3", "sh4"],
+      "standardRef": { "incose": "stakeholder_requirements", "iso15288": "stakeholder_requirements" },
+      "learningObjective": "Integrate stakeholder analysis and requirements engineering",
+      "hint": "Think about who influences the project and what measurable outcomes they need."
+    },
+    {
+      "title": "Phase 2: Architecture & Trade-offs",
+      "scenario": "Decompose the CBTC system into subsystems, define interfaces, and allocate your budget across performance, safety, and maintainability.",
+      "type": "build",
+      "config": {
+        "stages": ["Subsystem Decomposition", "Interface Definition", "Resource Allocation"],
+        "methods": ["N² Diagram", "IDEF0", "Trade-off Study", "Risk Analysis"]
+      },
+      "correctAnswer": { "Subsystem Decomposition": "N² Diagram", "Interface Definition": "IDEF0", "Resource Allocation": "Trade-off Study" },
+      "standardRef": { "incose": "architecture_design", "iso15288": "architecture" },
+      "learningObjective": "Apply architecture design and trade-off analysis",
+      "hint": "Consider how each analysis method maps to the architectural decision being made."
+    },
+    {
+      "title": "Phase 3: V&V & Compliance",
+      "scenario": "Plan verification and validation for the CBTC system. Ensure compliance with EN 50126 RAMS requirements.",
+      "type": "sequence",
+      "config": {
+        "steps": ["Hazard Analysis", "Safety Case Development", "Independent Safety Assessment", "Operational Validation"]
+      },
+      "correctAnswer": ["Hazard Analysis", "Safety Case Development", "Independent Safety Assessment", "Operational Validation"],
+      "standardRef": { "incose": "verification", "iso15288": "verification", "en50126": "verification_validation" },
+      "learningObjective": "Plan V&V and ensure RAMS compliance",
+      "hint": "Think about the V-model lifecycle: hazards must be identified before safety cases can be developed."
+    },
+    {
+      "title": "Phase 4: Integration & Risk Management",
+      "scenario": "Plan the integration sequence, assess risks, and assemble the SEMP for the CBTC project.",
+      "type": "select",
+      "config": {
+        "items": [
+          { "id": "int1", "text": "Bottom-up integration with hardware-in-the-loop" },
+          { "id": "int2", "text": "Risk assessment with SIL allocation" },
+          { "id": "int3", "text": "Configuration management plan" },
+          { "id": "int4", "text": "SEMP with tailored lifecycle processes" }
+        ]
+      },
+      "correctAnswer": ["int1", "int2", "int3", "int4"],
+      "standardRef": { "incose": "integration", "iso15288": "integration", "en50126": "risk_analysis" },
+      "learningObjective": "Integrate systems and manage project risks",
+      "hint": "Consider how integration, risk, configuration, and management processes work together."
+    }
+  ]
+}

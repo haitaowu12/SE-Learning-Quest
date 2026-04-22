@@ -10,9 +10,10 @@
     "allowSyntheticDefaultImports": true,
 
     "paths": {
-      "@/*": ["./src/*"],
-      "@assets/*": ["./public/assets/*"]
+      "@/*": ["./src/*"]
     },
+
+    "resolveJsonModule": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",

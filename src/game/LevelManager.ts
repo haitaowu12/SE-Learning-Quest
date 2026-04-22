@@ -1,12 +1,25 @@
 import type { LevelData, LevelMeta, ModuleMeta, PlayerProgress } from '@/types/index.ts';
 import moduleData from '@/data/modules.json';
+import { LEVELS_PER_MODULE, MODULE_COUNT } from '@/utils/constants.ts';
 
 export class LevelManager {
+  private static instance: LevelManager | null = null;
   private modules: ModuleMeta[] = [];
   private levels: Map<string, LevelData> = new Map();
 
-  constructor() {
+  private constructor() {
     this.loadModules();
+  }
+
+  static getInstance(): LevelManager {
+    if (!LevelManager.instance) {
+      LevelManager.instance = new LevelManager();
+    }
+    return LevelManager.instance;
+  }
+
+  getModuleCount(): number {
+    return this.modules.length;
   }
 
   private loadModules(): void {
@@ -37,7 +50,7 @@ export class LevelManager {
     };
   }
 
-  private isLevelUnlocked(levelId: string, progress: PlayerProgress): boolean {
+  isLevelUnlocked(levelId: string, progress: PlayerProgress): boolean {
     const parts = levelId.split('_');
     const moduleId = parseInt(parts[0], 10);
     const levelNum = parseInt(parts[1], 10);
@@ -62,10 +75,10 @@ export class LevelManager {
     const parts = currentLevelId.split('_');
     const moduleId = parseInt(parts[0], 10);
     const levelNum = parseInt(parts[1], 10);
-    if (levelNum < 4) {
+    if (levelNum < LEVELS_PER_MODULE) {
       return `${moduleId}_${levelNum + 1}`;
     }
-    if (moduleId < 5) {
+    if (moduleId < MODULE_COUNT) {
       return `${moduleId + 1}_1`;
     }
     return null;

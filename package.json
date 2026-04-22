@@ -1,7 +1,7 @@
 {
   "name": "se-learning-quest-rebuild",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,10 +13,6 @@
     "vite": "^8.0.9"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.2.4",
-    "autoprefixer": "^10.5.0",
-    "phaser": "^4.0.0",
-    "postcss": "^8.5.10",
-    "tailwindcss": "^3.4.19"
+    "phaser": "4.0.0"
   }
 }

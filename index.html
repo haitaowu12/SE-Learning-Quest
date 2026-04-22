@@ -2,8 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SE Learning Quest - An interactive game for learning Systems Engineering principles" />
     <title>SE Learning Quest</title>
     <style>
       html, body { margin: 0; padding: 0; overflow: hidden; background: #0f172a; }
@@ -12,6 +13,14 @@
   </head>
   <body>
     <div id="game-container"></div>
+    <noscript>
+      <div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#e2e8f0;font-family:sans-serif;text-align:center;padding:2rem;">
+        <div>
+          <h1>SE Learning Quest</h1>
+          <p>JavaScript is required to run this game. Please enable JavaScript in your browser settings.</p>
+        </div>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
