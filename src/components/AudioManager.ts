@@ -206,13 +206,6 @@ export class AudioManager {
       const now = ctx.currentTime;
       const chord = chords[currentChordIdx];
       
-      // Clean up old nodes
-      this.bgmOscillators = this.bgmOscillators.filter(osc => {
-        try {
-          return osc.playbackRate.value !== 0; // rough check to keep array clean
-        } catch { return false; }
-      });
-      
       chord.forEach(freq => {
         const osc = ctx.createOscillator();
         const noteGain = ctx.createGain();
@@ -229,6 +222,11 @@ export class AudioManager {
         
         osc.connect(noteGain);
         noteGain.connect(this.bgmGain!);
+        
+        osc.onended = () => {
+          this.bgmOscillators = this.bgmOscillators.filter(o => o !== osc);
+          this.bgmGainNodes = this.bgmGainNodes.filter(g => g !== noteGain);
+        };
         
         osc.start(now);
         osc.stop(now + 4.0);

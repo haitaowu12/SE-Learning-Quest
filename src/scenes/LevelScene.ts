@@ -766,7 +766,7 @@ export class LevelScene extends Phaser.Scene {
         optHit.on('pointerout', () => {
           optBg.clear();
         });
-        optHit.on('pointerdown', (pointer: Phaser.Input.Pointer, localX: number, localY: number, event: Phaser.Types.Input.EventData) => {
+        optHit.on('pointerdown', (_pointer: Phaser.Input.Pointer, _localX: number, _localY: number, event: Phaser.Types.Input.EventData) => {
           event.stopPropagation();
           onSelect(opt, i);
           label.setText(opt);
@@ -1380,6 +1380,8 @@ export class LevelScene extends Phaser.Scene {
     }
 
     const statements = config.statements;
+
+    const startY = y + 40;
 
     this.contentContainer.add(
       this.add.text(x + 20, startY - 25, 'Rewrite each requirement to include the missing quality attributes below:', {
