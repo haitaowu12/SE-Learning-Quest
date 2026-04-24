@@ -240,11 +240,9 @@ export class CapstoneScene extends Phaser.Scene {
       bg.lineStyle(2, COLORS.border, 1);
       bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
 
-      const checkbox = this.add.text(-w / 2 + 40, 0, '☐', {
-        fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0, 0.5);
+      const checkboxBg = this.add.graphics();
+      checkboxBg.fillStyle(COLORS.border, 1);
+      checkboxBg.fillRoundedRect(-w / 2 + 33, -8, 16, 16, 3);
 
       const label = this.add.text(-w / 2 + 70, 0, item.text, {
         fontSize: `${scaledFontSize(this, FONT.sizes.md - 1)}px`,
@@ -253,7 +251,7 @@ export class CapstoneScene extends Phaser.Scene {
         wordWrap: { width: w - 120 },
       }).setOrigin(0, 0.5);
 
-      btn.add([bg, checkbox, label]);
+      btn.add([bg, checkboxBg, label]);
       btn.setSize(w - 40, itemHeight);
       btn.setInteractive(new Phaser.Geom.Rectangle(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight), Phaser.Geom.Rectangle.Contains);
 
@@ -262,12 +260,20 @@ export class CapstoneScene extends Phaser.Scene {
       btn.on('pointerdown', () => {
         if (selected.has(item.id)) {
           selected.delete(item.id);
-          checkbox.setText('☐');
-          checkbox.setColor('#94a3b8');
+          checkboxBg.clear();
+          checkboxBg.fillStyle(COLORS.border, 1);
+          checkboxBg.fillRoundedRect(-w / 2 + 33, -8, 16, 16, 3);
         } else {
           selected.add(item.id);
-          checkbox.setText('☑');
-          checkbox.setColor('#0ea5e9');
+          checkboxBg.clear();
+          checkboxBg.fillStyle(COLORS.primary, 1);
+          checkboxBg.fillRoundedRect(-w / 2 + 33, -8, 16, 16, 3);
+          checkboxBg.lineStyle(2, COLORS.textBright, 1);
+          checkboxBg.beginPath();
+          checkboxBg.moveTo(-w / 2 + 37, -1);
+          checkboxBg.lineTo(-w / 2 + 40, 3);
+          checkboxBg.lineTo(-w / 2 + 46, -5);
+          checkboxBg.strokePath();
         }
       });
     });
@@ -596,12 +602,14 @@ export class CapstoneScene extends Phaser.Scene {
     panelBg.lineStyle(4, COLORS.warning, 1);
     panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
 
-    const title = this.add.text(0, -200, '🏆 Congratulations!', {
+    const trophyIcon = this.add.image(-120, -200, 'icon-trophy');
+    trophyIcon.setScale(0.6);
+    const title = this.add.text(-90, -200, 'Congratulations!', {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl + 8)}px`,
       color: '#f59e0b',
       fontFamily: FONT.family,
       fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0, 0.5);
 
     const subtitle = this.add.text(0, -150, 'You have completed the SE Learning Quest', {
       fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
@@ -672,7 +680,7 @@ export class CapstoneScene extends Phaser.Scene {
       this.scene.start('MapScene');
     });
 
-    panel.add([panelBg, title, subtitle, scoreText, completed, achievements, certText, dateText, downloadBtn, mapBtn]);
+    panel.add([panelBg, trophyIcon, title, subtitle, scoreText, completed, achievements, certText, dateText, downloadBtn, mapBtn]);
 
     this.gameManager.addAchievement('capstone_complete');
 

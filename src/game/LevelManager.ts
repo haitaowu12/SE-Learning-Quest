@@ -60,7 +60,7 @@ export class LevelManager {
       return progress.modulesCompleted.includes(moduleId - 1);
     }
     const prev = `${moduleId}_${levelNum - 1}`;
-    return (progress.levelScores[prev] ?? 0) > 0;
+    return prev in progress.levelScores;
   }
 
   getLevelData(levelId: string): LevelData | undefined {

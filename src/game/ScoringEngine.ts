@@ -8,10 +8,11 @@ export class ScoringEngine {
     hintsUsed: number,
     retries: number,
     elapsedMs: number,
+    creditRatio: number = 1.0,
   ): number {
-    const timeBonus = elapsedMs <= TIME_THRESHOLD_MS ? rules.timeBonus : 0;
-    const perfectBonus = hintsUsed === 0 && retries === 0 ? rules.perfectBonus : 0;
-    const score = rules.baseScore
+    const timeBonus = (elapsedMs <= TIME_THRESHOLD_MS && creditRatio >= 1.0) ? rules.timeBonus : 0;
+    const perfectBonus = (hintsUsed === 0 && retries === 0 && creditRatio >= 1.0) ? rules.perfectBonus : 0;
+    const score = Math.round(rules.baseScore * creditRatio)
       - (hintsUsed * rules.hintPenalty)
       - (retries * rules.retryPenalty)
       + timeBonus

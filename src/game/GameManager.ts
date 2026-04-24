@@ -41,9 +41,11 @@ export class GameManager {
   }
 
   completeLevel(levelId: string, score: number, hintsUsed: number, retries: number): void {
-    const existing = this.progress.levelScores[levelId] ?? 0;
+    const existing = this.progress.levelScores[levelId] ?? -1;
     if (score > existing) {
-      this.progress.totalScore += score - existing;
+      this.progress.totalScore += score - Math.max(existing, 0);
+      this.progress.levelScores[levelId] = score;
+    } else if (!(levelId in this.progress.levelScores)) {
       this.progress.levelScores[levelId] = score;
     }
 
@@ -125,6 +127,14 @@ export class GameManager {
 
   getStreak(): number {
     return this.progress.streak;
+  }
+
+  setLevelStars(levelId: string, stars: number): void {
+    const existing = this.progress.levelStars[levelId] ?? 0;
+    if (stars > existing) {
+      this.progress.levelStars[levelId] = stars;
+      this.save();
+    }
   }
 
   resetStreak(): void {

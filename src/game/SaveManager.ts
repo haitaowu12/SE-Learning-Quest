@@ -20,6 +20,7 @@ function validateProgress(data: unknown): data is PlayerProgress {
   if (!Array.isArray(d.scenarioHistory)) return false;
   if (typeof d.competencyScores !== 'object' || d.competencyScores === null) return false;
   if (typeof d.levelScores !== 'object' || d.levelScores === null) return false;
+  if (typeof d.levelStars !== 'object' || d.levelStars === null) return false;
   if (typeof d.sessionStart !== 'string') return false;
   if (typeof d.lastUpdated !== 'string') return false;
   if (typeof d.settings !== 'object' || d.settings === null) return false;
@@ -88,6 +89,7 @@ export class SaveManager {
         integration_management: 0,
       },
       levelScores: {},
+      levelStars: {},
       streak: 0,
       sessionStart: now,
       lastUpdated: now,

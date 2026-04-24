@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { AudioManager } from '@/components/AudioManager.ts';
 import { GameManager } from '@/game/GameManager.ts';
 import { TransitionManager } from '@/components/TransitionManager.ts';
+import { IconSprites } from '@/utils/iconSprites.ts';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -50,15 +51,6 @@ export class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
 
-    this.load.image('title-bg', 'assets/backgrounds/title.png');
-    this.load.image('map-bg', 'assets/backgrounds/map.png');
-    this.load.image('btn-start', 'assets/ui/btn-start.png');
-    this.load.image('btn-settings', 'assets/ui/btn-settings.png');
-    this.load.image('btn-back', 'assets/ui/btn-back.png');
-    this.load.image('particle', 'assets/ui/particle.png');
-    this.load.image('avatar-player', 'assets/sprites/avatar-player.png');
-    this.load.image('avatar-guide', 'assets/sprites/avatar-guide.png');
-
     this.load.on('loaderror', (file: Phaser.Loader.File) => {
       console.warn(`Asset load error: ${file.key}, generating placeholder`);
       this.createPlaceholderTexture(file.key, file.type);
@@ -70,6 +62,24 @@ export class BootScene extends Phaser.Scene {
     const audioManager = new AudioManager(gameManager.getSettings());
     this.registry.set('audioManager', audioManager);
 
+    IconSprites.generateAllTextures(this);
+
+    const placeholders = [
+      { key: 'title-bg', type: 'image' },
+      { key: 'map-bg', type: 'image' },
+      { key: 'btn-start', type: 'image' },
+      { key: 'btn-settings', type: 'image' },
+      { key: 'btn-back', type: 'image' },
+      { key: 'particle', type: 'image' },
+      { key: 'avatar-player', type: 'image' },
+      { key: 'avatar-guide', type: 'image' },
+    ];
+    placeholders.forEach(p => {
+      if (!this.textures.exists(p.key)) {
+        this.createPlaceholderTexture(p.key, p.type);
+      }
+    });
+
     TransitionManager.fadeOut(this, 300, () => {
       this.scene.start('TitleScene');
     });
@@ -78,20 +88,26 @@ export class BootScene extends Phaser.Scene {
   private createPlaceholderTexture(key: string, type: string): void {
     if (type === 'image') {
       const gfx = this.make.graphics({ x: 0, y: 0 });
+      let w = 16, h = 16;
       if (key.includes('bg')) {
         gfx.fillStyle(0x1e293b, 1);
         gfx.fillRect(0, 0, 1920, 1080);
+        w = 1920; h = 1080;
       } else if (key.includes('btn')) {
         gfx.fillStyle(0x0ea5e9, 1);
         gfx.fillRoundedRect(0, 0, 200, 60, 8);
+        w = 200; h = 60;
       } else if (key.includes('avatar')) {
         gfx.fillStyle(0x6366f1, 1);
         gfx.fillCircle(32, 32, 32);
+        w = 64; h = 64;
       } else {
         gfx.fillStyle(0x0ea5e9, 1);
-        gfx.fillCircle(16, 16, 16);
+        gfx.fillCircle(8, 8, 8);
+        w = 16; h = 16;
       }
-      gfx.generateTexture(key, 1920, 1080);
+      gfx.generateTexture(key, w, h);
+      gfx.destroy();
     }
   }
 }

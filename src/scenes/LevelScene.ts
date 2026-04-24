@@ -1,14 +1,20 @@
 import * as Phaser from 'phaser';
 import { GameManager } from '@/game/GameManager.ts';
 import { LevelManager } from '@/game/LevelManager.ts';
+import { ScoringEngine } from '@/game/ScoringEngine.ts';
+import { TransitionManager } from '@/components/TransitionManager.ts';
+import { ParticleEffect } from '@/components/ParticleEffect.ts';
+import { AudioManager } from '@/components/AudioManager.ts';
 import { STANDARDS_REFS } from '@/utils/standardsRefs.ts';
 import { scaledWidth, scaledFontSize } from '@/utils/scaling.ts';
 import { COLORS, RADIUS, FONT } from '@/utils/designTokens.ts';
+import { ProceduralBG } from '@/utils/proceduralBG.ts';
 import type { LevelData } from '@/types/index.ts';
 
 export class LevelScene extends Phaser.Scene {
   private gameManager!: GameManager;
   private levelManager!: LevelManager;
+  private audioManager!: AudioManager | null;
   private levelId!: string;
   private levelData!: LevelData;
   private hintsUsed = 0;
@@ -26,6 +32,7 @@ export class LevelScene extends Phaser.Scene {
   private quizOptionBgs: Phaser.GameObjects.Graphics[] = [];
   private quizOptionContainers: Phaser.GameObjects.Container[] = [];
   private checkBtnContainer: Phaser.GameObjects.Container | null = null;
+  private progressText: Phaser.GameObjects.Text | null = null;
 
   constructor() {
     super({ key: 'LevelScene' });
@@ -39,6 +46,7 @@ export class LevelScene extends Phaser.Scene {
   create(): void {
     this.gameManager = GameManager.getInstance();
     this.levelManager = LevelManager.getInstance();
+    this.audioManager = AudioManager.fromRegistry(this);
     const data = this.levelManager.getLevelData(this.levelId);
     if (!data) {
       this.scene.start('MapScene');
@@ -56,13 +64,15 @@ export class LevelScene extends Phaser.Scene {
     this.quizOptionBgs = [];
     this.quizOptionContainers = [];
     this.checkBtnContainer = null;
+    if (this.progressText) {
+      this.progressText.destroy();
+    }
+    this.progressText = null;
 
     const width = this.scale.width;
     const height = this.scale.height;
 
-    const bg = this.add.graphics();
-    bg.fillGradientStyle(COLORS.bg, COLORS.bg, COLORS.panelBg, COLORS.panelBg, 1);
-    bg.fillRect(0, 0, width, height);
+    ProceduralBG.draw(this, this.levelData.moduleId, width, height);
 
     const titleBar = this.add.graphics();
     titleBar.fillStyle(COLORS.panelBg, 1);
@@ -76,12 +86,15 @@ export class LevelScene extends Phaser.Scene {
     }).setOrigin(0, 0.5);
 
     const streak = this.gameManager.getStreak();
-    this.add.text(width / 2, 30, `🔥 Streak: ${streak}`, {
+    const flameIcon = this.add.image(width / 2 - 50, 30, 'icon-flame');
+    flameIcon.setScale(0.4);
+    if (streak < 3) flameIcon.setTint(0x94a3b8);
+    this.add.text(width / 2 - 30, 30, `Streak: ${streak}`, {
       fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
       color: streak >= 3 ? '#f59e0b' : '#94a3b8',
       fontFamily: FONT.family,
       fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0, 0.5);
 
     if (streak >= 3) {
       this.add.text(width / 2, 48, 'On Fire!', {
@@ -101,6 +114,8 @@ export class LevelScene extends Phaser.Scene {
     panel.fillRoundedRect(20, panelY, width - 40, panelHeight, RADIUS.sm);
     panel.lineStyle(1, COLORS.border, 1);
     panel.strokeRoundedRect(20, panelY, width - 40, panelHeight, RADIUS.sm);
+    panel.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.1, 0.1, 0, 0);
+    panel.fillRect(22, panelY + 2, width - 44, 20);
 
     this.add.text(40, panelY + 15, this.levelData.scenarioText, {
       fontSize: `${scaledFontSize(this, FONT.sizes.md - 1)}px`,
@@ -154,7 +169,7 @@ export class LevelScene extends Phaser.Scene {
         this.checkBtnContainer.emit('pointerdown');
       } else if (event.key === 'Escape') {
         this.hintTimer?.remove();
-        this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId });
+        this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId, newUnlock: true });
       }
     });
   }
@@ -308,7 +323,7 @@ export class LevelScene extends Phaser.Scene {
       }
     } else if (event.key === 'Escape') {
       this.hintTimer?.remove();
-      this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId });
+      this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId, newUnlock: true });
     }
   }
 
@@ -404,7 +419,7 @@ export class LevelScene extends Phaser.Scene {
     });
     btn.on('pointerdown', () => {
       this.hintTimer?.remove();
-      this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId });
+      this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId, newUnlock: true });
     });
   }
 
@@ -413,13 +428,15 @@ export class LevelScene extends Phaser.Scene {
     const bg = this.add.graphics();
     bg.fillStyle(COLORS.warning, 1);
     bg.fillRoundedRect(-40, -15, 80, 30, RADIUS.sm);
-    const label = this.add.text(0, 0, '💡 Hint', {
+    const bulbIcon = this.add.image(-14, 0, 'icon-bulb');
+    bulbIcon.setScale(0.35);
+    const label = this.add.text(6, 0, 'Hint', {
       fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#0f172a',
       fontFamily: FONT.family,
       fontStyle: 'bold',
-    }).setOrigin(0.5);
-    btn.add([bg, label]);
+    }).setOrigin(0, 0.5);
+    btn.add([bg, bulbIcon, label]);
     btn.setSize(80, 30);
     btn.setInteractive(new Phaser.Geom.Rectangle(-40, -15, 80, 30), Phaser.Geom.Rectangle.Contains);
     btn.on('pointerover', () => {
@@ -471,14 +488,18 @@ export class LevelScene extends Phaser.Scene {
     panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
     panelBg.lineStyle(2, COLORS.warning, 1);
     panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
+    panelBg.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.1, 0.1, 0, 0);
+    panelBg.fillRect(-halfW + 2, -halfH + 2, panelW - 4, 20);
 
     const totalHints = this.levelData.hints.length;
-    const title = this.add.text(0, -80, `💡 Hint ${this.hintsUsed}/${totalHints}`, {
+    const hintBulbIcon = this.add.image(-60, -80, 'icon-bulb');
+    hintBulbIcon.setScale(0.4);
+    const title = this.add.text(-40, -80, `Hint ${this.hintsUsed}/${totalHints}`, {
       fontSize: `${scaledFontSize(this, FONT.sizes.lg + 2)}px`,
       color: '#f59e0b',
       fontFamily: FONT.family,
       fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0, 0.5);
 
     const text = this.add.text(0, -10, hint, {
       fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
@@ -488,11 +509,22 @@ export class LevelScene extends Phaser.Scene {
       align: 'center',
     }).setOrigin(0.5);
 
+    const guideGfx = this.add.graphics();
+    guideGfx.fillStyle(0x6366f1, 1);
+    guideGfx.fillCircle(-halfW + 40, halfH - 50, 12);
+    guideGfx.fillStyle(0x3b82f6, 1);
+    guideGfx.fillRoundedRect(-halfW + 28, halfH - 38, 24, 22, 3);
+    guideGfx.fillStyle(0xf59e0b, 1);
+    guideGfx.fillRoundedRect(-halfW + 26, halfH - 52, 28, 6, 2);
+    guideGfx.fillStyle(0xffffff, 1);
+    guideGfx.fillCircle(-halfW + 35, halfH - 52, 1.5);
+    guideGfx.fillCircle(-halfW + 45, halfH - 52, 1.5);
+
     const closeBtn = this.createSmallButton(0, 70, 'Got it', () => {
       this.closeHintOverlay();
     });
 
-    this.hintOverlay.add([panelBg, title, text, closeBtn]);
+    this.hintOverlay.add([panelBg, hintBulbIcon, title, text, guideGfx, closeBtn]);
   }
 
   private createSmallButton(x: number, y: number, text: string, callback: () => void): Phaser.GameObjects.Container {
@@ -629,10 +661,20 @@ export class LevelScene extends Phaser.Scene {
           this.quizOptionBgs[i].fillStyle(COLORS.error, 1);
           this.quizOptionBgs[i].fillRoundedRect(-w / 2 + 20, -btnHeight / 2, w - 40, btnHeight, RADIUS.sm);
 
-          if (config.correctIndex !== undefined) {
+          if (config.correctIndex !== undefined && config.options) {
             this.quizOptionBgs[config.correctIndex].clear();
             this.quizOptionBgs[config.correctIndex].fillStyle(COLORS.success, 1);
             this.quizOptionBgs[config.correctIndex].fillRoundedRect(-w / 2 + 20, -btnHeight / 2, w - 40, btnHeight, RADIUS.sm);
+
+            const explanationText = this.add.text(x + w / 2, startY + config.options.length * (btnHeight + gap) + 10,
+              `Correct answer: ${config.options[config.correctIndex]}`, {
+              fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+              color: '#f59e0b',
+              fontFamily: FONT.family,
+              wordWrap: { width: w - 40 },
+              align: 'center',
+            }).setOrigin(0.5, 0);
+            this.contentContainer.add(explanationText);
           }
         }
 
@@ -648,6 +690,111 @@ export class LevelScene extends Phaser.Scene {
 
     const totalHeight = startY + config.options.length * (btnHeight + gap) - y;
     this.maxContentScrollY = Math.max(0, totalHeight - _h);
+  }
+
+  private createDropdownSelector(
+    x: number, y: number, w: number, h: number,
+    options: string[], onSelect: (option: string, index: number) => void
+  ): { container: Phaser.GameObjects.Container; label: Phaser.GameObjects.Text; bg: Phaser.GameObjects.Graphics; setValue: (text: string) => void } {
+    const container = this.add.container(x, y);
+    const bg = this.add.graphics();
+    bg.fillStyle(COLORS.panelBg, 1);
+    bg.fillRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+    bg.lineStyle(2, COLORS.border, 1);
+    bg.strokeRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+
+    const label = this.add.text(0, 0, 'Select...', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
+
+    const arrow = this.add.text(w / 2 - 12, 0, '▼', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
+
+    container.add([bg, label, arrow]);
+    container.setSize(w, h);
+    container.setInteractive(new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h), Phaser.Geom.Rectangle.Contains);
+
+    let dropdownPanel: Phaser.GameObjects.Container | null = null;
+
+    const closeDropdown = () => {
+      if (dropdownPanel) {
+        dropdownPanel.destroy();
+        dropdownPanel = null;
+      }
+    };
+
+    container.on('pointerdown', () => {
+      closeDropdown();
+
+      dropdownPanel = this.add.container(x, y + h / 2 + 4);
+      dropdownPanel.setDepth(150);
+      this.contentContainer.add(dropdownPanel);
+
+      const panelBg = this.add.graphics();
+      panelBg.fillStyle(COLORS.panelBg, 1);
+      const panelH = options.length * 36 + 8;
+      panelBg.fillRoundedRect(-w / 2, 0, w, panelH, RADIUS.sm);
+      panelBg.lineStyle(2, COLORS.primary, 1);
+      panelBg.strokeRoundedRect(-w / 2, 0, w, panelH, RADIUS.sm);
+      dropdownPanel.add(panelBg);
+
+      options.forEach((opt, i) => {
+        const optY = 4 + i * 36 + 18;
+        const optBg = this.add.graphics();
+        const optLabel = this.add.text(0, optY, opt, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+          color: '#e2e8f0',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5);
+
+        const optHit = this.add.zone(0, optY, w - 8, 34);
+        optHit.setInteractive();
+        optHit.on('pointerover', () => {
+          optBg.clear();
+          optBg.fillStyle(COLORS.primaryDim, 1);
+          optBg.fillRoundedRect(-w / 2 + 4, optY - 17, w - 8, 34, RADIUS.xs);
+        });
+        optHit.on('pointerout', () => {
+          optBg.clear();
+        });
+        optHit.on('pointerdown', () => {
+          onSelect(opt, i);
+          label.setText(opt);
+          label.setColor('#e2e8f0');
+          bg.clear();
+          bg.fillStyle(COLORS.panelBg, 1);
+          bg.fillRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+          bg.lineStyle(2, COLORS.primary, 1);
+          bg.strokeRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+          closeDropdown();
+        });
+
+        dropdownPanel!.add([optBg, optLabel, optHit]);
+      });
+
+      this.time.delayedCall(100, () => {
+        this.input.once('pointerdown', () => {
+          closeDropdown();
+        });
+      });
+    });
+
+    const setValue = (text: string) => {
+      label.setText(text);
+      label.setColor('#e2e8f0');
+      bg.clear();
+      bg.fillStyle(COLORS.panelBg, 1);
+      bg.fillRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+      bg.lineStyle(2, COLORS.primary, 1);
+      bg.strokeRoundedRect(-w / 2, -h / 2, w, h, RADIUS.sm);
+    };
+
+    return { container, label, bg, setValue };
   }
 
   private renderMatch(x: number, y: number, w: number, h: number): void {
@@ -670,6 +817,13 @@ export class LevelScene extends Phaser.Scene {
     const matches: Record<string, string> = {};
     const selectionIndices: number[] = shuffledCaps.map((_, i) => i);
     const rowButtons: { bg: Phaser.GameObjects.Graphics; label: Phaser.GameObjects.Text; indicator: Phaser.GameObjects.Graphics }[] = [];
+    const touchedRows = new Set<number>();
+
+    this.progressText = this.add.text(this.scale.width / 2, 185, `Selected: 0/${pairs.length}`, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
 
     const col1X = x + 80;
     const col2X = x + w - 80;
@@ -709,55 +863,50 @@ export class LevelScene extends Phaser.Scene {
       );
 
       const cap = shuffledCaps[selectionIndices[i]];
-      const btn = this.add.container(col2X, rowY);
-      const bg = this.add.graphics();
-      bg.fillStyle(COLORS.panelBg, 1);
-      bg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
-      bg.lineStyle(2, COLORS.border, 1);
-      bg.strokeRoundedRect(-100, -20, 200, 40, RADIUS.sm);
-      const label = this.add.text(0, 0, cap, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-        color: '#e2e8f0',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
+      const dropdown = this.createDropdownSelector(col2X, rowY, 200, 40, shuffledCaps, (opt, idx) => {
+        selectionIndices[i] = idx;
+        matches[pair.need] = opt;
+        touchedRows.add(i);
+        if (this.progressText) {
+          this.progressText.setText(`Selected: ${touchedRows.size}/${pairs.length}`);
+        }
+        updateVisualIndicators();
+      });
+      dropdown.setValue(cap);
+
       const indicator = this.add.graphics();
       indicator.fillStyle(COLORS.border, 1);
       indicator.fillCircle(-110, 0, 5);
-      btn.add([bg, label, indicator]);
-      btn.setSize(200, 40);
-      btn.setInteractive(new Phaser.Geom.Rectangle(-100, -20, 200, 40), Phaser.Geom.Rectangle.Contains);
+      dropdown.container.add(indicator);
 
-      rowButtons.push({ bg, label, indicator });
-
-      btn.on('pointerdown', () => {
-        const usedByOthers = new Set(selectionIndices.filter((_, j) => j !== i));
-        let nextIndex = (selectionIndices[i] + 1) % shuffledCaps.length;
-        let attempts = 0;
-        while (usedByOthers.has(nextIndex) && attempts < shuffledCaps.length) {
-          nextIndex = (nextIndex + 1) % shuffledCaps.length;
-          attempts++;
-        }
-        selectionIndices[i] = nextIndex;
-        matches[pair.need] = shuffledCaps[nextIndex];
-        updateVisualIndicators();
-      });
-
-      matches[pair.need] = cap;
-      this.contentContainer.add(btn);
+      rowButtons.push({ bg: dropdown.bg, label: dropdown.label, indicator });
+      this.contentContainer.add(dropdown.container);
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = pairs.every((p) => matches[p.need] === p.capability);
+      let correctCount = 0;
+      pairs.forEach((p) => {
+        if (matches[p.need] === p.capability) correctCount++;
+      });
+      const correct = correctCount === pairs.length;
 
       pairs.forEach((p, ri) => {
         const isMatchCorrect = matches[p.need] === p.capability;
         rowButtons[ri].bg.clear();
         rowButtons[ri].bg.fillStyle(isMatchCorrect ? COLORS.success : COLORS.error, 1);
         rowButtons[ri].bg.fillRoundedRect(-100, -20, 200, 40, RADIUS.sm);
+        if (!isMatchCorrect) {
+          const correctLabel = this.add.text(col2X + 110, startY + ri * rowHeight, `→ ${p.capability}`, {
+            fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+            color: '#f59e0b',
+            fontFamily: FONT.family,
+          }).setOrigin(0, 0.5);
+          this.contentContainer.add(correctLabel);
+        }
       });
 
       this.time.delayedCall(1500, () => {
-        this.checkAnswer(correct);
+        this.checkAnswer(correct, correctCount, pairs.length);
       });
     });
     this.checkBtnContainer = checkBtn;
@@ -798,11 +947,9 @@ export class LevelScene extends Phaser.Scene {
       bg.lineStyle(2, COLORS.border, 1);
       bg.strokeRoundedRect(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight, RADIUS.sm);
 
-      const checkbox = this.add.text(-w / 2 + 35, 0, '☐', {
-        fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0, 0.5);
+      const checkboxBg = this.add.graphics();
+      checkboxBg.fillStyle(COLORS.border, 1);
+      checkboxBg.fillRoundedRect(-w / 2 + 28, -8, 16, 16, 3);
 
       const label = this.add.text(-w / 2 + 60, 0, item.text, {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
@@ -811,7 +958,7 @@ export class LevelScene extends Phaser.Scene {
         wordWrap: { width: w - 100 },
       }).setOrigin(0, 0.5);
 
-      btn.add([bg, checkbox, label]);
+      btn.add([bg, checkboxBg, label]);
       btn.setSize(w - 40, itemHeight);
       btn.setInteractive(new Phaser.Geom.Rectangle(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight), Phaser.Geom.Rectangle.Contains);
 
@@ -820,12 +967,20 @@ export class LevelScene extends Phaser.Scene {
       btn.on('pointerdown', () => {
         if (selected.has(item.id)) {
           selected.delete(item.id);
-          checkbox.setText('☐');
-          checkbox.setColor('#94a3b8');
+          checkboxBg.clear();
+          checkboxBg.fillStyle(COLORS.border, 1);
+          checkboxBg.fillRoundedRect(-w / 2 + 28, -8, 16, 16, 3);
         } else {
           selected.add(item.id);
-          checkbox.setText('☑');
-          checkbox.setColor('#0ea5e9');
+          checkboxBg.clear();
+          checkboxBg.fillStyle(COLORS.primary, 1);
+          checkboxBg.fillRoundedRect(-w / 2 + 28, -8, 16, 16, 3);
+          checkboxBg.lineStyle(2, COLORS.textBright, 1);
+          checkboxBg.beginPath();
+          checkboxBg.moveTo(-w / 2 + 32, -1);
+          checkboxBg.lineTo(-w / 2 + 35, 3);
+          checkboxBg.lineTo(-w / 2 + 41, -5);
+          checkboxBg.strokePath();
         }
       });
 
@@ -833,6 +988,9 @@ export class LevelScene extends Phaser.Scene {
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
+      const correctInSelection = correctAnswer.filter(id => selected.has(id)).length;
+      const wrongInSelection = [...selected].filter(id => !correctAnswer.includes(id)).length;
+      const correctCount = Math.max(0, correctInSelection - wrongInSelection);
       const correct = correctAnswer.every((id) => selected.has(id)) && selected.size === correctAnswer.length;
 
       config.items!.forEach((item, i) => {
@@ -854,7 +1012,7 @@ export class LevelScene extends Phaser.Scene {
       });
 
       this.time.delayedCall(1500, () => {
-        this.checkAnswer(correct);
+        this.checkAnswer(correct, correctCount, correctAnswer.length);
       });
     });
     this.checkBtnContainer = checkBtn;
@@ -884,6 +1042,7 @@ export class LevelScene extends Phaser.Scene {
     const startY = y + 30;
     const itemHeight = 45;
     const gap = 8;
+    let isDragging = false;
 
     const renderItems = () => {
       itemContainers.forEach((c) => c.destroy());
@@ -934,6 +1093,41 @@ export class LevelScene extends Phaser.Scene {
         btn.add([bg, label, upBtn, downBtn]);
         btn.setSize(w - 40, itemHeight);
 
+        btn.setInteractive(new Phaser.Geom.Rectangle(-w / 2 + 20, -itemHeight / 2, w - 40, itemHeight), Phaser.Geom.Rectangle.Contains);
+        this.input.setDraggable(btn);
+
+        const dragIndex = i;
+
+        btn.on('dragstart', () => {
+          isDragging = true;
+          btn.setDepth(50);
+          btn.setScale(1.05);
+        });
+
+        btn.on('drag', (_pointer: Phaser.Input.Pointer, _dragX: number, dragY: number) => {
+          btn.y = Phaser.Math.Clamp(
+            dragY,
+            startY,
+            startY + (currentOrder.length - 1) * (itemHeight + gap)
+          );
+        });
+
+        btn.on('dragend', () => {
+          btn.setDepth(0);
+          btn.setScale(1);
+
+          const newIndex = Math.round((btn.y - startY) / (itemHeight + gap));
+          const clampedIndex = Phaser.Math.Clamp(newIndex, 0, currentOrder.length - 1);
+
+          if (clampedIndex !== dragIndex) {
+            const item = currentOrder.splice(dragIndex, 1)[0];
+            currentOrder.splice(clampedIndex, 0, item);
+          }
+
+          isDragging = false;
+          renderItems();
+        });
+
         itemContainers.push(btn);
         this.contentContainer.add(btn);
       });
@@ -942,6 +1136,7 @@ export class LevelScene extends Phaser.Scene {
     renderItems();
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
+      if (isDragging) return;
       const correct = currentOrder.every((step, i) => step === correctAnswer[i]);
       this.checkAnswer(correct);
     });
@@ -988,6 +1183,12 @@ export class LevelScene extends Phaser.Scene {
         fontFamily: FONT.family,
       })
     );
+
+    this.progressText = this.add.text(this.scale.width / 2, 185, `Items placed: 0/${items.length}`, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
 
     const poolBg = this.add.graphics();
     poolBg.fillStyle(COLORS.bg, 0.5);
@@ -1080,7 +1281,7 @@ export class LevelScene extends Phaser.Scene {
         this.input.off('pointermove', onPointerMove);
 
         const itemCenterX = container.x + (poolItemWidth - 4) / 2;
-        const itemCenterY = container.y + itemHeight / 2;
+        const itemCenterY = container.y + itemHeight / 2 + this.contentScrollY;
         const previousZone = placements[item.id];
         let placed = false;
 
@@ -1119,6 +1320,9 @@ export class LevelScene extends Phaser.Scene {
           container.x = originalPositions[ii].x;
           container.y = originalPositions[ii].y;
         }
+        if (this.progressText) {
+          this.progressText.setText(`Items placed: ${Object.keys(placements).length}/${items.length}`);
+        }
       };
 
       container.on('pointerup', handleDrop);
@@ -1128,8 +1332,12 @@ export class LevelScene extends Phaser.Scene {
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = items.every(item => placements[item.id] === correctAnswer[item.id]);
-      this.checkAnswer(correct);
+      let correctCount = 0;
+      items.forEach(item => {
+        if (placements[item.id] === correctAnswer[item.id]) correctCount++;
+      });
+      const correct = correctCount === items.length;
+      this.checkAnswer(correct, correctCount, items.length);
     });
     this.checkBtnContainer = checkBtn;
     this.contentContainer.add(checkBtn);
@@ -1151,7 +1359,7 @@ export class LevelScene extends Phaser.Scene {
     }
 
     const statements = config.statements;
-    const inputState: { text: Phaser.GameObjects.Text; cursor: Phaser.GameObjects.Text; value: string; feedback: Phaser.GameObjects.Text; inputBg: Phaser.GameObjects.Graphics; rowY: number }[] = [];
+    const inputState: { text: Phaser.GameObjects.Text; cursor: Phaser.GameObjects.Text; value: string; feedback: Phaser.GameObjects.Text; inputBg: Phaser.GameObjects.Graphics; rowY: number; placeholder: Phaser.GameObjects.Text }[] = [];
     let activeInputIndex = -1;
     let cursorTimer: Phaser.Time.TimerEvent | null = null;
 
@@ -1187,6 +1395,15 @@ export class LevelScene extends Phaser.Scene {
         fontFamily: FONT.family,
       }).setOrigin(0, 0.5).setVisible(false);
 
+      const expected = correctAnswer ? (correctAnswer[stmt] || '') : '';
+      const placeholderKeywords = expected.split(/[\s,;:.]+/).filter(k => k.length > 3);
+      const placeholderStr = placeholderKeywords.length > 0 ? `e.g., ${placeholderKeywords.slice(0, 3).join(', ')}` : '';
+      const placeholderText = this.add.text(x + 30, rowY + 42, placeholderStr, {
+        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+        color: '#475569',
+        fontFamily: FONT.family,
+      }).setOrigin(0, 0.5).setVisible(placeholderStr.length > 0);
+
       const feedback = this.add.text(x + 30, rowY + 65, '', {
         fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
         color: '#94a3b8',
@@ -1194,9 +1411,10 @@ export class LevelScene extends Phaser.Scene {
         wordWrap: { width: w - 60 },
       });
 
-      inputState.push({ text: inputText, cursor, value: '', feedback, inputBg, rowY });
+      inputState.push({ text: inputText, cursor, value: '', feedback, inputBg, rowY, placeholder: placeholderText });
 
       this.contentContainer.add(inputBg);
+      this.contentContainer.add(placeholderText);
       this.contentContainer.add(inputText);
       this.contentContainer.add(cursor);
       this.contentContainer.add(feedback);
@@ -1272,30 +1490,42 @@ export class LevelScene extends Phaser.Scene {
       active.text.setText(active.value);
       active.cursor.setPosition(x + 30 + active.text.width, active.rowY + 42);
       active.cursor.setVisible(true);
+      active.placeholder.setVisible(active.value.length === 0);
       active.feedback.setText('');
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
       if (correctAnswer) {
         let allCorrect = true;
+        let totalKeywords = 0;
+        let totalMatched = 0;
         statements.forEach((stmt, i) => {
           const userText = inputState[i].value.toLowerCase();
           const expected = (correctAnswer[stmt] || '').toLowerCase();
           const keywords = expected.split(/[\s,;:.]+/).filter(k => k.length > 3);
-          const matched = keywords.filter(kw => userText.includes(kw));
-          const missing = keywords.filter(kw => !userText.includes(kw));
+          const matched = keywords.filter(kw => {
+            const userWords = userText.split(/\s+/);
+            return userWords.some(uw => this.levenshteinDistance(uw.toLowerCase(), kw.toLowerCase()) <= 2);
+          });
+          const missing = keywords.filter(kw => !matched.includes(kw));
+          totalKeywords += keywords.length;
+          totalMatched += matched.length;
           if (matched.length < Math.ceil(keywords.length * 0.6)) {
             allCorrect = false;
           }
           if (missing.length > 0) {
-            inputState[i].feedback.setText(`Missing: ${missing.join(', ')}`);
+            if (this.retries >= 2) {
+              inputState[i].feedback.setText(`Missing: ${missing.join(', ')}\nExpected: ${expected}`);
+            } else {
+              inputState[i].feedback.setText(`Missing: ${missing.join(', ')}`);
+            }
             inputState[i].feedback.setColor('#f59e0b');
           } else if (keywords.length > 0) {
             inputState[i].feedback.setText('All keywords matched');
             inputState[i].feedback.setColor('#10b981');
           }
         });
-        this.checkAnswer(allCorrect);
+        this.checkAnswer(allCorrect, Math.round(totalMatched), totalKeywords);
       } else {
         const correct = statements.every((_, i) => inputState[i].value.length > 20);
         this.checkAnswer(correct);
@@ -1326,6 +1556,13 @@ export class LevelScene extends Phaser.Scene {
     const stages = config.stages;
     const methods = config.methods;
     const selections: Record<string, string> = {};
+    let selectedCount = 0;
+
+    this.progressText = this.add.text(this.scale.width / 2, 185, `Selected: 0/${stages.length}`, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
 
     const startY = y + 30;
     const rowHeight = 60;
@@ -1340,36 +1577,37 @@ export class LevelScene extends Phaser.Scene {
         }).setOrigin(0, 0.5)
       );
 
-      const btn = this.add.container(x + w - 120, rowY);
-      const bg = this.add.graphics();
-      bg.fillStyle(COLORS.panelBg, 1);
-      bg.fillRoundedRect(-90, -18, 180, 36, RADIUS.sm);
-      bg.lineStyle(2, COLORS.border, 1);
-      bg.strokeRoundedRect(-90, -18, 180, 36, RADIUS.sm);
-      const label = this.add.text(0, 0, 'Select...', {
-        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
-      btn.add([bg, label]);
-      btn.setSize(180, 36);
-      btn.setInteractive(new Phaser.Geom.Rectangle(-90, -18, 180, 36), Phaser.Geom.Rectangle.Contains);
-
-      let methodIndex = -1;
-      btn.on('pointerdown', () => {
-        methodIndex = methodIndex === -1 ? 0 : (methodIndex + 1) % methods.length;
-        const method = methods[methodIndex];
-        label.setText(method);
-        label.setColor('#e2e8f0');
-        selections[stage] = method;
+      const dropdown = this.createDropdownSelector(x + w - 120, rowY, 180, 36, methods, (opt) => {
+        if (!selections[stage]) selectedCount++;
+        selections[stage] = opt;
+        if (this.progressText) {
+          this.progressText.setText(`Selected: ${selectedCount}/${stages.length}`);
+        }
       });
 
-      this.contentContainer.add(btn);
+      this.contentContainer.add(dropdown.container);
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = stages.every((stage) => selections[stage] === correctAnswer[stage]);
-      this.checkAnswer(correct);
+      let correctCount = 0;
+      stages.forEach((stage) => {
+        if (selections[stage] === correctAnswer[stage]) correctCount++;
+      });
+      const correct = correctCount === stages.length;
+
+      stages.forEach((stage, i) => {
+        const rowY = startY + i * rowHeight;
+        if (selections[stage] !== correctAnswer[stage]) {
+          const correctLabel = this.add.text(x + w - 30, rowY, `→ ${correctAnswer[stage]}`, {
+            fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+            color: '#f59e0b',
+            fontFamily: FONT.family,
+          }).setOrigin(1, 0.5);
+          this.contentContainer.add(correctLabel);
+        }
+      });
+
+      this.checkAnswer(correct, correctCount, stages.length);
     });
     this.checkBtnContainer = checkBtn;
     this.contentContainer.add(checkBtn);
@@ -1449,6 +1687,11 @@ export class LevelScene extends Phaser.Scene {
     const correctOutside = correctAnswer.outside;
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
+      let correctCount = 0;
+      elements.forEach((el) => {
+        if (correctInside.includes(el) && classifications[el] === 'inside') correctCount++;
+        else if (correctOutside.includes(el) && classifications[el] === 'outside') correctCount++;
+      });
       const insideCorrect = correctInside.every((el) => classifications[el] === 'inside');
       const outsideCorrect = correctOutside.every((el) => classifications[el] === 'outside');
       const noExtras = elements.every((el) => {
@@ -1456,7 +1699,8 @@ export class LevelScene extends Phaser.Scene {
         if (correctOutside.includes(el)) return classifications[el] === 'outside';
         return true;
       });
-      this.checkAnswer(insideCorrect && outsideCorrect && noExtras);
+      const correct = insideCorrect && outsideCorrect && noExtras;
+      this.checkAnswer(correct, correctCount, elements.length);
     });
     this.checkBtnContainer = checkBtn;
     this.contentContainer.add(checkBtn);
@@ -1487,6 +1731,14 @@ export class LevelScene extends Phaser.Scene {
     const selections: Record<string, string> = {};
     const stages = config.stages;
     const activities = config.activities;
+    let selectedCount = 0;
+
+    this.progressText = this.add.text(this.scale.width / 2, 185, `Selected: 0/${stages.length}`, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#94a3b8',
+      fontFamily: FONT.family,
+    }).setOrigin(0.5);
+
     const startY = y + 10;
 
     this.contentContainer.add(
@@ -1517,44 +1769,55 @@ export class LevelScene extends Phaser.Scene {
         }).setOrigin(0.5)
       );
 
-      const btn = this.add.container(sx + stageWidth / 2, stageY + 50);
-      const bg = this.add.graphics();
-      bg.fillStyle(COLORS.panelBg, 1);
-      bg.fillRoundedRect(-stageWidth / 2 + 6, -18, stageWidth - 12, 36, RADIUS.sm);
-      bg.lineStyle(1, COLORS.border, 1);
-      bg.strokeRoundedRect(-stageWidth / 2 + 6, -18, stageWidth - 12, 36, RADIUS.sm);
-      const label = this.add.text(0, 0, 'Select...', {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
-      btn.add([bg, label]);
-      btn.setSize(stageWidth - 12, 36);
-      btn.setInteractive(new Phaser.Geom.Rectangle(-stageWidth / 2 + 6, -18, stageWidth - 12, 36), Phaser.Geom.Rectangle.Contains);
-
-      let actIndex = -1;
-      btn.on('pointerdown', () => {
-        actIndex = (actIndex + 1) % activities.length;
-        const activity = activities[actIndex];
-        label.setText(activity);
-        label.setColor('#e2e8f0');
-        selections[stage] = activity;
+      const dropdown = this.createDropdownSelector(sx + stageWidth / 2, stageY + 50, stageWidth - 12, 36, activities, (opt) => {
+        if (!selections[stage]) selectedCount++;
+        selections[stage] = opt;
+        if (this.progressText) {
+          this.progressText.setText(`Selected: ${selectedCount}/${stages.length}`);
+        }
       });
 
-      this.contentContainer.add(btn);
+      this.contentContainer.add(dropdown.container);
     });
 
     const checkBtn = this.createSmallButton(x + w / 2, y + h - 40, 'Check', () => {
-      const correct = stages.every(stage => selections[stage] === correctAnswer[stage]);
-      this.checkAnswer(correct);
+      let correctCount = 0;
+      stages.forEach(stage => {
+        if (selections[stage] === correctAnswer[stage]) correctCount++;
+      });
+      const correct = correctCount === stages.length;
+
+      stages.forEach((stage, si) => {
+        if (selections[stage] !== correctAnswer[stage]) {
+          const sx = x + si * stageWidth;
+          const correctLabel = this.add.text(sx + stageWidth / 2, stageY + 90, `→ ${correctAnswer[stage]}`, {
+            fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+            color: '#f59e0b',
+            fontFamily: FONT.family,
+          }).setOrigin(0.5);
+          this.contentContainer.add(correctLabel);
+        }
+      });
+
+      this.checkAnswer(correct, correctCount, stages.length);
     });
     this.checkBtnContainer = checkBtn;
     this.contentContainer.add(checkBtn);
   }
 
-  private checkAnswer(correct: boolean): void {
+  private checkAnswer(correct: boolean, correctCount?: number, totalCount?: number): void {
     if (correct) {
-      this.showSuccess();
+      this.audioManager?.playSFX('sfx-success');
+      this.showSuccess(1.0);
+    } else if (correctCount !== undefined && totalCount !== undefined && correctCount > 0) {
+      const ratio = correctCount / totalCount;
+      if (ratio >= 0.5) {
+        this.showSuccess(ratio);
+      } else {
+        this.retries++;
+        this.gameManager.resetStreak();
+        this.showFailure();
+      }
     } else {
       this.retries++;
       this.gameManager.resetStreak();
@@ -1562,20 +1825,67 @@ export class LevelScene extends Phaser.Scene {
     }
   }
 
-  private showSuccess(): void {
+  private showSuccess(creditRatio: number = 1.0): void {
+    this.audioManager?.playSFX('sfx-level-complete');
+
     const width = this.scale.width;
     const height = this.scale.height;
 
     const elapsed = (Date.now() - this.startTime) / 1000;
     const rules = this.levelData.scoringRules;
-    let score = rules.baseScore;
-    score -= this.hintsUsed * rules.hintPenalty;
-    score -= this.retries * rules.retryPenalty;
-    if (elapsed < 60) score += rules.timeBonus;
-    if (this.hintsUsed === 0 && this.retries === 0) score += rules.perfectBonus;
-    score = Math.max(0, score);
+    const score = ScoringEngine.calculateScore(rules, this.hintsUsed, this.retries, Date.now() - this.startTime, creditRatio);
 
     this.gameManager.completeLevel(this.levelId, score, this.hintsUsed, this.retries);
+
+    const maxPossible = rules.baseScore + rules.timeBonus + rules.perfectBonus;
+    const starRatio = maxPossible > 0 ? score / maxPossible : 0;
+    let stars = 1;
+    if (starRatio >= 0.85) stars = 3;
+    else if (starRatio >= 0.6) stars = 2;
+    this.gameManager.setLevelStars(this.levelId, stars);
+
+    const COMPETENCY_MAP: Record<number, string> = {
+      1: 'systems_thinking',
+      2: 'requirements_engineering',
+      3: 'architecture_design',
+      4: 'verification_validation',
+      5: 'integration_management',
+    };
+    const competencyKey = COMPETENCY_MAP[this.levelData.moduleId];
+    if (competencyKey) {
+      this.gameManager.updateCompetency(competencyKey, score);
+    }
+
+    const completedCount = Object.values(this.gameManager.getProgress().levelScores).filter(s => s > 0).length;
+    if (completedCount === 1) {
+      this.gameManager.addAchievement('first_level');
+    }
+
+    if (score >= maxPossible) {
+      this.gameManager.addAchievement('perfect_score');
+    }
+
+    if (elapsed < 30 && creditRatio >= 1.0) {
+      this.gameManager.addAchievement('speed_demon');
+    }
+
+    if (this.hintsUsed === 0 && creditRatio >= 1.0) {
+      this.gameManager.addAchievement('no_hints');
+    }
+
+    const progress = this.gameManager.getProgress();
+    if (Object.keys(progress.levelScores).length >= 20) {
+      const allMax = Object.entries(progress.levelScores).every(([id, s]) => {
+        const lvlData = this.levelManager.getLevelData(id);
+        if (!lvlData) return false;
+        const max = lvlData.scoringRules.baseScore + lvlData.scoringRules.timeBonus + lvlData.scoringRules.perfectBonus;
+        return s >= max;
+      });
+      if (allMax) {
+        this.gameManager.addAchievement('se_master');
+      }
+    }
+
     const nextLevel = this.levelManager.getNextLevelId(this.levelId);
     if (nextLevel && !nextLevel.startsWith(`${this.levelData.moduleId}_`)) {
       this.gameManager.advanceModule(this.levelData.moduleId);
@@ -1600,12 +1910,14 @@ export class LevelScene extends Phaser.Scene {
     panelBg.lineStyle(3, COLORS.success, 1);
     panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.lg);
 
-    const title = this.add.text(0, -140, '🎉 Level Complete!', {
+    const trophyIcon = this.add.image(-80, -140, 'icon-trophy');
+    trophyIcon.setScale(0.5);
+    const title = this.add.text(-55, -140, 'Level Complete!', {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl + 4)}px`,
       color: '#10b981',
       fontFamily: FONT.family,
       fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0, 0.5);
 
     const scoreText = this.add.text(0, -80, `Score: ${score}`, {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl - 4)}px`,
@@ -1613,6 +1925,30 @@ export class LevelScene extends Phaser.Scene {
       fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
+
+    const starGfx = this.add.graphics();
+    for (let i = 0; i < 3; i++) {
+      const sx = -40 + i * 40;
+      const sy = -50;
+      if (i < stars) {
+        starGfx.fillStyle(0xeab308, 1);
+      } else {
+        starGfx.fillStyle(0x334155, 1);
+      }
+      const outerR = 14;
+      const innerR = 6;
+      starGfx.beginPath();
+      for (let j = 0; j < 10; j++) {
+        const r = j % 2 === 0 ? outerR : innerR;
+        const angle = (j * Math.PI) / 5 - Math.PI / 2;
+        const px = sx + r * Math.cos(angle);
+        const py = sy + r * Math.sin(angle);
+        if (j === 0) starGfx.moveTo(px, py);
+        else starGfx.lineTo(px, py);
+      }
+      starGfx.closePath();
+      starGfx.fillPath();
+    }
 
     const details = this.add.text(0, -30, `Hints used: ${this.hintsUsed} | Retries: ${this.retries}`, {
       fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
@@ -1628,18 +1964,38 @@ export class LevelScene extends Phaser.Scene {
       align: 'center',
     }).setOrigin(0.5);
 
+    const streak = this.gameManager.getStreak();
+    if (streak >= 3) {
+      const badgeText = streak >= 10 ? 'Legendary!' : streak >= 5 ? 'Unstoppable!' : 'On Fire!';
+      const badgeColor = streak >= 10 ? 0xef4444 : streak >= 5 ? 0xf59e0b : 0xfb923c;
+
+      const badge = this.add.text(0, -110, badgeText, {
+        fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
+        color: `#${badgeColor.toString(16).padStart(6, '0')}`,
+        fontFamily: FONT.family,
+        fontStyle: 'bold',
+      }).setOrigin(0.5);
+      panel.add(badge);
+
+      this.time.delayedCall(200, () => {
+        ParticleEffect.success(this, width / 2, height / 2);
+      });
+    }
+
     const nextBtn = this.createSmallButton(0, 120, nextLevel ? 'Next Level' : 'Back to Map', () => {
       if (nextLevel) {
         this.scene.start('LevelScene', { levelId: nextLevel });
       } else {
-        this.scene.start('MapScene');
+        this.scene.start('MapScene', { newUnlock: true });
       }
     });
 
-    panel.add([panelBg, title, scoreText, details, takeaway, nextBtn]);
+    panel.add([panelBg, trophyIcon, title, scoreText, starGfx, details, takeaway, nextBtn]);
   }
 
   private showFailure(): void {
+    this.audioManager?.playSFX('sfx-failure');
+
     const width = this.scale.width;
     const height = this.scale.height;
 
@@ -1651,8 +2007,10 @@ export class LevelScene extends Phaser.Scene {
     const panel = this.add.container(width / 2, height / 2);
     panel.setDepth(201);
 
+    const showSkip = this.retries >= 1;
+    const showAnswerBtn = this.retries >= 2;
     const panelW = scaledWidth(this, 400);
-    const panelH = 200;
+    const panelH = showAnswerBtn ? 300 : (showSkip ? 270 : 240);
     const halfW = panelW / 2;
     const halfH = panelH / 2;
 
@@ -1662,24 +2020,221 @@ export class LevelScene extends Phaser.Scene {
     panelBg.lineStyle(2, COLORS.error, 1);
     panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
 
-    const title = this.add.text(0, -60, 'Not quite right', {
+    const title = this.add.text(0, -halfH + 30, 'Not quite right', {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl - 4)}px`,
       color: '#ef4444',
       fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    const msg = this.add.text(0, -10, 'Take your time and try again.\nUse a hint if you need help!', {
+    const msg = this.add.text(0, -halfH + 70, 'Take your time and try again.\nUse a hint if you need help!', {
       fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
       color: '#e2e8f0',
       fontFamily: FONT.family,
       align: 'center',
     }).setOrigin(0.5);
 
-    const retryBtn = this.createSmallButton(0, 50, 'Try Again', () => {
+    const elements: Phaser.GameObjects.GameObject[] = [panelBg, title, msg];
+
+    const retryBtn = this.createSmallButton(-80, halfH - 50, 'Try Again', () => {
       this.scene.restart();
     });
+    elements.push(retryBtn);
 
-    panel.add([panelBg, title, msg, retryBtn]);
+    const learnMoreBtn = this.createSmallButton(80, halfH - 50, 'Learn More', () => {
+      overlay.destroy();
+      panel.destroy();
+      TransitionManager.fadeOut(this, 300, () => {
+        this.scene.start('LessonScene', { levelId: this.levelId });
+      });
+    });
+    elements.push(learnMoreBtn);
+
+    if (showSkip) {
+      const skipBtn = this.createSmallButton(-80, halfH - 90, 'Skip Level', () => {
+        this.gameManager.completeLevel(this.levelId, 0, this.hintsUsed, this.retries);
+        const nextLevel = this.levelManager.getNextLevelId(this.levelId);
+        if (nextLevel) {
+          this.scene.start('LevelScene', { levelId: nextLevel });
+        } else {
+          this.scene.start('MapScene');
+        }
+      });
+      elements.push(skipBtn);
+    }
+
+    if (showAnswerBtn) {
+      const answerBtn = this.createSmallButton(80, halfH - 90, 'Show Answer', () => {
+        this.showAnswerOverlay();
+      });
+      elements.push(answerBtn);
+    }
+
+    panel.add(elements);
+  }
+
+  private showAnswerOverlay(): void {
+    const width = this.scale.width;
+    const height = this.scale.height;
+
+    const answerOverlay = this.add.graphics();
+    answerOverlay.fillStyle(0x000000, 0.7);
+    answerOverlay.fillRect(0, 0, width, height);
+    answerOverlay.setDepth(300);
+
+    const answerPanel = this.add.container(width / 2, height / 2);
+    answerPanel.setDepth(301);
+
+    const answerText = this.getCorrectAnswerText();
+    const lineCount = answerText.split('\n').length;
+    const panelW = scaledWidth(this, 440);
+    const panelH = Math.max(200, 120 + lineCount * 24);
+    const halfW = panelW / 2;
+    const halfH = panelH / 2;
+
+    const panelBg = this.add.graphics();
+    panelBg.fillStyle(COLORS.panelBg, 1);
+    panelBg.fillRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
+    panelBg.lineStyle(2, COLORS.primary, 1);
+    panelBg.strokeRoundedRect(-halfW, -halfH, panelW, panelH, RADIUS.md);
+
+    const title = this.add.text(0, -halfH + 25, 'Correct Answer', {
+      fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
+      color: '#0ea5e9',
+      fontFamily: FONT.family,
+      fontStyle: 'bold',
+    }).setOrigin(0.5);
+
+    const answerContent = this.add.text(0, -halfH + 60, answerText, {
+      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+      color: '#e2e8f0',
+      fontFamily: FONT.family,
+      align: 'left',
+      wordWrap: { width: panelW - 40 },
+    }).setOrigin(0.5, 0);
+
+    const closeBtn = this.createSmallButton(0, halfH - 35, 'Close', () => {
+      answerOverlay.destroy();
+      answerPanel.destroy();
+    });
+
+    answerPanel.add([panelBg, title, answerContent, closeBtn]);
+  }
+
+  private getCorrectAnswerText(): string {
+    const config = this.levelData.config as Record<string, unknown>;
+    const correctAnswer = this.levelData.correctAnswer;
+    const lines: string[] = [];
+
+    switch (this.levelData.type) {
+      case 'quiz': {
+        const qConfig = config as { question?: string; options?: string[]; correctIndex?: number };
+        if (qConfig.options && qConfig.correctIndex !== undefined) {
+          lines.push(`Correct answer: ${qConfig.options[qConfig.correctIndex]}`);
+        }
+        break;
+      }
+      case 'drag-drop': {
+        const ddConfig = config as { items?: { id: string; text: string }[]; categories?: { id: string; label: string }[] };
+        const ddAnswer = correctAnswer as Record<string, string> | undefined;
+        if (ddConfig.items && ddConfig.categories && ddAnswer) {
+          const catLabels = Object.fromEntries(ddConfig.categories.map(c => [c.id, c.label]));
+          ddConfig.items.forEach(item => {
+            const cat = ddAnswer[item.id];
+            lines.push(`${item.text} → ${catLabels[cat] || cat}`);
+          });
+        }
+        break;
+      }
+      case 'match': {
+        const mConfig = config as { pairs?: { need: string; capability: string }[] };
+        if (mConfig.pairs) {
+          mConfig.pairs.forEach(p => {
+            lines.push(`${p.need} ↔ ${p.capability}`);
+          });
+        }
+        break;
+      }
+      case 'edit': {
+        const eConfig = config as { statements?: string[] };
+        const eAnswer = correctAnswer as Record<string, string> | undefined;
+        if (eConfig.statements && eAnswer) {
+          eConfig.statements.forEach(stmt => {
+            lines.push(`${stmt}: ${eAnswer[stmt] || ''}`);
+          });
+        }
+        break;
+      }
+      case 'build': {
+        const bConfig = config as { stages?: string[] };
+        const bAnswer = correctAnswer as Record<string, string> | undefined;
+        if (bConfig.stages && bAnswer) {
+          bConfig.stages.forEach(stage => {
+            lines.push(`${stage}: ${bAnswer[stage] || ''}`);
+          });
+        }
+        break;
+      }
+      case 'trace': {
+        const tConfig = config as { stages?: string[] };
+        const tAnswer = correctAnswer as Record<string, string> | undefined;
+        if (tConfig.stages && tAnswer) {
+          tConfig.stages.forEach(stage => {
+            lines.push(`${stage}: ${tAnswer[stage] || ''}`);
+          });
+        }
+        break;
+      }
+      case 'sequence': {
+        const sAnswer = correctAnswer as string[] | undefined;
+        if (sAnswer) {
+          sAnswer.forEach((step, i) => {
+            lines.push(`${i + 1}. ${step}`);
+          });
+        }
+        break;
+      }
+      case 'select': {
+        const sConfig = config as { items?: { id: string; text: string }[] };
+        const sAnswer = correctAnswer as string[] | undefined;
+        if (sConfig.items && sAnswer) {
+          const selectedItems = sConfig.items.filter(item => sAnswer.includes(item.id));
+          lines.push(`Select: ${selectedItems.map(item => item.text).join(', ')}`);
+        }
+        break;
+      }
+      case 'draw': {
+        const dAnswer = correctAnswer as { inside?: string[]; outside?: string[] } | undefined;
+        if (dAnswer) {
+          if (dAnswer.inside) lines.push(`Inside: ${dAnswer.inside.join(', ')}`);
+          if (dAnswer.outside) lines.push(`Outside: ${dAnswer.outside.join(', ')}`);
+        }
+        break;
+      }
+      default:
+        lines.push('Answer not available for this level type.');
+    }
+
+    return lines.join('\n');
+  }
+
+  private levenshteinDistance(a: string, b: string): number {
+    const matrix: number[][] = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j] + 1
+          );
+        }
+      }
+    }
+    return matrix[b.length][a.length];
   }
 }

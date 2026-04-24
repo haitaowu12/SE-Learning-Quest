@@ -95,7 +95,18 @@
       "correctAnswer": { "highPowerHighInterest": ["City Council", "Emergency Services"], "highPowerLowInterest": ["Regulatory Bodies"], "lowPowerHighInterest": ["Citizens", "Technology Vendors"], "lowPowerLowInterest": ["General Public"] },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "stakeholders": ["City Council", "Citizens", "Technology Vendors", "Regulatory Bodies", "Emergency Services", "General Public"] }
+      "config": { "stakeholders": ["City Council", "Citizens", "Technology Vendors", "Regulatory Bodies", "Emergency Services", "General Public"] },
+      "lessonContent": {
+        "conceptTitle": "Stakeholder Identification & Power/Interest Matrix",
+        "keyPoints": [
+          "Stakeholders are anyone affected by or who can affect the system",
+          "The Power/Interest matrix classifies stakeholders by their influence and concern",
+          "High power + high interest stakeholders must be actively managed",
+          "Low power + low interest stakeholders need only monitoring"
+        ],
+        "example": "In a smart city project, the City Council has high power and high interest — they fund and approve the project. The General Public has low power but high interest — they use the services but don't control decisions.",
+        "diagramType": "matrix"
+      }
     },
     {
       "id": "1_2",
@@ -110,7 +121,18 @@
       "correctAnswer": { "Patient Safety": "Real-time Monitoring", "Operational Efficiency": "Automated Scheduling", "Regulatory Compliance": "Audit Logging", "Cost Control": "Resource Optimization" },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "pairs": [{ "need": "Patient Safety", "capability": "Real-time Monitoring" }, { "need": "Operational Efficiency", "capability": "Automated Scheduling" }, { "need": "Regulatory Compliance", "capability": "Audit Logging" }, { "need": "Cost Control", "capability": "Resource Optimization" }] }
+      "config": { "pairs": [{ "need": "Patient Safety", "capability": "Real-time Monitoring" }, { "need": "Operational Efficiency", "capability": "Automated Scheduling" }, { "need": "Regulatory Compliance", "capability": "Audit Logging" }, { "need": "Cost Control", "capability": "Resource Optimization" }] },
+      "lessonContent": {
+        "conceptTitle": "Matching Stakeholder Needs to System Capabilities",
+        "keyPoints": [
+          "Every system capability should trace to at least one stakeholder need",
+          "Value is created when system features address real concerns",
+          "One capability may serve multiple stakeholders",
+          "Unmatched needs indicate gaps in the system design"
+        ],
+        "example": "A hospital's 'Real-time Monitoring' capability directly addresses the 'Patient Safety' need of doctors and patients, while 'Automated Scheduling' addresses 'Operational Efficiency' for administrators.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "1_3",
@@ -125,7 +147,18 @@
       "correctAnswer": { "inside": ["Student Records", "Course Registration", "Grading System", "Library Services"], "outside": ["Payment Gateway", "Government Database", "Email Provider"] },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "elements": ["Student Records", "Course Registration", "Grading System", "Library Services", "Payment Gateway", "Government Database", "Email Provider"] }
+      "config": { "elements": ["Student Records", "Course Registration", "Grading System", "Library Services", "Payment Gateway", "Government Database", "Email Provider"] },
+      "lessonContent": {
+        "conceptTitle": "Defining System Boundaries",
+        "keyPoints": [
+          "The system boundary separates what the system controls from its environment",
+          "Elements inside the boundary are part of the system",
+          "External entities interact with the system but are not part of it",
+          "Clear boundaries prevent scope creep and clarify interfaces"
+        ],
+        "example": "A university information system includes student records and course registration (inside), but the payment gateway and government databases are external entities that interact across the boundary.",
+        "diagramType": "hierarchy"
+      }
     },
     {
       "id": "1_4",
@@ -140,7 +173,18 @@
       "correctAnswer": { "loops": [{ "nodes": ["Temperature Drop", "Heating On", "Temperature Rise", "Heating Off"], "type": "balancing" }, { "nodes": ["Motion Detected", "Lights On", "Energy Use Increases", "Cost Increases"], "type": "reinforcing" }] },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "nodes": ["Cost Increases", "Heating On", "Motion Detected", "Temperature Rise", "Lights On", "Temperature Drop", "Energy Use Increases", "Heating Off"] }
+      "config": { "nodes": ["Cost Increases", "Heating On", "Motion Detected", "Temperature Rise", "Lights On", "Temperature Drop", "Energy Use Increases", "Heating Off"] },
+      "lessonContent": {
+        "conceptTitle": "Reinforcing and Balancing Feedback Loops",
+        "keyPoints": [
+          "Reinforcing loops amplify change — they grow exponentially",
+          "Balancing loops resist change — they seek equilibrium",
+          "Identifying loop type helps predict system behavior",
+          "Most real systems contain both types interacting"
+        ],
+        "example": "A thermostat is a balancing loop: temperature drops → heating turns on → temperature rises → heating turns off. Social media engagement is a reinforcing loop: more posts → more engagement → more posts.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "2_1",
@@ -155,7 +199,19 @@
       "correctAnswer": { "The system shall be fast.": "The system shall respond to user queries within 2 seconds under normal load.", "The system should be secure.": "The system shall enforce role-based access control for all user actions by Q2 2026.", "Training will be provided.": "All operators shall complete 8 hours of safety training before system handover." },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "statements": ["The system shall be fast.", "The system should be secure.", "Training will be provided."] }
+      "config": { "statements": ["The system shall be fast.", "The system should be secure.", "Training will be provided."] },
+      "lessonContent": {
+        "conceptTitle": "Writing SMART Requirements",
+        "keyPoints": [
+          "Specific: Clearly state what the system shall do",
+          "Measurable: Include quantitative acceptance criteria",
+          "Achievable: Feasible within constraints",
+          "Relevant: Traces to a stakeholder need",
+          "Time-bound: Specifies when or how quickly"
+        ],
+        "example": "Vague: 'The system shall be fast.' SMART: 'The system shall respond to user queries within 2 seconds under normal load.'",
+        "diagramType": "sequence"
+      }
     },
     {
       "id": "2_2",
@@ -170,7 +226,18 @@
       "correctAnswer": { "SYS-001": "SH-001", "SYS-002": "SH-002", "SYS-003": "SH-003" },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "stakeholderReqs": [{ "id": "SH-001", "text": "The system shall provide real-time status updates." }, { "id": "SH-002", "text": "The system shall support 1000 concurrent users." }, { "id": "SH-003", "text": "The system shall comply with GDPR." }], "systemReqs": [{ "id": "SYS-001", "text": "Status updates shall be pushed every 5 seconds." }, { "id": "SYS-002", "text": "The server shall handle 1000 simultaneous connections." }, { "id": "SYS-003", "text": "Personal data shall be encrypted at rest and in transit." }] }
+      "config": { "stakeholderReqs": [{ "id": "SH-001", "text": "The system shall provide real-time status updates." }, { "id": "SH-002", "text": "The system shall support 1000 concurrent users." }, { "id": "SH-003", "text": "The system shall comply with GDPR." }], "systemReqs": [{ "id": "SYS-001", "text": "Status updates shall be pushed every 5 seconds." }, { "id": "SYS-002", "text": "The server shall handle 1000 simultaneous connections." }, { "id": "SYS-003", "text": "Personal data shall be encrypted at rest and in transit." }] },
+      "lessonContent": {
+        "conceptTitle": "Requirements Traceability",
+        "keyPoints": [
+          "Every system requirement must trace to a stakeholder requirement",
+          "Traceability ensures no orphan requirements exist",
+          "Forward traceability: stakeholder need → system requirement → design → test",
+          "Backward traceability: test → design → system requirement → stakeholder need"
+        ],
+        "example": "Stakeholder need 'The system shall provide real-time updates' traces to system requirement 'Status updates shall be pushed every 5 seconds', which traces to a design component and a test case.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "2_3",
@@ -185,7 +252,18 @@
       "correctAnswer": { "The GUI shall use corporate color scheme.": "Inspection", "The algorithm shall sort data in O(n log n).": "Analysis", "The login flow shall redirect to dashboard.": "Demonstration", "The system shall handle 1000 req/s.": "Test" },
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "requirements": ["The GUI shall use corporate color scheme.", "The algorithm shall sort data in O(n log n).", "The login flow shall redirect to dashboard.", "The system shall handle 1000 req/s."], "methods": ["Inspection", "Analysis", "Demonstration", "Test"] }
+      "config": { "requirements": ["The GUI shall use corporate color scheme.", "The algorithm shall sort data in O(n log n).", "The login flow shall redirect to dashboard.", "The system shall handle 1000 req/s."], "methods": ["Inspection", "Analysis", "Demonstration", "Test"] },
+      "lessonContent": {
+        "conceptTitle": "Selecting Verification Methods",
+        "keyPoints": [
+          "Inspection: Visual or physical examination (e.g., check color scheme)",
+          "Analysis: Modeling, simulation, or calculation (e.g., algorithm complexity)",
+          "Demonstration: Operation without quantitative measurement (e.g., login flow works)",
+          "Test: Operation with quantitative measurement (e.g., handles 1000 req/s)"
+        ],
+        "example": "To verify 'The GUI shall use corporate colors', use Inspection (look at it). To verify 'The system shall handle 1000 requests/second', use Test (measure it).",
+        "diagramType": "matrix"
+      }
     },
     {
       "id": "2_4",
@@ -200,7 +278,18 @@
       "correctAnswer": ["SR-002", "SR-005", "DS-001", "TC-003"],
       "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
       "timeLimit": 90,
-      "config": { "changeRequest": "Add biometric authentication to user login.", "items": [{ "id": "SR-001", "text": "User shall enter username and password." }, { "id": "SR-002", "text": "System shall authenticate user identity." }, { "id": "SR-003", "text": "Password shall be at least 8 characters." }, { "id": "SR-004", "text": "Session shall timeout after 30 minutes." }, { "id": "SR-005", "text": "System shall support multiple auth methods." }, { "id": "DS-001", "text": "Authentication module design." }, { "id": "DS-002", "text": "Session management design." }, { "id": "TC-003", "text": "Login test cases." }] }
+      "config": { "changeRequest": "Add biometric authentication to user login.", "items": [{ "id": "SR-001", "text": "User shall enter username and password." }, { "id": "SR-002", "text": "System shall authenticate user identity." }, { "id": "SR-003", "text": "Password shall be at least 8 characters." }, { "id": "SR-004", "text": "Session shall timeout after 30 minutes." }, { "id": "SR-005", "text": "System shall support multiple auth methods." }, { "id": "DS-001", "text": "Authentication module design." }, { "id": "DS-002", "text": "Session management design." }, { "id": "TC-003", "text": "Login test cases." }] },
+      "lessonContent": {
+        "conceptTitle": "Change Impact Analysis",
+        "keyPoints": [
+          "Every change has ripple effects through the system",
+          "Follow traceability links to find affected requirements",
+          "Consider upstream (stakeholder) and downstream (design, test) impacts",
+          "Interface requirements are often overlooked but critically affected"
+        ],
+        "example": "Adding biometric authentication affects: the authentication module design, the login test cases, and the 'multiple auth methods' requirement — but not the password length requirement.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "3_1",
@@ -215,7 +304,18 @@
       "correctAnswer": { "Interlocking": ["Route Setting", "Signal Control"], "Train Detection": ["Axle Counting", "Track Circuits"], "Wayside Control": ["Point Control", "Level Crossing"], "Central Supervision": ["Traffic Management", "Diagnostics"] },
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "functions": ["Route Setting", "Signal Control", "Axle Counting", "Track Circuits", "Point Control", "Level Crossing", "Traffic Management", "Diagnostics"] }
+      "config": { "functions": ["Route Setting", "Signal Control", "Axle Counting", "Track Circuits", "Point Control", "Level Crossing", "Traffic Management", "Diagnostics"] },
+      "lessonContent": {
+        "conceptTitle": "System Decomposition & N² Diagrams",
+        "keyPoints": [
+          "Decomposition breaks a system into manageable subsystems",
+          "Each function should be allocated to exactly one subsystem",
+          "N² diagrams show interfaces: diagonal = internal, off-diagonal = external",
+          "Complete decomposition covers all functions with no overlaps"
+        ],
+        "example": "A railway signaling system decomposes into: Interlocking (route setting, signal control), Train Detection (axle counting, track circuits), Wayside Control (points, level crossings), and Central Supervision (traffic management, diagnostics).",
+        "diagramType": "hierarchy"
+      }
     },
     {
       "id": "3_2",
@@ -230,7 +330,18 @@
       "correctAnswer": { "flows": [{ "from": "Train Detection", "to": "Interlocking", "type": "data", "label": "Train Position" }, { "from": "Interlocking", "to": "Wayside Control", "type": "control", "label": "Point Command" }, { "from": "Central Supervision", "to": "Interlocking", "type": "control", "label": "Route Request" }] },
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "subsystems": ["Interlocking", "Train Detection", "Wayside Control", "Central Supervision"] }
+      "config": { "subsystems": ["Interlocking", "Train Detection", "Wayside Control", "Central Supervision"] },
+      "lessonContent": {
+        "conceptTitle": "Interface Definition & Data Flow",
+        "keyPoints": [
+          "Every subsystem output should be another subsystem's input",
+          "Data flows carry information between components",
+          "Control flows manage sequencing and state",
+          "Missing interfaces cause integration failures"
+        ],
+        "example": "Train Detection sends 'Train Position' (data flow) to Interlocking, which sends 'Point Command' (control flow) to Wayside Control. Central Supervision sends 'Route Request' to Interlocking.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "3_3",
@@ -245,7 +356,18 @@
       "correctAnswer": { "Performance": 40, "Security": 30, "Usability": 20, "Maintainability": 10 },
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "budget": 100, "requirements": [{ "name": "Performance", "max": 40, "valuePerUnit": 2.5 }, { "name": "Security", "max": 30, "valuePerUnit": 3.0 }, { "name": "Usability", "max": 20, "valuePerUnit": 2.0 }, { "name": "Maintainability", "max": 20, "valuePerUnit": 1.5 }] }
+      "config": { "budget": 100, "requirements": [{ "name": "Performance", "max": 40, "valuePerUnit": 2.5 }, { "name": "Security", "max": 30, "valuePerUnit": 3.0 }, { "name": "Usability", "max": 20, "valuePerUnit": 2.0 }, { "name": "Maintainability", "max": 20, "valuePerUnit": 1.5 }] },
+      "lessonContent": {
+        "conceptTitle": "Trade-off Analysis & Resource Allocation",
+        "keyPoints": [
+          "Resources are always limited — you can't maximize everything",
+          "The Pareto front shows optimal trade-off points",
+          "Marginal value decreases as you invest more in one area",
+          "Good trade-offs balance competing stakeholder priorities"
+        ],
+        "example": "With a budget of 100 units, allocating 40 to Performance (high value/unit), 30 to Security, 20 to Usability, and 10 to Maintainability maximizes total system value.",
+        "diagramType": "matrix"
+      }
     },
     {
       "id": "3_4",
@@ -260,7 +382,18 @@
       "correctAnswer": "Layered architecture with redundancy",
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "question": "Which pattern best suits a safety-critical distributed control system?", "options": ["Monolithic", "Client-server", "Layered architecture with redundancy", "Peer-to-peer"], "correctIndex": 2 }
+      "config": { "question": "Which pattern best suits a safety-critical distributed control system?", "options": ["Monolithic", "Client-server", "Layered architecture with redundancy", "Peer-to-peer"], "correctIndex": 2 },
+      "lessonContent": {
+        "conceptTitle": "Architectural Design Patterns",
+        "keyPoints": [
+          "Client-server: Centralized control, clear separation",
+          "Peer-to-peer: No single point of failure, decentralized",
+          "Layered: Separation of concerns, each layer depends only on the one below",
+          "Pattern choice depends on quality attributes (reliability, performance, security)"
+        ],
+        "example": "A safety-critical railway control system needs high availability and fault tolerance — a layered architecture with redundancy provides both separation of concerns and backup paths.",
+        "diagramType": "hierarchy"
+      }
     },
     {
       "id": "4_1",
@@ -275,7 +408,18 @@
       "correctAnswer": { "Concept": "Analysis", "Development": "Inspection", "Integration": "Test", "Operation": "Demonstration" },
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "stages": ["Concept", "Development", "Integration", "Operation"], "methods": ["Analysis", "Inspection", "Test", "Demonstration"] }
+      "config": { "stages": ["Concept", "Development", "Integration", "Operation"], "methods": ["Analysis", "Inspection", "Test", "Demonstration"] },
+      "lessonContent": {
+        "conceptTitle": "Verification & Validation Planning",
+        "keyPoints": [
+          "Verification: Did we build the system right? (meets requirements)",
+          "Validation: Did we build the right system? (meets needs)",
+          "Early lifecycle stages favor Analysis and Inspection",
+          "Later lifecycle stages favor Demonstration and Test"
+        ],
+        "example": "During Concept phase, use Analysis (simulate the design). During Integration, use Test (measure performance). During Operation, use Demonstration (show it works in the field).",
+        "diagramType": "sequence"
+      }
     },
     {
       "id": "4_2",
@@ -290,7 +434,18 @@
       "correctAnswer": { "REQ-01": "TC-01: Input valid credentials → Login succeeds.", "REQ-02": "TC-02: Input invalid password 3 times → Account locks.", "REQ-03": "TC-03: Request password reset → Email sent within 60s." },
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "requirements": [{ "id": "REQ-01", "text": "User shall log in with valid credentials." }, { "id": "REQ-02", "text": "Account shall lock after 3 failed attempts." }, { "id": "REQ-03", "text": "Password reset email shall arrive within 60 seconds." }] }
+      "config": { "requirements": [{ "id": "REQ-01", "text": "User shall log in with valid credentials." }, { "id": "REQ-02", "text": "Account shall lock after 3 failed attempts." }, { "id": "REQ-03", "text": "Password reset email shall arrive within 60 seconds." }] },
+      "lessonContent": {
+        "conceptTitle": "Writing Effective Test Cases",
+        "keyPoints": [
+          "Each test case needs: preconditions, inputs, expected results, pass/fail criteria",
+          "Consider boundary values and equivalence classes",
+          "Every requirement should trace to at least one test case",
+          "Good test cases are repeatable and independent"
+        ],
+        "example": "For 'User shall log in with valid credentials': TC-01: Input valid username + password → Login succeeds. For 'Account locks after 3 failures': TC-02: Input wrong password 3 times → Account locks.",
+        "diagramType": "flowchart"
+      }
     },
     {
       "id": "4_3",
@@ -305,7 +460,18 @@
       "correctAnswer": ["All requirements traced to design elements", "Interface definitions complete", "No unresolved hazards", "Stakeholder concerns addressed"],
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "items": ["All requirements traced to design elements", "Interface definitions complete", "No unresolved hazards", "Stakeholder concerns addressed", "Code comments present", "Unit tests written"] }
+      "config": { "items": ["All requirements traced to design elements", "Interface definitions complete", "No unresolved hazards", "Stakeholder concerns addressed", "Code comments present", "Unit tests written"] },
+      "lessonContent": {
+        "conceptTitle": "Design Review Preparation",
+        "keyPoints": [
+          "Check completeness: Are all requirements addressed?",
+          "Check consistency: Are there contradictions?",
+          "Check clarity: Can all stakeholders understand it?",
+          "Check traceability: Can every design element trace to a requirement?"
+        ],
+        "example": "Before a PDR (Preliminary Design Review), verify: all requirements traced to design elements, interface definitions complete, no unresolved hazards, and stakeholder concerns addressed.",
+        "diagramType": "sequence"
+      }
     },
     {
       "id": "4_4",
@@ -320,7 +486,18 @@
       "correctAnswer": "Missing quantitative availability target and hazard log reference",
       "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
       "timeLimit": 120,
-      "config": { "question": "What is missing from these requirements for EN 50126 compliance?", "options": ["Nothing, they are complete", "Missing quantitative availability target and hazard log reference", "Missing only the safety case", "Missing only the verification plan"], "correctIndex": 1 }
+      "config": { "question": "What is missing from these requirements for EN 50126 compliance?", "options": ["Nothing, they are complete", "Missing quantitative availability target and hazard log reference", "Missing only the safety case", "Missing only the verification plan"], "correctIndex": 1 },
+      "lessonContent": {
+        "conceptTitle": "EN 50126 RAMS Compliance",
+        "keyPoints": [
+          "RAMS = Reliability, Availability, Maintainability, Safety",
+          "EN 50126 requires explicit quantitative RAMS targets",
+          "Safety requirements must include hazard identification",
+          "Risk acceptance criteria must be defined and justified"
+        ],
+        "example": "A requirements set missing quantitative availability targets (e.g., '99.99% availability') and a hazard log reference would fail EN 50126 compliance review.",
+        "diagramType": "matrix"
+      }
     },
     {
       "id": "5_1",
@@ -335,7 +512,18 @@
       "correctAnswer": ["Establish Baseline", "Submit Change Request", "Review Change Request", "Approve Change", "Implement Change", "Verify Change", "Update Baseline"],
       "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
       "timeLimit": 150,
-      "config": { "steps": ["Update Baseline", "Implement Change", "Submit Change Request", "Verify Change", "Establish Baseline", "Approve Change", "Review Change Request"] }
+      "config": { "steps": ["Update Baseline", "Implement Change", "Submit Change Request", "Verify Change", "Establish Baseline", "Approve Change", "Review Change Request"] },
+      "lessonContent": {
+        "conceptTitle": "Configuration Management Process",
+        "keyPoints": [
+          "Baselines are established at major milestones",
+          "Changes must be formally requested, reviewed, and approved",
+          "Every change must be traced to its originating request",
+          "Baselines are updated only after verification of implemented changes"
+        ],
+        "example": "The CM process: Establish Baseline → Submit Change Request → Review → Approve → Implement → Verify → Update Baseline. Skipping any step risks uncontrolled changes.",
+        "diagramType": "sequence"
+      }
     },
     {
       "id": "5_2",
@@ -350,7 +538,18 @@
       "correctAnswer": { "Signal failure": { "probability": "high", "impact": "high", "mitigation": "Redundant design" }, "Vendor delay": { "probability": "medium", "impact": "medium", "mitigation": "Penalty clause" }, "Staff turnover": { "probability": "low", "impact": "low", "mitigation": "Knowledge documentation" } },
       "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
       "timeLimit": 150,
-      "config": { "risks": ["Signal failure", "Vendor delay", "Staff turnover"] }
+      "config": { "risks": ["Signal failure", "Vendor delay", "Staff turnover"] },
+      "lessonContent": {
+        "conceptTitle": "Risk Assessment & Mitigation",
+        "keyPoints": [
+          "Risks are classified by probability and impact",
+          "High probability + high impact = immediate action required",
+          "Mitigation strategies: Avoid, Transfer, Mitigate, Accept",
+          "Residual risk remains after mitigation — it must be monitored"
+        ],
+        "example": "Signal failure: High probability + High impact → Mitigate with redundant design. Vendor delay: Medium → Transfer with penalty clause. Staff turnover: Low → Accept with knowledge documentation.",
+        "diagramType": "matrix"
+      }
     },
     {
       "id": "5_3",
@@ -365,7 +564,18 @@
       "correctAnswer": ["Integrate Core Library", "Integrate Database Layer", "Integrate Business Logic", "Integrate API Layer", "Integrate Frontend"],
       "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
       "timeLimit": 150,
-      "config": { "steps": ["Integrate Frontend", "Integrate Business Logic", "Integrate Core Library", "Integrate API Layer", "Integrate Database Layer"] }
+      "config": { "steps": ["Integrate Frontend", "Integrate Business Logic", "Integrate Core Library", "Integrate API Layer", "Integrate Database Layer"] },
+      "lessonContent": {
+        "conceptTitle": "Integration Sequencing Strategy",
+        "keyPoints": [
+          "Integration order affects testing efficiency and stub/driver count",
+          "Bottom-up: Minimizes stubs but needs drivers for upper layers",
+          "Top-down: Minimizes drivers but needs stubs for lower layers",
+          "Integrate components with the most interfaces first to catch issues early"
+        ],
+        "example": "For a web application: Core Library → Database Layer → Business Logic → API Layer → Frontend. This bottom-up approach minimizes stubs and allows incremental testing.",
+        "diagramType": "sequence"
+      }
     },
     {
       "id": "5_4",
@@ -380,7 +590,18 @@
       "correctAnswer": { "Technical Processes": ["Requirements Analysis", "Architecture Design", "Integration", "Verification"], "Management Processes": ["Planning", "Risk Management", "Configuration Management"], "Support Processes": ["Quality Assurance", "Measurement", "Review"] },
       "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
       "timeLimit": 150,
-      "config": { "sections": ["Technical Processes", "Management Processes", "Support Processes"], "blocks": ["Requirements Analysis", "Architecture Design", "Integration", "Verification", "Planning", "Risk Management", "Configuration Management", "Quality Assurance", "Measurement", "Review"] }
+      "config": { "sections": ["Technical Processes", "Management Processes", "Support Processes"], "blocks": ["Requirements Analysis", "Architecture Design", "Integration", "Verification", "Planning", "Risk Management", "Configuration Management", "Quality Assurance", "Measurement", "Review"] },
+      "lessonContent": {
+        "conceptTitle": "Systems Engineering Management Plan (SEMP)",
+        "keyPoints": [
+          "SEMP defines how SE processes will be applied on the project",
+          "Three process categories: Technical, Management, Support",
+          "Technical: Requirements Analysis, Architecture Design, Integration, Verification",
+          "Tailor the plan to project size and complexity"
+        ],
+        "example": "A SEMP for a railway project includes: Technical Processes (Requirements Analysis, Architecture Design, Integration, Verification), Management Processes (Planning, Risk Management, CM), and Support Processes (QA, Measurement, Review).",
+        "diagramType": "hierarchy"
+      }
     }
   ]
 }
