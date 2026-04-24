@@ -8,10 +8,280 @@
       "themeColor": "#0ea5e9",
       "icon": "brain",
       "levels": [
-        { "id": "1_1", "moduleId": 1, "title": "Stakeholder Analysis", "type": "drag-drop", "learningObjective": "Identify and categorize stakeholders using power/interest matrix", "standardRef": { "incose": "stakeholder_requirements", "iso15288": "stakeholder_requirements" }, "scenarioText": "You are the lead systems engineer for a new smart city project. Identify the key stakeholders and place them in the power/interest matrix.", "hints": ["Think about who has power to influence the project and who has interest in its outcomes.", "Consider both internal and external stakeholders.", "High power + high interest = keep satisfied and closely manage."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": false, "completed": false, "bestScore": 0 },
-        { "id": "1_2", "moduleId": 1, "title": "Value Proposition", "type": "match", "learningObjective": "Match stakeholder needs to system capabilities", "standardRef": { "incose": "stakeholder_requirements", "iso15288": "stakeholder_requirements" }, "scenarioText": "Different stakeholders have different needs. Match each stakeholder to the system capability that best addresses their primary concern.", "hints": ["Read each stakeholder's primary concern carefully.", "Look for direct relationships between needs and capabilities.", "Some capabilities may address multiple stakeholders."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "1_3", "moduleId": 1, "title": "System Boundaries", "type": "draw", "learningObjective": "Define system boundaries and classify elements", "standardRef": { "incose": "architecture_design", "iso15288": "architecture" }, "scenarioText": "Draw the boundary of the university information system. Classify elements as inside or outside the system boundary.", "hints": ["The system boundary separates what is controlled by the system from what is not.", "Consider data flows across the boundary.", "External entities interact with the system but are not part of it."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "1_4", "moduleId": 1, "title": "Feedback Loops", "type": "sequence", "learningObjective": "Identify reinforcing and balancing feedback loops", "standardRef": { "incose": "system_analysis", "iso15288": "system_analysis" }, "scenarioText": "Connect the causes and effects to form feedback loops in the smart home ecosystem. Identify whether each loop is reinforcing or balancing.", "hints": ["Reinforcing loops amplify change (positive feedback).", "Balancing loops stabilize change (negative feedback).", "Follow the arrows to see if the loop strengthens or weakens the initial change."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 }
+        {
+          "id": "1_1",
+          "moduleId": 1,
+          "title": "Stakeholder Analysis",
+          "type": "drag-drop",
+          "learningObjective": "Identify and categorize stakeholders using power/interest matrix",
+          "standardRef": {
+            "incose": "stakeholder_requirements",
+            "iso15288": "stakeholder_requirements"
+          },
+          "scenarioText": "You are the Lead Systems Engineer for Project Vanguard (Autonomous Logistics Network). The Planetary Council is demanding a progress report. Classify the key stakeholders in the power/interest matrix to determine our response strategy.",
+          "hints": [
+            "Think about who has power to influence the project and who has interest in its outcomes.",
+            "Consider both internal and external stakeholders.",
+            "High power + high interest = keep satisfied and closely manage."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": false,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Vanguard Control, we have a situation. The Planetary Council is demanding an immediate progress report on the autonomous network."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We need to know who we're talking to before we say anything. Engineer, pull up the power/interest matrix."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Classify our key stakeholders. We need to prioritize our response strategy before the public feed gets wind of this."
+            }
+          ],
+          "config": {
+            "stakeholders": [
+              "Planetary Council",
+              "Citizens",
+              "Tech Syndicates",
+              "Safety Regulators",
+              "Emergency Protocols",
+              "General Public"
+            ]
+          },
+          "correctAnswer": {
+            "highPowerHighInterest": [
+              "Planetary Council",
+              "Emergency Protocols"
+            ],
+            "highPowerLowInterest": [
+              "Safety Regulators"
+            ],
+            "lowPowerHighInterest": [
+              "Citizens",
+              "Tech Syndicates"
+            ],
+            "lowPowerLowInterest": [
+              "General Public"
+            ]
+          }
+        },
+        {
+          "id": "1_2",
+          "moduleId": 1,
+          "title": "Value Proposition",
+          "type": "match",
+          "learningObjective": "Match stakeholder needs to system capabilities",
+          "standardRef": {
+            "incose": "stakeholder_requirements",
+            "iso15288": "stakeholder_requirements"
+          },
+          "scenarioText": "Different stakeholders have different needs. Match each stakeholder to the Vanguard network capability that best addresses their primary concern.",
+          "hints": [
+            "Read each stakeholder's primary concern carefully.",
+            "Look for direct relationships between needs and capabilities.",
+            "Some capabilities may address multiple stakeholders."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "The new routing algorithm is facing pushback from multiple sectors."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Everyone has different priorities. Operations wants swarm efficiency, Security wants collision avoidance."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Engineer, match these stakeholders to the system capabilities that actually solve their problems. Let's prove the Vanguard system is viable."
+            }
+          ],
+          "config": {
+            "pairs": [
+              {
+                "need": "Civic Safety",
+                "capability": "Collision Avoidance Alg"
+              },
+              {
+                "need": "Swarm Efficiency",
+                "capability": "Automated Routing"
+              },
+              {
+                "need": "Algorithmic Compliance",
+                "capability": "Audit Logging"
+              },
+              {
+                "need": "Energy Control",
+                "capability": "Predictive Charging"
+              }
+            ]
+          },
+          "correctAnswer": {
+            "Civic Safety": "Collision Avoidance Alg",
+            "Swarm Efficiency": "Automated Routing",
+            "Algorithmic Compliance": "Audit Logging",
+            "Energy Control": "Predictive Charging"
+          }
+        },
+        {
+          "id": "1_3",
+          "moduleId": 1,
+          "title": "System Boundaries",
+          "type": "draw",
+          "learningObjective": "Define system boundaries and classify elements",
+          "standardRef": {
+            "incose": "architecture_design",
+            "iso15288": "architecture"
+          },
+          "scenarioText": "Draw the boundary of the Vanguard Central Control System. Classify elements as inside or outside the system boundary.",
+          "hints": [
+            "The system boundary separates what is controlled by the system from what is not.",
+            "Consider data flows across the boundary.",
+            "External entities interact with the system but are not part of it."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Scope creep is killing our energy budget. The external syndicates are trying to push their systems into our core scope."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We need to draw a hard line. What is inside the Vanguard Control Core, and what is outside?"
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Define the system boundary immediately before we get billed for integrating the global weather grid."
+            }
+          ],
+          "config": {
+            "elements": [
+              "drone Routing",
+              "Scheduling",
+              "Telemetry",
+              "Platform Displays",
+              "City Power Grid",
+              "Weather Database",
+              "Payment Gateway"
+            ]
+          },
+          "correctAnswer": {
+            "inside": [
+              "drone Routing",
+              "Scheduling",
+              "Telemetry",
+              "Platform Displays"
+            ],
+            "outside": [
+              "City Power Grid",
+              "Weather Database",
+              "Payment Gateway"
+            ]
+          }
+        },
+        {
+          "id": "1_4",
+          "moduleId": 1,
+          "title": "Feedback Loops",
+          "type": "sequence",
+          "learningObjective": "Identify reinforcing and balancing feedback loops",
+          "standardRef": {
+            "incose": "system_analysis",
+            "iso15288": "system_analysis"
+          },
+          "scenarioText": "Connect the causes and effects to form feedback loops in the automated routing ecosystem. Identify whether each loop is reinforcing or balancing.",
+          "hints": [
+            "Reinforcing loops amplify change (positive feedback).",
+            "Balancing loops stabilize change (negative feedback).",
+            "Follow the arrows to see if the loop strengthens or weakens the initial change."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Throughput is up, but our solar grid is failing under the load. We're caught in a feedback loop!"
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Classic feedback loop problem. More drones mean more power draw, which spikes the thermal output."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Map the causal loops in the ecosystem. Identify the reinforcing and balancing loops so we can stabilize the swarm."
+            }
+          ],
+          "config": {
+            "nodes": [
+              "Ridership Increases",
+              "drone Frequency Up",
+              "Wait Times Decrease",
+              "Passenger Satisfaction Up",
+              "Power Draw Increases",
+              "Operating Cost Up",
+              "Ticket Price Up",
+              "Ridership Decreases"
+            ]
+          },
+          "correctAnswer": {
+            "loops": [
+              {
+                "nodes": [
+                  "Ridership Increases",
+                  "drone Frequency Up",
+                  "Wait Times Decrease",
+                  "Passenger Satisfaction Up"
+                ],
+                "type": "reinforcing"
+              },
+              {
+                "nodes": [
+                  "Power Draw Increases",
+                  "Operating Cost Up",
+                  "Ticket Price Up",
+                  "Ridership Decreases"
+                ],
+                "type": "balancing"
+              }
+            ]
+          }
+        }
       ],
       "locked": false,
       "completed": false
@@ -24,10 +294,281 @@
       "themeColor": "#6366f1",
       "icon": "file-text",
       "levels": [
-        { "id": "2_1", "moduleId": 2, "title": "SMART Requirements", "type": "edit", "learningObjective": "Write requirements that meet SMART criteria", "standardRef": { "incose": "requirements_analysis", "iso15288": "system_requirements" }, "scenarioText": "Edit the following requirement statements to make them Specific, Measurable, Achievable, Relevant, and Time-bound.", "hints": ["Specific: Who, what, when, where, why?", "Measurable: How will you know it's done?", "Achievable: Is it realistic with available resources?"], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "2_2", "moduleId": 2, "title": "Traceability Matrix", "type": "drag-drop", "learningObjective": "Build traceability links between requirements", "standardRef": { "incose": "requirements_analysis", "iso15288": "system_requirements" }, "scenarioText": "Drag each system requirement to its parent stakeholder requirement to build a complete traceability matrix.", "hints": ["Traceability ensures every system requirement traces back to a stakeholder need.", "Look for keywords that match between stakeholder and system requirements.", "A complete matrix has no orphan requirements."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "2_3", "moduleId": 2, "title": "Verification Methods", "type": "match", "learningObjective": "Select appropriate verification methods for requirements", "standardRef": { "incose": "verification", "iso15288": "verification" }, "scenarioText": "Match each requirement to the most appropriate verification method (Inspection, Analysis, Demonstration, or Test).", "hints": ["Inspection: visual or physical examination.", "Analysis: modeling, simulation, or algorithmic evaluation.", "Demonstration: operation without quantitative measurement.", "Test: operation with quantitative measurement."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "2_4", "moduleId": 2, "title": "Change Impact", "type": "select", "learningObjective": "Analyze ripple effects of requirement changes", "standardRef": { "incose": "configuration_management", "iso15288": "technical_management" }, "scenarioText": "A stakeholder has requested a change. Select all requirements and design elements that will be impacted by this change.", "hints": ["Follow the traceability links from the changed requirement.", "Consider both upstream (stakeholder) and downstream (design, test) impacts.", "Don't forget interface requirements that may be affected."], "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 }, "locked": true, "completed": false, "bestScore": 0 }
+        {
+          "id": "2_1",
+          "moduleId": 2,
+          "title": "SMART Requirements",
+          "type": "edit",
+          "learningObjective": "Write requirements that meet SMART criteria",
+          "standardRef": {
+            "incose": "requirements_analysis",
+            "iso15288": "system_requirements"
+          },
+          "scenarioText": "Edit the following Vanguard requirement statements to make them Specific, Measurable, Achievable, Relevant, and Time-bound.",
+          "hints": [
+            "Specific: Who, what, when, where, why?",
+            "Measurable: How will you know it's done?",
+            "Achievable: Is it realistic with available resources?"
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "The requirements trace for the targeting subsystem just threw an exception."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+            }
+          ],
+          "config": {
+            "statements": [
+              "The system shall be fast.",
+              "The system should be secure.",
+              "droneing will be provided."
+            ]
+          },
+          "correctAnswer": {
+            "The drone shall be fast.": "The drone shall accelerate to 80km/h within 15 seconds under normal load.",
+            "The system should be secure.": "The OCC shall enforce role-based access control for all dispatch commands by Q2 2026.",
+            "droneing will be provided.": "All OCC operators shall complete 8 hours of safety droneing before handover."
+          }
+        },
+        {
+          "id": "2_2",
+          "moduleId": 2,
+          "title": "Traceability Matrix",
+          "type": "drag-drop",
+          "learningObjective": "Build traceability links between requirements",
+          "standardRef": {
+            "incose": "requirements_analysis",
+            "iso15288": "system_requirements"
+          },
+          "scenarioText": "Drag each Vanguard subsystem requirement to its parent stakeholder requirement to build a complete traceability matrix.",
+          "hints": [
+            "Traceability ensures every system requirement traces back to a stakeholder need.",
+            "Look for keywords that match between stakeholder and system requirements.",
+            "A complete matrix has no orphan requirements."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "The requirements trace for the targeting subsystem just threw an exception."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+            }
+          ],
+          "config": {
+            "stakeholderReqs": [
+              {
+                "id": "SH-001",
+                "text": "The system shall provide real-time status updates."
+              },
+              {
+                "id": "SH-002",
+                "text": "The system shall support 1000 concurrent users."
+              },
+              {
+                "id": "SH-003",
+                "text": "The system shall comply with GDPR."
+              }
+            ],
+            "systemReqs": [
+              {
+                "id": "SYS-001",
+                "text": "Status updates shall be pushed every 5 seconds."
+              },
+              {
+                "id": "SYS-002",
+                "text": "The server shall handle 1000 simultaneous connections."
+              },
+              {
+                "id": "SYS-003",
+                "text": "Personal data shall be encrypted at rest and in transit."
+              }
+            ]
+          },
+          "correctAnswer": {
+            "SYS-001": "SH-001",
+            "SYS-002": "SH-002",
+            "SYS-003": "SH-003"
+          }
+        },
+        {
+          "id": "2_3",
+          "moduleId": 2,
+          "title": "Verification Methods",
+          "type": "match",
+          "learningObjective": "Select appropriate verification methods for requirements",
+          "standardRef": {
+            "incose": "verification",
+            "iso15288": "verification"
+          },
+          "scenarioText": "Match each requirement to the most appropriate verification method (Inspection, Analysis, Demonstration, or Test).",
+          "hints": [
+            "Inspection: visual or physical examination.",
+            "Analysis: modeling, simulation, or algorithmic evaluation.",
+            "Demonstration: operation without quantitative measurement.",
+            "Test: operation with quantitative measurement."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "The requirements trace for the targeting subsystem just threw an exception."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+            }
+          ],
+          "config": {
+            "requirements": [
+              "The GUI shall use corporate color scheme.",
+              "The algorithm shall sort data in O(n log n).",
+              "The login flow shall redirect to dashboard.",
+              "The system shall handle 1000 req/s."
+            ],
+            "methods": [
+              "Inspection",
+              "Analysis",
+              "Demonstration",
+              "Test"
+            ]
+          },
+          "correctAnswer": {
+            "The GUI shall use corporate color scheme.": "Inspection",
+            "The algorithm shall sort data in O(n log n).": "Analysis",
+            "The login flow shall redirect to dashboard.": "Demonstration",
+            "The system shall handle 1000 req/s.": "Test"
+          }
+        },
+        {
+          "id": "2_4",
+          "moduleId": 2,
+          "title": "Change Impact",
+          "type": "select",
+          "learningObjective": "Analyze ripple effects of requirement changes",
+          "standardRef": {
+            "incose": "configuration_management",
+            "iso15288": "technical_management"
+          },
+          "scenarioText": "A stakeholder has requested a change. Select all requirements and design elements that will be impacted by this change.",
+          "hints": [
+            "Follow the traceability links from the changed requirement.",
+            "Consider both upstream (stakeholder) and downstream (design, test) impacts.",
+            "Don't forget interface requirements that may be affected."
+          ],
+          "scoringRules": {
+            "baseScore": 100,
+            "hintPenalty": 10,
+            "retryPenalty": 5,
+            "timeBonus": 20,
+            "perfectBonus": 50
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "The requirements trace for the targeting subsystem just threw an exception."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+            }
+          ],
+          "config": {
+            "changeRequest": "Add biometric authentication to user login.",
+            "items": [
+              {
+                "id": "SR-001",
+                "text": "User shall enter username and password."
+              },
+              {
+                "id": "SR-002",
+                "text": "System shall authenticate user identity."
+              },
+              {
+                "id": "SR-003",
+                "text": "Password shall be at least 8 characters."
+              },
+              {
+                "id": "SR-004",
+                "text": "Session shall timeout after 30 minutes."
+              },
+              {
+                "id": "SR-005",
+                "text": "System shall support multiple auth methods."
+              },
+              {
+                "id": "DS-001",
+                "text": "Authentication module design."
+              },
+              {
+                "id": "DS-002",
+                "text": "Session management design."
+              },
+              {
+                "id": "TC-003",
+                "text": "Login test cases."
+              }
+            ]
+          },
+          "correctAnswer": [
+            "SR-002",
+            "SR-005",
+            "DS-001",
+            "TC-003"
+          ]
+        }
       ],
       "locked": true,
       "completed": false
@@ -40,10 +581,272 @@
       "themeColor": "#f59e0b",
       "icon": "layers",
       "levels": [
-        { "id": "3_1", "moduleId": 3, "title": "Component Decomposition", "type": "drag-drop", "learningObjective": "Decompose a system into subsystems and validate N² diagram", "standardRef": { "incose": "architecture_design", "iso15288": "architecture" }, "scenarioText": "Decompose the railway signaling system into logical subsystems. Validate the completeness using an N² diagram.", "hints": ["Each function should be allocated to exactly one subsystem.", "The N² diagram diagonal represents internal interfaces.", "Off-diagonal elements represent external interfaces."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "3_2", "moduleId": 3, "title": "Interface Definition", "type": "draw", "learningObjective": "Define data and control flows between components", "standardRef": { "incose": "architecture_design", "iso15288": "design" }, "scenarioText": "Draw the data and control flows between the subsystems. Identify any missing interfaces.", "hints": ["Every output from one subsystem should be an input to another.", "Control flows manage sequencing and state.", "Data flows carry information between subsystems."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "3_3", "moduleId": 3, "title": "Trade-off Analysis", "type": "select", "learningObjective": "Allocate resources across competing requirements", "standardRef": { "incose": "decision_management", "iso15288": "system_analysis" }, "scenarioText": "You have a fixed budget. Allocate resources across competing requirements to maximize overall system value.", "hints": ["Consider the marginal value of each additional resource unit.", "The Pareto front shows optimal trade-offs.", "Sometimes satisfying all requirements is impossible—prioritize."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "3_4", "moduleId": 3, "title": "Design Patterns", "type": "quiz", "learningObjective": "Select appropriate architectural patterns", "standardRef": { "incose": "architecture_design", "iso15288": "architecture" }, "scenarioText": "Given the following constraints, select the most appropriate architectural pattern for the system.", "hints": ["Client-server works well for centralized control.", "Peer-to-peer is robust against single points of failure.", "Layered architectures promote separation of concerns."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 }
+        {
+          "id": "3_1",
+          "moduleId": 3,
+          "title": "Component Decomposition",
+          "type": "drag-drop",
+          "learningObjective": "Decompose a system into subsystems and validate N² diagram",
+          "standardRef": {
+            "incose": "architecture_design",
+            "iso15288": "architecture"
+          },
+          "scenarioText": "Decompose the routingway signaling system into logical subsystems. Validate the completeness using an N² diagram.",
+          "hints": [
+            "Each function should be allocated to exactly one subsystem.",
+            "The N² diagram diagonal represents internal interfaces.",
+            "Off-diagonal elements represent external interfaces."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+            }
+          ],
+          "config": {
+            "functions": [
+              "Route Setting",
+              "Signal Control",
+              "Axle Counting",
+              "Track Circuits",
+              "Point Control",
+              "Level Crossing",
+              "Traffic Management",
+              "Diagnostics"
+            ]
+          },
+          "correctAnswer": {
+            "Interlocking": [
+              "Route Setting",
+              "Signal Control"
+            ],
+            "drone Detection": [
+              "Axle Counting",
+              "Track Circuits"
+            ],
+            "Wayside Control": [
+              "Point Control",
+              "Level Crossing"
+            ],
+            "Central Supervision": [
+              "Traffic Management",
+              "Diagnostics"
+            ]
+          }
+        },
+        {
+          "id": "3_2",
+          "moduleId": 3,
+          "title": "Interface Definition",
+          "type": "draw",
+          "learningObjective": "Define data and control flows between components",
+          "standardRef": {
+            "incose": "architecture_design",
+            "iso15288": "design"
+          },
+          "scenarioText": "Draw the data and control flows between the subsystems. Identify any missing interfaces.",
+          "hints": [
+            "Every output from one subsystem should be an input to another.",
+            "Control flows manage sequencing and state.",
+            "Data flows carry information between subsystems."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+            }
+          ],
+          "config": {
+            "subsystems": [
+              "Interlocking",
+              "drone Detection",
+              "Wayside Control",
+              "Central Supervision"
+            ]
+          },
+          "correctAnswer": {
+            "flows": [
+              {
+                "from": "drone Detection",
+                "to": "Interlocking",
+                "type": "data",
+                "label": "drone Position"
+              },
+              {
+                "from": "Interlocking",
+                "to": "Wayside Control",
+                "type": "control",
+                "label": "Point Command"
+              },
+              {
+                "from": "Central Supervision",
+                "to": "Interlocking",
+                "type": "control",
+                "label": "Route Request"
+              }
+            ]
+          }
+        },
+        {
+          "id": "3_3",
+          "moduleId": 3,
+          "title": "Trade-off Analysis",
+          "type": "select",
+          "learningObjective": "Allocate resources across competing requirements",
+          "standardRef": {
+            "incose": "decision_management",
+            "iso15288": "system_analysis"
+          },
+          "scenarioText": "You have a fixed budget. Allocate resources across competing requirements to maximize overall system value.",
+          "hints": [
+            "Consider the marginal value of each additional resource unit.",
+            "The Pareto front shows optimal trade-offs.",
+            "Sometimes satisfying all requirements is impossible—prioritize."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+            }
+          ],
+          "config": {
+            "budget": 100,
+            "requirements": [
+              {
+                "name": "Performance",
+                "max": 40,
+                "valuePerUnit": 2.5
+              },
+              {
+                "name": "Security",
+                "max": 30,
+                "valuePerUnit": 3
+              },
+              {
+                "name": "Usability",
+                "max": 20,
+                "valuePerUnit": 2
+              },
+              {
+                "name": "Maintainability",
+                "max": 20,
+                "valuePerUnit": 1.5
+              }
+            ]
+          },
+          "correctAnswer": {
+            "Performance": 40,
+            "Security": 30,
+            "Usability": 20,
+            "Maintainability": 10
+          }
+        },
+        {
+          "id": "3_4",
+          "moduleId": 3,
+          "title": "Design Patterns",
+          "type": "quiz",
+          "learningObjective": "Select appropriate architectural patterns",
+          "standardRef": {
+            "incose": "architecture_design",
+            "iso15288": "architecture"
+          },
+          "scenarioText": "Given the following consdronets, select the most appropriate architectural pattern for the system.",
+          "hints": [
+            "Client-server works well for centralized control.",
+            "Peer-to-peer is robust against single points of failure.",
+            "Layered architectures promote separation of concerns."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-lead",
+              "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+            }
+          ],
+          "config": {
+            "question": "Which pattern best suits a safety-critical distributed control system?",
+            "options": [
+              "Monolithic",
+              "Client-server",
+              "Layered architecture with redundancy",
+              "Peer-to-peer"
+            ],
+            "correctIndex": 2
+          },
+          "correctAnswer": "Layered architecture with redundancy"
+        }
       ],
       "locked": true,
       "completed": false
@@ -56,10 +859,239 @@
       "themeColor": "#10b981",
       "icon": "check-circle",
       "levels": [
-        { "id": "4_1", "moduleId": 4, "title": "V&V Planning", "type": "build", "learningObjective": "Build a V&V matrix mapping lifecycle stages to methods", "standardRef": { "incose": "verification", "iso15288": "verification" }, "scenarioText": "Build the Verification and Validation matrix by mapping each lifecycle stage to the appropriate verification method.", "hints": ["Early stages favor analysis and inspection.", "Later stages favor demonstration and test.", "Validation ensures the right system was built; verification ensures it was built right."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "4_2", "moduleId": 4, "title": "Test Case Design", "type": "edit", "learningObjective": "Write test cases from requirements", "standardRef": { "incose": "verification", "iso15288": "verification" }, "scenarioText": "Write test cases for the following requirements. Ensure each requirement has at least one test case.", "hints": ["A good test case has preconditions, inputs, expected results, and pass/fail criteria.", "Consider boundary values and equivalence classes.", "Each requirement should be traceable to at least one test case."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "4_3", "moduleId": 4, "title": "Review Preparation", "type": "select", "learningObjective": "Identify review checklist items for artifacts", "standardRef": { "incose": "quality_assurance", "iso15288": "technical_management" }, "scenarioText": "You are preparing for a design review. Select all checklist items that should be verified for the architecture document.", "hints": ["Check for completeness: are all requirements addressed?", "Check for consistency: are there contradictions?", "Check for clarity: can stakeholders understand it?"], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "4_4", "moduleId": 4, "title": "RAMS Compliance", "type": "quiz", "learningObjective": "Audit requirements against EN 50126 RAMS criteria", "standardRef": { "incose": "risk_management", "iso15288": "technical_management", "en50126": "risk_analysis" }, "scenarioText": "Audit the following requirements set against EN 50126 RAMS criteria. Identify gaps in reliability, availability, maintainability, and safety.", "hints": ["EN 50126 requires explicit RAMS targets for safety-critical systems.", "Consider quantitative targets (e.g., MTBF, availability percentage).", "Safety requirements must include hazard identification and risk acceptance criteria."], "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 }, "locked": true, "completed": false, "bestScore": 0 }
+        {
+          "id": "4_1",
+          "moduleId": 4,
+          "title": "V&V Planning",
+          "type": "build",
+          "learningObjective": "Build a V&V matrix mapping lifecycle stages to methods",
+          "standardRef": {
+            "incose": "verification",
+            "iso15288": "verification"
+          },
+          "scenarioText": "Build the Verification and Validation matrix by mapping each lifecycle stage to the appropriate verification method.",
+          "hints": [
+            "Early stages favor analysis and inspection.",
+            "Later stages favor demonstration and test.",
+            "Validation ensures the right system was built; verification ensures it was built right."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Audit the test plans and ensure every requirement is fully verified."
+            }
+          ],
+          "config": {
+            "stages": [
+              "Concept",
+              "Development",
+              "Integration",
+              "Operation"
+            ],
+            "methods": [
+              "Analysis",
+              "Inspection",
+              "Test",
+              "Demonstration"
+            ]
+          },
+          "correctAnswer": {
+            "Concept": "Analysis",
+            "Development": "Inspection",
+            "Integration": "Test",
+            "Operation": "Demonstration"
+          }
+        },
+        {
+          "id": "4_2",
+          "moduleId": 4,
+          "title": "Test Case Design",
+          "type": "edit",
+          "learningObjective": "Write test cases from requirements",
+          "standardRef": {
+            "incose": "verification",
+            "iso15288": "verification"
+          },
+          "scenarioText": "Write test cases for the following requirements. Ensure each requirement has at least one test case.",
+          "hints": [
+            "A good test case has preconditions, inputs, expected results, and pass/fail criteria.",
+            "Consider boundary values and equivalence classes.",
+            "Each requirement should be traceable to at least one test case."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Audit the test plans and ensure every requirement is fully verified."
+            }
+          ],
+          "config": {
+            "requirements": [
+              {
+                "id": "REQ-01",
+                "text": "User shall log in with valid credentials."
+              },
+              {
+                "id": "REQ-02",
+                "text": "Account shall lock after 3 failed attempts."
+              },
+              {
+                "id": "REQ-03",
+                "text": "Password reset email shall arrive within 60 seconds."
+              }
+            ]
+          },
+          "correctAnswer": {
+            "REQ-01": "TC-01: Input valid credentials → Login succeeds.",
+            "REQ-02": "TC-02: Input invalid password 3 times → Account locks.",
+            "REQ-03": "TC-03: Request password reset → Email sent within 60s."
+          }
+        },
+        {
+          "id": "4_3",
+          "moduleId": 4,
+          "title": "Review Preparation",
+          "type": "select",
+          "learningObjective": "Identify review checklist items for artifacts",
+          "standardRef": {
+            "incose": "quality_assurance",
+            "iso15288": "technical_management"
+          },
+          "scenarioText": "You are preparing for a design review. Select all checklist items that should be verified for the architecture document.",
+          "hints": [
+            "Check for completeness: are all requirements addressed?",
+            "Check for consistency: are there contradictions?",
+            "Check for clarity: can stakeholders understand it?"
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Audit the test plans and ensure every requirement is fully verified."
+            }
+          ],
+          "config": {
+            "items": [
+              "All requirements traced to design elements",
+              "Interface definitions complete",
+              "No unresolved hazards",
+              "Stakeholder concerns addressed",
+              "Code comments present",
+              "Unit tests written"
+            ]
+          },
+          "correctAnswer": [
+            "All requirements traced to design elements",
+            "Interface definitions complete",
+            "No unresolved hazards",
+            "Stakeholder concerns addressed"
+          ]
+        },
+        {
+          "id": "4_4",
+          "moduleId": 4,
+          "title": "RAMS Compliance",
+          "type": "quiz",
+          "learningObjective": "Audit requirements against EN 50126 RAMS criteria",
+          "standardRef": {
+            "incose": "risk_management",
+            "iso15288": "technical_management",
+            "en50126": "risk_analysis"
+          },
+          "scenarioText": "Audit the following requirements set against EN 50126 RAMS criteria. Identify gaps in reliability, availability, maintainability, and safety.",
+          "hints": [
+            "EN 50126 requires explicit RAMS targets for safety-critical systems.",
+            "Consider quantitative targets (e.g., MTBF, availability percentage).",
+            "Safety requirements must include hazard identification and risk acceptance criteria."
+          ],
+          "scoringRules": {
+            "baseScore": 120,
+            "hintPenalty": 12,
+            "retryPenalty": 6,
+            "timeBonus": 25,
+            "perfectBonus": 60
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+            },
+            {
+              "speaker": "avatar-pm",
+              "text": "Audit the test plans and ensure every requirement is fully verified."
+            }
+          ],
+          "config": {
+            "question": "What is missing from these requirements for EN 50126 compliance?",
+            "options": [
+              "Nothing, they are complete",
+              "Missing quantitative availability target and hazard log reference",
+              "Missing only the safety case",
+              "Missing only the verification plan"
+            ],
+            "correctIndex": 1
+          },
+          "correctAnswer": "Missing quantitative availability target and hazard log reference"
+        }
       ],
       "locked": true,
       "completed": false
@@ -72,10 +1104,268 @@
       "themeColor": "#ef4444",
       "icon": "settings",
       "levels": [
-        { "id": "5_1", "moduleId": 5, "title": "Configuration Management", "type": "sequence", "learningObjective": "Resolve version conflicts in a CM timeline", "standardRef": { "incose": "configuration_management", "iso15288": "technical_management" }, "scenarioText": "Resolve the version conflicts in the configuration management timeline. Place each change in the correct sequence.", "hints": ["Baselines are established at major milestones.", "Changes must be approved before implementation.", "Trace each change to its originating request."], "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "5_2", "moduleId": 5, "title": "Risk Assessment", "type": "drag-drop", "learningObjective": "Place risks on probability/impact matrix and define mitigations", "standardRef": { "incose": "risk_management", "iso15288": "technical_management", "en50126": "risk_analysis" }, "scenarioText": "Place each identified risk on the probability/impact matrix and select appropriate mitigation strategies.", "hints": ["High probability + high impact = immediate action required.", "Mitigation strategies include avoidance, transfer, mitigation, and acceptance.", "Consider residual risk after mitigation."], "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "5_3", "moduleId": 5, "title": "Integration Sequencing", "type": "sequence", "learningObjective": "Order integration steps to minimize stubs", "standardRef": { "incose": "integration", "iso15288": "integration" }, "scenarioText": "Order the integration steps to minimize the number of stubs and drivers needed. Detect any potential deadlock loops.", "hints": ["Integrate components with the most interfaces first.", "Bottom-up integration minimizes stubs but needs drivers.", "Top-down integration minimizes drivers but needs stubs."], "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 }, "locked": true, "completed": false, "bestScore": 0 },
-        { "id": "5_4", "moduleId": 5, "title": "SEMP Construction", "type": "build", "learningObjective": "Assemble a Systems Engineering Management Plan", "standardRef": { "incose": "technical_planning", "iso15288": "technical_management" }, "scenarioText": "Assemble the Systems Engineering Management Plan by selecting the appropriate process building blocks for each section.", "hints": ["SEMP defines how the project will apply SE processes.", "Include technical processes, management processes, and support processes.", "Tailor the plan to project size and complexity."], "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 }, "locked": true, "completed": false, "bestScore": 0 }
+        {
+          "id": "5_1",
+          "moduleId": 5,
+          "title": "Configuration Management",
+          "type": "sequence",
+          "learningObjective": "Resolve version conflicts in a CM timeline",
+          "standardRef": {
+            "incose": "configuration_management",
+            "iso15288": "technical_management"
+          },
+          "scenarioText": "Resolve the version conflicts in the configuration management timeline. Place each change in the correct sequence.",
+          "hints": [
+            "Baselines are established at major milestones.",
+            "Changes must be approved before implementation.",
+            "Trace each change to its originating request."
+          ],
+          "scoringRules": {
+            "baseScore": 150,
+            "hintPenalty": 15,
+            "retryPenalty": 8,
+            "timeBonus": 30,
+            "perfectBonus": 75
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "We're moving to integration, but the configuration management baseline is corrupted."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+            }
+          ],
+          "config": {
+            "steps": [
+              "Update Baseline",
+              "Implement Change",
+              "Submit Change Request",
+              "Verify Change",
+              "Establish Baseline",
+              "Approve Change",
+              "Review Change Request"
+            ]
+          },
+          "correctAnswer": [
+            "Establish Baseline",
+            "Submit Change Request",
+            "Review Change Request",
+            "Approve Change",
+            "Implement Change",
+            "Verify Change",
+            "Update Baseline"
+          ]
+        },
+        {
+          "id": "5_2",
+          "moduleId": 5,
+          "title": "Risk Assessment",
+          "type": "drag-drop",
+          "learningObjective": "Place risks on probability/impact matrix and define mitigations",
+          "standardRef": {
+            "incose": "risk_management",
+            "iso15288": "technical_management",
+            "en50126": "risk_analysis"
+          },
+          "scenarioText": "Place each identified risk on the probability/impact matrix and select appropriate mitigation strategies.",
+          "hints": [
+            "High probability + high impact = immediate action required.",
+            "Mitigation strategies include avoidance, transfer, mitigation, and acceptance.",
+            "Consider residual risk after mitigation."
+          ],
+          "scoringRules": {
+            "baseScore": 150,
+            "hintPenalty": 15,
+            "retryPenalty": 8,
+            "timeBonus": 30,
+            "perfectBonus": 75
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "We're moving to integration, but the configuration management baseline is corrupted."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+            }
+          ],
+          "config": {
+            "risks": [
+              "Signal failure",
+              "Vendor delay",
+              "Staff turnover"
+            ]
+          },
+          "correctAnswer": {
+            "Signal failure": {
+              "probability": "high",
+              "impact": "high",
+              "mitigation": "Redundant design"
+            },
+            "Vendor delay": {
+              "probability": "medium",
+              "impact": "medium",
+              "mitigation": "Penalty clause"
+            },
+            "Staff turnover": {
+              "probability": "low",
+              "impact": "low",
+              "mitigation": "Knowledge documentation"
+            }
+          }
+        },
+        {
+          "id": "5_3",
+          "moduleId": 5,
+          "title": "Integration Sequencing",
+          "type": "sequence",
+          "learningObjective": "Order integration steps to minimize stubs",
+          "standardRef": {
+            "incose": "integration",
+            "iso15288": "integration"
+          },
+          "scenarioText": "Order the integration steps to minimize the number of stubs and drivers needed. Detect any potential deadlock loops.",
+          "hints": [
+            "Integrate components with the most interfaces first.",
+            "Bottom-up integration minimizes stubs but needs drivers.",
+            "Top-down integration minimizes drivers but needs stubs."
+          ],
+          "scoringRules": {
+            "baseScore": 150,
+            "hintPenalty": 15,
+            "retryPenalty": 8,
+            "timeBonus": 30,
+            "perfectBonus": 75
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "We're moving to integration, but the configuration management baseline is corrupted."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+            }
+          ],
+          "config": {
+            "steps": [
+              "Integrate Frontend",
+              "Integrate Business Logic",
+              "Integrate Core Library",
+              "Integrate API Layer",
+              "Integrate Database Layer"
+            ]
+          },
+          "correctAnswer": [
+            "Integrate Core Library",
+            "Integrate Database Layer",
+            "Integrate Business Logic",
+            "Integrate API Layer",
+            "Integrate Frontend"
+          ]
+        },
+        {
+          "id": "5_4",
+          "moduleId": 5,
+          "title": "SEMP Construction",
+          "type": "build",
+          "learningObjective": "Assemble a Systems Engineering Management Plan",
+          "standardRef": {
+            "incose": "technical_planning",
+            "iso15288": "technical_management"
+          },
+          "scenarioText": "Assemble the Systems Engineering Management Plan by selecting the appropriate process building blocks for each section.",
+          "hints": [
+            "SEMP defines how the project will apply SE processes.",
+            "Include technical processes, management processes, and support processes.",
+            "Tailor the plan to project size and complexity."
+          ],
+          "scoringRules": {
+            "baseScore": 150,
+            "hintPenalty": 15,
+            "retryPenalty": 8,
+            "timeBonus": 30,
+            "perfectBonus": 75
+          },
+          "locked": true,
+          "completed": false,
+          "bestScore": 0,
+          "introDialogue": [
+            {
+              "speaker": "avatar-pm",
+              "text": "We're moving to integration, but the configuration management baseline is corrupted."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+            },
+            {
+              "speaker": "avatar-lead",
+              "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+            }
+          ],
+          "config": {
+            "sections": [
+              "Technical Processes",
+              "Management Processes",
+              "Support Processes"
+            ],
+            "blocks": [
+              "Requirements Analysis",
+              "Architecture Design",
+              "Integration",
+              "Verification",
+              "Planning",
+              "Risk Management",
+              "Configuration Management",
+              "Quality Assurance",
+              "Measurement",
+              "Review"
+            ]
+          },
+          "correctAnswer": {
+            "Technical Processes": [
+              "Requirements Analysis",
+              "Architecture Design",
+              "Integration",
+              "Verification"
+            ],
+            "Management Processes": [
+              "Planning",
+              "Risk Management",
+              "Configuration Management"
+            ],
+            "Support Processes": [
+              "Quality Assurance",
+              "Measurement",
+              "Review"
+            ]
+          }
+        }
       ],
       "locked": true,
       "completed": false
@@ -88,14 +1378,51 @@
       "title": "Stakeholder Analysis",
       "type": "drag-drop",
       "learningObjective": "Identify and categorize stakeholders using power/interest matrix",
-      "standardRef": { "incose": "stakeholder_requirements", "iso15288": "stakeholder_requirements" },
-      "scenarioText": "You are the lead systems engineer for a new smart city project. Identify the key stakeholders and place them in the power/interest matrix.",
-      "contextText": "The smart city project involves traffic management, energy optimization, public safety, and citizen services. Key groups include city council, citizens, technology vendors, regulatory bodies, and emergency services.",
-      "hints": ["Think about who has power to influence the project and who has interest in its outcomes.", "Consider both internal and external stakeholders.", "High power + high interest = keep satisfied and closely manage."],
-      "correctAnswer": { "highPowerHighInterest": ["City Council", "Emergency Services"], "highPowerLowInterest": ["Regulatory Bodies"], "lowPowerHighInterest": ["Citizens", "Technology Vendors"], "lowPowerLowInterest": ["General Public"] },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "standardRef": {
+        "incose": "stakeholder_requirements",
+        "iso15288": "stakeholder_requirements"
+      },
+      "scenarioText": "You are the Lead Systems Engineer for Project Vanguard (Autonomous Logistics Network). The Planetary Council is demanding a progress report. Classify the key stakeholders in the power/interest matrix to determine our response strategy.",
+      "contextText": "The Project Vanguard network involves autonomous drones, smart grid charging, public safety algorithms, and airspace management. Key groups include the Planetary Council, citizens, tech syndicates, safety regulators, and emergency protocols.",
+      "hints": [
+        "Think about who has power to influence the project and who has interest in its outcomes.",
+        "Consider both internal and external stakeholders.",
+        "High power + high interest = keep satisfied and closely manage."
+      ],
+      "correctAnswer": {
+        "highPowerHighInterest": [
+          "Planetary Council",
+          "Emergency Protocols"
+        ],
+        "highPowerLowInterest": [
+          "Safety Regulators"
+        ],
+        "lowPowerHighInterest": [
+          "Citizens",
+          "Tech Syndicates"
+        ],
+        "lowPowerLowInterest": [
+          "General Public"
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "stakeholders": ["City Council", "Citizens", "Technology Vendors", "Regulatory Bodies", "Emergency Services", "General Public"] },
+      "config": {
+        "stakeholders": [
+          "Planetary Council",
+          "Citizens",
+          "Tech Syndicates",
+          "Safety Regulators",
+          "Emergency Protocols",
+          "General Public"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Stakeholder Identification & Power/Interest Matrix",
         "keyPoints": [
@@ -104,9 +1431,23 @@
           "High power + high interest stakeholders must be actively managed",
           "Low power + low interest stakeholders need only monitoring"
         ],
-        "example": "In a smart city project, the City Council has high power and high interest — they fund and approve the project. The General Public has low power but high interest — they use the services but don't control decisions.",
+        "example": "In the Project Vanguard routingway, the City Council has high power and high interest — they fund and approve the project. Commuters have low power but high interest — they use the autonomous drones but don't control decisions.",
         "diagramType": "matrix"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Vanguard Control, we have a situation. The Planetary Council is demanding an immediate progress report on the autonomous network."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We need to know who we're talking to before we say anything. Engineer, pull up the power/interest matrix."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Classify our key stakeholders. We need to prioritize our response strategy before the public feed gets wind of this."
+        }
+      ]
     },
     {
       "id": "1_2",
@@ -114,14 +1455,51 @@
       "title": "Value Proposition",
       "type": "match",
       "learningObjective": "Match stakeholder needs to system capabilities",
-      "standardRef": { "incose": "stakeholder_requirements", "iso15288": "stakeholder_requirements" },
-      "scenarioText": "Different stakeholders have different needs. Match each stakeholder to the system capability that best addresses their primary concern.",
-      "contextText": "The healthcare system must balance patient care, operational efficiency, regulatory compliance, and cost control.",
-      "hints": ["Read each stakeholder's primary concern carefully.", "Look for direct relationships between needs and capabilities.", "Some capabilities may address multiple stakeholders."],
-      "correctAnswer": { "Patient Safety": "Real-time Monitoring", "Operational Efficiency": "Automated Scheduling", "Regulatory Compliance": "Audit Logging", "Cost Control": "Resource Optimization" },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "standardRef": {
+        "incose": "stakeholder_requirements",
+        "iso15288": "stakeholder_requirements"
+      },
+      "scenarioText": "Different stakeholders have different needs. Match each stakeholder to the Vanguard network capability that best addresses their primary concern.",
+      "contextText": "The Vanguard system must balance civic safety, swarm efficiency, algorithmic compliance, and energy control.",
+      "hints": [
+        "Read each stakeholder's primary concern carefully.",
+        "Look for direct relationships between needs and capabilities.",
+        "Some capabilities may address multiple stakeholders."
+      ],
+      "correctAnswer": {
+        "Civic Safety": "Collision Avoidance Alg",
+        "Swarm Efficiency": "Automated Routing",
+        "Algorithmic Compliance": "Audit Logging",
+        "Energy Control": "Predictive Charging"
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "pairs": [{ "need": "Patient Safety", "capability": "Real-time Monitoring" }, { "need": "Operational Efficiency", "capability": "Automated Scheduling" }, { "need": "Regulatory Compliance", "capability": "Audit Logging" }, { "need": "Cost Control", "capability": "Resource Optimization" }] },
+      "config": {
+        "pairs": [
+          {
+            "need": "Civic Safety",
+            "capability": "Collision Avoidance Alg"
+          },
+          {
+            "need": "Swarm Efficiency",
+            "capability": "Automated Routing"
+          },
+          {
+            "need": "Algorithmic Compliance",
+            "capability": "Audit Logging"
+          },
+          {
+            "need": "Energy Control",
+            "capability": "Predictive Charging"
+          }
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Matching Stakeholder Needs to System Capabilities",
         "keyPoints": [
@@ -130,9 +1508,23 @@
           "One capability may serve multiple stakeholders",
           "Unmatched needs indicate gaps in the system design"
         ],
-        "example": "A hospital's 'Real-time Monitoring' capability directly addresses the 'Patient Safety' need of doctors and patients, while 'Automated Scheduling' addresses 'Operational Efficiency' for administrators.",
+        "example": "Vanguard's 'Collision Avoidance System' directly addresses the 'Passenger Safety' need, while 'Automated Dispatch' addresses 'Operational Efficiency' for the OCC operators.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "The new routing algorithm is facing pushback from multiple sectors."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Everyone has different priorities. Operations wants swarm efficiency, Security wants collision avoidance."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Engineer, match these stakeholders to the system capabilities that actually solve their problems. Let's prove the Vanguard system is viable."
+        }
+      ]
     },
     {
       "id": "1_3",
@@ -140,14 +1532,49 @@
       "title": "System Boundaries",
       "type": "draw",
       "learningObjective": "Define system boundaries and classify elements",
-      "standardRef": { "incose": "architecture_design", "iso15288": "architecture" },
-      "scenarioText": "Draw the boundary of the university information system. Classify elements as inside or outside the system boundary.",
-      "contextText": "The university information system handles student records, course registration, grading, and library services. It interfaces with external payment systems, government databases, and email providers.",
-      "hints": ["The system boundary separates what is controlled by the system from what is not.", "Consider data flows across the boundary.", "External entities interact with the system but are not part of it."],
-      "correctAnswer": { "inside": ["Student Records", "Course Registration", "Grading System", "Library Services"], "outside": ["Payment Gateway", "Government Database", "Email Provider"] },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "standardRef": {
+        "incose": "architecture_design",
+        "iso15288": "architecture"
+      },
+      "scenarioText": "Draw the boundary of the Vanguard Central Control System. Classify elements as inside or outside the system boundary.",
+      "contextText": "The Vanguard Central Control System handles drone routing, scheduling, telemetry, and platform services. It interfaces with external city power grids, national weather databases, and third-party payment gateways.",
+      "hints": [
+        "The system boundary separates what is controlled by the system from what is not.",
+        "Consider data flows across the boundary.",
+        "External entities interact with the system but are not part of it."
+      ],
+      "correctAnswer": {
+        "inside": [
+          "drone Routing",
+          "Scheduling",
+          "Telemetry",
+          "Platform Displays"
+        ],
+        "outside": [
+          "City Power Grid",
+          "Weather Database",
+          "Payment Gateway"
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "elements": ["Student Records", "Course Registration", "Grading System", "Library Services", "Payment Gateway", "Government Database", "Email Provider"] },
+      "config": {
+        "elements": [
+          "drone Routing",
+          "Scheduling",
+          "Telemetry",
+          "Platform Displays",
+          "City Power Grid",
+          "Weather Database",
+          "Payment Gateway"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Defining System Boundaries",
         "keyPoints": [
@@ -156,9 +1583,23 @@
           "External entities interact with the system but are not part of it",
           "Clear boundaries prevent scope creep and clarify interfaces"
         ],
-        "example": "A university information system includes student records and course registration (inside), but the payment gateway and government databases are external entities that interact across the boundary.",
+        "example": "The Vanguard system includes drone routing and scheduling (inside), but the city power grid and weather databases are external entities that interact across the boundary.",
         "diagramType": "hierarchy"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Scope creep is killing our energy budget. The external syndicates are trying to push their systems into our core scope."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We need to draw a hard line. What is inside the Vanguard Control Core, and what is outside?"
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Define the system boundary immediately before we get billed for integrating the global weather grid."
+        }
+      ]
     },
     {
       "id": "1_4",
@@ -166,14 +1607,59 @@
       "title": "Feedback Loops",
       "type": "sequence",
       "learningObjective": "Identify reinforcing and balancing feedback loops",
-      "standardRef": { "incose": "system_analysis", "iso15288": "system_analysis" },
-      "scenarioText": "Connect the causes and effects to form feedback loops in the smart home ecosystem. Identify whether each loop is reinforcing or balancing.",
-      "contextText": "In a smart home, temperature sensors control heating, motion sensors control lighting, and energy usage feeds back into the system.",
-      "hints": ["Reinforcing loops amplify change (positive feedback).", "Balancing loops stabilize change (negative feedback).", "Follow the arrows to see if the loop strengthens or weakens the initial change."],
-      "correctAnswer": { "loops": [{ "nodes": ["Temperature Drop", "Heating On", "Temperature Rise", "Heating Off"], "type": "balancing" }, { "nodes": ["Motion Detected", "Lights On", "Energy Use Increases", "Cost Increases"], "type": "reinforcing" }] },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "standardRef": {
+        "incose": "system_analysis",
+        "iso15288": "system_analysis"
+      },
+      "scenarioText": "Connect the causes and effects to form feedback loops in the automated routing ecosystem. Identify whether each loop is reinforcing or balancing.",
+      "contextText": "In the automated routing system, ridership demand controls drone frequency, drone frequency impacts power draw, and power draw feeds back into the operating costs.",
+      "hints": [
+        "Reinforcing loops amplify change (positive feedback).",
+        "Balancing loops stabilize change (negative feedback).",
+        "Follow the arrows to see if the loop strengthens or weakens the initial change."
+      ],
+      "correctAnswer": {
+        "loops": [
+          {
+            "nodes": [
+              "Ridership Increases",
+              "drone Frequency Up",
+              "Wait Times Decrease",
+              "Passenger Satisfaction Up"
+            ],
+            "type": "reinforcing"
+          },
+          {
+            "nodes": [
+              "Power Draw Increases",
+              "Operating Cost Up",
+              "Ticket Price Up",
+              "Ridership Decreases"
+            ],
+            "type": "balancing"
+          }
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "nodes": ["Cost Increases", "Heating On", "Motion Detected", "Temperature Rise", "Lights On", "Temperature Drop", "Energy Use Increases", "Heating Off"] },
+      "config": {
+        "nodes": [
+          "Ridership Increases",
+          "drone Frequency Up",
+          "Wait Times Decrease",
+          "Passenger Satisfaction Up",
+          "Power Draw Increases",
+          "Operating Cost Up",
+          "Ticket Price Up",
+          "Ridership Decreases"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Reinforcing and Balancing Feedback Loops",
         "keyPoints": [
@@ -182,9 +1668,23 @@
           "Identifying loop type helps predict system behavior",
           "Most real systems contain both types interacting"
         ],
-        "example": "A thermostat is a balancing loop: temperature drops → heating turns on → temperature rises → heating turns off. Social media engagement is a reinforcing loop: more posts → more engagement → more posts.",
+        "example": "drone frequency scaling to meet demand is a reinforcing loop: more riders → more autonomous drones → better service → more riders. Pricing to offset power costs is a balancing loop: more autonomous drones → higher cost → higher ticket price → fewer riders.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Throughput is up, but our solar grid is failing under the load. We're caught in a feedback loop!"
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Classic feedback loop problem. More drones mean more power draw, which spikes the thermal output."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Map the causal loops in the ecosystem. Identify the reinforcing and balancing loops so we can stabilize the swarm."
+        }
+      ]
     },
     {
       "id": "2_1",
@@ -192,26 +1692,63 @@
       "title": "SMART Requirements",
       "type": "edit",
       "learningObjective": "Write requirements that meet SMART criteria",
-      "standardRef": { "incose": "requirements_analysis", "iso15288": "system_requirements" },
-      "scenarioText": "Edit the following requirement statements to make them Specific, Measurable, Achievable, Relevant, and Time-bound.",
-      "contextText": "Poor requirements lead to project failure. Transform vague statements into SMART requirements.",
-      "hints": ["Specific: Who, what, when, where, why?", "Measurable: How will you know it's done?", "Achievable: Is it realistic with available resources?"],
-      "correctAnswer": { "The system shall be fast.": "The system shall respond to user queries within 2 seconds under normal load.", "The system should be secure.": "The system shall enforce role-based access control for all user actions by Q2 2026.", "Training will be provided.": "All operators shall complete 8 hours of safety training before system handover." },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "standardRef": {
+        "incose": "requirements_analysis",
+        "iso15288": "system_requirements"
+      },
+      "scenarioText": "Edit the following Vanguard requirement statements to make them Specific, Measurable, Achievable, Relevant, and Time-bound.",
+      "contextText": "Poor requirements lead to drone delays and budget overruns. Transform these vague statements into SMART requirements for the Vanguard OCC.",
+      "hints": [
+        "Specific: Who, what, when, where, why?",
+        "Measurable: How will you know it's done?",
+        "Achievable: Is it realistic with available resources?"
+      ],
+      "correctAnswer": {
+        "The drone shall be fast.": "The drone shall accelerate to 80km/h within 15 seconds under normal load.",
+        "The system should be secure.": "The OCC shall enforce role-based access control for all dispatch commands by Q2 2026.",
+        "droneing will be provided.": "All OCC operators shall complete 8 hours of safety droneing before handover."
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "statements": ["The system shall be fast.", "The system should be secure.", "Training will be provided."] },
+      "config": {
+        "statements": [
+          "The system shall be fast.",
+          "The system should be secure.",
+          "droneing will be provided."
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Writing SMART Requirements",
         "keyPoints": [
           "Specific: Clearly state what the system shall do",
           "Measurable: Include quantitative acceptance criteria",
-          "Achievable: Feasible within constraints",
+          "Achievable: Feasible within consdronets",
           "Relevant: Traces to a stakeholder need",
           "Time-bound: Specifies when or how quickly"
         ],
         "example": "Vague: 'The system shall be fast.' SMART: 'The system shall respond to user queries within 2 seconds under normal load.'",
         "diagramType": "sequence"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "The requirements trace for the targeting subsystem just threw an exception."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+        }
+      ]
     },
     {
       "id": "2_2",
@@ -219,14 +1756,60 @@
       "title": "Traceability Matrix",
       "type": "drag-drop",
       "learningObjective": "Build traceability links between requirements",
-      "standardRef": { "incose": "requirements_analysis", "iso15288": "system_requirements" },
-      "scenarioText": "Drag each system requirement to its parent stakeholder requirement to build a complete traceability matrix.",
+      "standardRef": {
+        "incose": "requirements_analysis",
+        "iso15288": "system_requirements"
+      },
+      "scenarioText": "Drag each Vanguard subsystem requirement to its parent stakeholder requirement to build a complete traceability matrix.",
       "contextText": "Traceability ensures every system requirement traces back to a stakeholder need. No orphan requirements allowed.",
-      "hints": ["Traceability ensures every system requirement traces back to a stakeholder need.", "Look for keywords that match between stakeholder and system requirements.", "A complete matrix has no orphan requirements."],
-      "correctAnswer": { "SYS-001": "SH-001", "SYS-002": "SH-002", "SYS-003": "SH-003" },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "hints": [
+        "Traceability ensures every system requirement traces back to a stakeholder need.",
+        "Look for keywords that match between stakeholder and system requirements.",
+        "A complete matrix has no orphan requirements."
+      ],
+      "correctAnswer": {
+        "SYS-001": "SH-001",
+        "SYS-002": "SH-002",
+        "SYS-003": "SH-003"
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "stakeholderReqs": [{ "id": "SH-001", "text": "The system shall provide real-time status updates." }, { "id": "SH-002", "text": "The system shall support 1000 concurrent users." }, { "id": "SH-003", "text": "The system shall comply with GDPR." }], "systemReqs": [{ "id": "SYS-001", "text": "Status updates shall be pushed every 5 seconds." }, { "id": "SYS-002", "text": "The server shall handle 1000 simultaneous connections." }, { "id": "SYS-003", "text": "Personal data shall be encrypted at rest and in transit." }] },
+      "config": {
+        "stakeholderReqs": [
+          {
+            "id": "SH-001",
+            "text": "The system shall provide real-time status updates."
+          },
+          {
+            "id": "SH-002",
+            "text": "The system shall support 1000 concurrent users."
+          },
+          {
+            "id": "SH-003",
+            "text": "The system shall comply with GDPR."
+          }
+        ],
+        "systemReqs": [
+          {
+            "id": "SYS-001",
+            "text": "Status updates shall be pushed every 5 seconds."
+          },
+          {
+            "id": "SYS-002",
+            "text": "The server shall handle 1000 simultaneous connections."
+          },
+          {
+            "id": "SYS-003",
+            "text": "Personal data shall be encrypted at rest and in transit."
+          }
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Requirements Traceability",
         "keyPoints": [
@@ -237,7 +1820,21 @@
         ],
         "example": "Stakeholder need 'The system shall provide real-time updates' traces to system requirement 'Status updates shall be pushed every 5 seconds', which traces to a design component and a test case.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "The requirements trace for the targeting subsystem just threw an exception."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+        }
+      ]
     },
     {
       "id": "2_3",
@@ -245,14 +1842,46 @@
       "title": "Verification Methods",
       "type": "match",
       "learningObjective": "Select appropriate verification methods for requirements",
-      "standardRef": { "incose": "verification", "iso15288": "verification" },
+      "standardRef": {
+        "incose": "verification",
+        "iso15288": "verification"
+      },
       "scenarioText": "Match each requirement to the most appropriate verification method (Inspection, Analysis, Demonstration, or Test).",
       "contextText": "Different requirements need different verification approaches. Choose wisely.",
-      "hints": ["Inspection: visual or physical examination.", "Analysis: modeling, simulation, or algorithmic evaluation.", "Demonstration: operation without quantitative measurement.", "Test: operation with quantitative measurement."],
-      "correctAnswer": { "The GUI shall use corporate color scheme.": "Inspection", "The algorithm shall sort data in O(n log n).": "Analysis", "The login flow shall redirect to dashboard.": "Demonstration", "The system shall handle 1000 req/s.": "Test" },
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "hints": [
+        "Inspection: visual or physical examination.",
+        "Analysis: modeling, simulation, or algorithmic evaluation.",
+        "Demonstration: operation without quantitative measurement.",
+        "Test: operation with quantitative measurement."
+      ],
+      "correctAnswer": {
+        "The GUI shall use corporate color scheme.": "Inspection",
+        "The algorithm shall sort data in O(n log n).": "Analysis",
+        "The login flow shall redirect to dashboard.": "Demonstration",
+        "The system shall handle 1000 req/s.": "Test"
+      },
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "requirements": ["The GUI shall use corporate color scheme.", "The algorithm shall sort data in O(n log n).", "The login flow shall redirect to dashboard.", "The system shall handle 1000 req/s."], "methods": ["Inspection", "Analysis", "Demonstration", "Test"] },
+      "config": {
+        "requirements": [
+          "The GUI shall use corporate color scheme.",
+          "The algorithm shall sort data in O(n log n).",
+          "The login flow shall redirect to dashboard.",
+          "The system shall handle 1000 req/s."
+        ],
+        "methods": [
+          "Inspection",
+          "Analysis",
+          "Demonstration",
+          "Test"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Selecting Verification Methods",
         "keyPoints": [
@@ -263,7 +1892,21 @@
         ],
         "example": "To verify 'The GUI shall use corporate colors', use Inspection (look at it). To verify 'The system shall handle 1000 requests/second', use Test (measure it).",
         "diagramType": "matrix"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "The requirements trace for the targeting subsystem just threw an exception."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+        }
+      ]
     },
     {
       "id": "2_4",
@@ -271,14 +1914,68 @@
       "title": "Change Impact",
       "type": "select",
       "learningObjective": "Analyze ripple effects of requirement changes",
-      "standardRef": { "incose": "configuration_management", "iso15288": "technical_management" },
+      "standardRef": {
+        "incose": "configuration_management",
+        "iso15288": "technical_management"
+      },
       "scenarioText": "A stakeholder has requested a change. Select all requirements and design elements that will be impacted by this change.",
       "contextText": "Change is inevitable. Understanding ripple effects prevents surprises later.",
-      "hints": ["Follow the traceability links from the changed requirement.", "Consider both upstream (stakeholder) and downstream (design, test) impacts.", "Don't forget interface requirements that may be affected."],
-      "correctAnswer": ["SR-002", "SR-005", "DS-001", "TC-003"],
-      "scoringRules": { "baseScore": 100, "hintPenalty": 10, "retryPenalty": 5, "timeBonus": 20, "perfectBonus": 50 },
+      "hints": [
+        "Follow the traceability links from the changed requirement.",
+        "Consider both upstream (stakeholder) and downstream (design, test) impacts.",
+        "Don't forget interface requirements that may be affected."
+      ],
+      "correctAnswer": [
+        "SR-002",
+        "SR-005",
+        "DS-001",
+        "TC-003"
+      ],
+      "scoringRules": {
+        "baseScore": 100,
+        "hintPenalty": 10,
+        "retryPenalty": 5,
+        "timeBonus": 20,
+        "perfectBonus": 50
+      },
       "timeLimit": 90,
-      "config": { "changeRequest": "Add biometric authentication to user login.", "items": [{ "id": "SR-001", "text": "User shall enter username and password." }, { "id": "SR-002", "text": "System shall authenticate user identity." }, { "id": "SR-003", "text": "Password shall be at least 8 characters." }, { "id": "SR-004", "text": "Session shall timeout after 30 minutes." }, { "id": "SR-005", "text": "System shall support multiple auth methods." }, { "id": "DS-001", "text": "Authentication module design." }, { "id": "DS-002", "text": "Session management design." }, { "id": "TC-003", "text": "Login test cases." }] },
+      "config": {
+        "changeRequest": "Add biometric authentication to user login.",
+        "items": [
+          {
+            "id": "SR-001",
+            "text": "User shall enter username and password."
+          },
+          {
+            "id": "SR-002",
+            "text": "System shall authenticate user identity."
+          },
+          {
+            "id": "SR-003",
+            "text": "Password shall be at least 8 characters."
+          },
+          {
+            "id": "SR-004",
+            "text": "Session shall timeout after 30 minutes."
+          },
+          {
+            "id": "SR-005",
+            "text": "System shall support multiple auth methods."
+          },
+          {
+            "id": "DS-001",
+            "text": "Authentication module design."
+          },
+          {
+            "id": "DS-002",
+            "text": "Session management design."
+          },
+          {
+            "id": "TC-003",
+            "text": "Login test cases."
+          }
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Change Impact Analysis",
         "keyPoints": [
@@ -289,7 +1986,21 @@
         ],
         "example": "Adding biometric authentication affects: the authentication module design, the login test cases, and the 'multiple auth methods' requirement — but not the password length requirement.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "The requirements trace for the targeting subsystem just threw an exception."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "If we don't fix these requirements, the constructor bots are going to build the wrong logic gates."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Engineer, parse the requirements matrix. Ensure everything is SMART, traceable, and verified."
+        }
+      ]
     },
     {
       "id": "3_1",
@@ -297,14 +2008,55 @@
       "title": "Component Decomposition",
       "type": "drag-drop",
       "learningObjective": "Decompose a system into subsystems and validate N² diagram",
-      "standardRef": { "incose": "architecture_design", "iso15288": "architecture" },
-      "scenarioText": "Decompose the railway signaling system into logical subsystems. Validate the completeness using an N² diagram.",
-      "contextText": "Railway signaling includes interlocking, train detection, wayside control, and central supervision.",
-      "hints": ["Each function should be allocated to exactly one subsystem.", "The N² diagram diagonal represents internal interfaces.", "Off-diagonal elements represent external interfaces."],
-      "correctAnswer": { "Interlocking": ["Route Setting", "Signal Control"], "Train Detection": ["Axle Counting", "Track Circuits"], "Wayside Control": ["Point Control", "Level Crossing"], "Central Supervision": ["Traffic Management", "Diagnostics"] },
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "standardRef": {
+        "incose": "architecture_design",
+        "iso15288": "architecture"
+      },
+      "scenarioText": "Decompose the routingway signaling system into logical subsystems. Validate the completeness using an N² diagram.",
+      "contextText": "routingway signaling includes interlocking, drone detection, wayside control, and central supervision.",
+      "hints": [
+        "Each function should be allocated to exactly one subsystem.",
+        "The N² diagram diagonal represents internal interfaces.",
+        "Off-diagonal elements represent external interfaces."
+      ],
+      "correctAnswer": {
+        "Interlocking": [
+          "Route Setting",
+          "Signal Control"
+        ],
+        "drone Detection": [
+          "Axle Counting",
+          "Track Circuits"
+        ],
+        "Wayside Control": [
+          "Point Control",
+          "Level Crossing"
+        ],
+        "Central Supervision": [
+          "Traffic Management",
+          "Diagnostics"
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "functions": ["Route Setting", "Signal Control", "Axle Counting", "Track Circuits", "Point Control", "Level Crossing", "Traffic Management", "Diagnostics"] },
+      "config": {
+        "functions": [
+          "Route Setting",
+          "Signal Control",
+          "Axle Counting",
+          "Track Circuits",
+          "Point Control",
+          "Level Crossing",
+          "Traffic Management",
+          "Diagnostics"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "System Decomposition & N² Diagrams",
         "keyPoints": [
@@ -313,9 +2065,23 @@
           "N² diagrams show interfaces: diagonal = internal, off-diagonal = external",
           "Complete decomposition covers all functions with no overlaps"
         ],
-        "example": "A railway signaling system decomposes into: Interlocking (route setting, signal control), Train Detection (axle counting, track circuits), Wayside Control (points, level crossings), and Central Supervision (traffic management, diagnostics).",
+        "example": "A routingway signaling system decomposes into: Interlocking (route setting, signal control), drone Detection (axle counting, track circuits), Wayside Control (points, level crossings), and Central Supervision (traffic management, diagnostics).",
         "diagramType": "hierarchy"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+        }
+      ]
     },
     {
       "id": "3_2",
@@ -323,14 +2089,55 @@
       "title": "Interface Definition",
       "type": "draw",
       "learningObjective": "Define data and control flows between components",
-      "standardRef": { "incose": "architecture_design", "iso15288": "design" },
+      "standardRef": {
+        "incose": "architecture_design",
+        "iso15288": "design"
+      },
       "scenarioText": "Draw the data and control flows between the subsystems. Identify any missing interfaces.",
-      "contextText": "The subsystems must communicate to ensure safe train movement. Data flows include position reports and control commands.",
-      "hints": ["Every output from one subsystem should be an input to another.", "Control flows manage sequencing and state.", "Data flows carry information between subsystems."],
-      "correctAnswer": { "flows": [{ "from": "Train Detection", "to": "Interlocking", "type": "data", "label": "Train Position" }, { "from": "Interlocking", "to": "Wayside Control", "type": "control", "label": "Point Command" }, { "from": "Central Supervision", "to": "Interlocking", "type": "control", "label": "Route Request" }] },
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "contextText": "The subsystems must communicate to ensure safe drone movement. Data flows include position reports and control commands.",
+      "hints": [
+        "Every output from one subsystem should be an input to another.",
+        "Control flows manage sequencing and state.",
+        "Data flows carry information between subsystems."
+      ],
+      "correctAnswer": {
+        "flows": [
+          {
+            "from": "drone Detection",
+            "to": "Interlocking",
+            "type": "data",
+            "label": "drone Position"
+          },
+          {
+            "from": "Interlocking",
+            "to": "Wayside Control",
+            "type": "control",
+            "label": "Point Command"
+          },
+          {
+            "from": "Central Supervision",
+            "to": "Interlocking",
+            "type": "control",
+            "label": "Route Request"
+          }
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "subsystems": ["Interlocking", "Train Detection", "Wayside Control", "Central Supervision"] },
+      "config": {
+        "subsystems": [
+          "Interlocking",
+          "drone Detection",
+          "Wayside Control",
+          "Central Supervision"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Interface Definition & Data Flow",
         "keyPoints": [
@@ -339,9 +2146,23 @@
           "Control flows manage sequencing and state",
           "Missing interfaces cause integration failures"
         ],
-        "example": "Train Detection sends 'Train Position' (data flow) to Interlocking, which sends 'Point Command' (control flow) to Wayside Control. Central Supervision sends 'Route Request' to Interlocking.",
+        "example": "drone Detection sends 'drone Position' (data flow) to Interlocking, which sends 'Point Command' (control flow) to Wayside Control. Central Supervision sends 'Route Request' to Interlocking.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+        }
+      ]
     },
     {
       "id": "3_3",
@@ -349,14 +2170,56 @@
       "title": "Trade-off Analysis",
       "type": "select",
       "learningObjective": "Allocate resources across competing requirements",
-      "standardRef": { "incose": "decision_management", "iso15288": "system_analysis" },
+      "standardRef": {
+        "incose": "decision_management",
+        "iso15288": "system_analysis"
+      },
       "scenarioText": "You have a fixed budget. Allocate resources across competing requirements to maximize overall system value.",
       "contextText": "Budget = 100 units. Requirements: Performance (40 max), Security (30 max), Usability (20 max), Maintainability (20 max).",
-      "hints": ["Consider the marginal value of each additional resource unit.", "The Pareto front shows optimal trade-offs.", "Sometimes satisfying all requirements is impossible—prioritize."],
-      "correctAnswer": { "Performance": 40, "Security": 30, "Usability": 20, "Maintainability": 10 },
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "hints": [
+        "Consider the marginal value of each additional resource unit.",
+        "The Pareto front shows optimal trade-offs.",
+        "Sometimes satisfying all requirements is impossible—prioritize."
+      ],
+      "correctAnswer": {
+        "Performance": 40,
+        "Security": 30,
+        "Usability": 20,
+        "Maintainability": 10
+      },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "budget": 100, "requirements": [{ "name": "Performance", "max": 40, "valuePerUnit": 2.5 }, { "name": "Security", "max": 30, "valuePerUnit": 3.0 }, { "name": "Usability", "max": 20, "valuePerUnit": 2.0 }, { "name": "Maintainability", "max": 20, "valuePerUnit": 1.5 }] },
+      "config": {
+        "budget": 100,
+        "requirements": [
+          {
+            "name": "Performance",
+            "max": 40,
+            "valuePerUnit": 2.5
+          },
+          {
+            "name": "Security",
+            "max": 30,
+            "valuePerUnit": 3
+          },
+          {
+            "name": "Usability",
+            "max": 20,
+            "valuePerUnit": 2
+          },
+          {
+            "name": "Maintainability",
+            "max": 20,
+            "valuePerUnit": 1.5
+          }
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Trade-off Analysis & Resource Allocation",
         "keyPoints": [
@@ -367,7 +2230,21 @@
         ],
         "example": "With a budget of 100 units, allocating 40 to Performance (high value/unit), 30 to Security, 20 to Usability, and 10 to Maintainability maximizes total system value.",
         "diagramType": "matrix"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+        }
+      ]
     },
     {
       "id": "3_4",
@@ -375,14 +2252,36 @@
       "title": "Design Patterns",
       "type": "quiz",
       "learningObjective": "Select appropriate architectural patterns",
-      "standardRef": { "incose": "architecture_design", "iso15288": "architecture" },
-      "scenarioText": "Given the following constraints, select the most appropriate architectural pattern for the system.",
-      "contextText": "A distributed railway control system needs high availability, real-time response, and fault tolerance.",
-      "hints": ["Client-server works well for centralized control.", "Peer-to-peer is robust against single points of failure.", "Layered architectures promote separation of concerns."],
+      "standardRef": {
+        "incose": "architecture_design",
+        "iso15288": "architecture"
+      },
+      "scenarioText": "Given the following consdronets, select the most appropriate architectural pattern for the system.",
+      "contextText": "A distributed routingway control system needs high availability, real-time response, and fault tolerance.",
+      "hints": [
+        "Client-server works well for centralized control.",
+        "Peer-to-peer is robust against single points of failure.",
+        "Layered architectures promote separation of concerns."
+      ],
       "correctAnswer": "Layered architecture with redundancy",
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "question": "Which pattern best suits a safety-critical distributed control system?", "options": ["Monolithic", "Client-server", "Layered architecture with redundancy", "Peer-to-peer"], "correctIndex": 2 },
+      "config": {
+        "question": "Which pattern best suits a safety-critical distributed control system?",
+        "options": [
+          "Monolithic",
+          "Client-server",
+          "Layered architecture with redundancy",
+          "Peer-to-peer"
+        ],
+        "correctIndex": 2
+      },
       "lessonContent": {
         "conceptTitle": "Architectural Design Patterns",
         "keyPoints": [
@@ -391,9 +2290,23 @@
           "Layered: Separation of concerns, each layer depends only on the one below",
           "Pattern choice depends on quality attributes (reliability, performance, security)"
         ],
-        "example": "A safety-critical railway control system needs high availability and fault tolerance — a layered architecture with redundancy provides both separation of concerns and backup paths.",
+        "example": "A safety-critical routingway control system needs high availability and fault tolerance — a layered architecture with redundancy provides both separation of concerns and backup paths.",
         "diagramType": "hierarchy"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-lead",
+          "text": "Architecture baseline is unstable. We have unallocated nodes in the N-squared diagram."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "The Critical Design Review is tomorrow! We can't present a flawed holographic model."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Decompose the logical nodes and resolve the interface gaps. I need a stable trade-off analysis stat."
+        }
+      ]
     },
     {
       "id": "4_1",
@@ -401,14 +2314,45 @@
       "title": "V&V Planning",
       "type": "build",
       "learningObjective": "Build a V&V matrix mapping lifecycle stages to methods",
-      "standardRef": { "incose": "verification", "iso15288": "verification" },
+      "standardRef": {
+        "incose": "verification",
+        "iso15288": "verification"
+      },
       "scenarioText": "Build the Verification and Validation matrix by mapping each lifecycle stage to the appropriate verification method.",
       "contextText": "Different lifecycle stages need different V&V approaches. Match stages to methods.",
-      "hints": ["Early stages favor analysis and inspection.", "Later stages favor demonstration and test.", "Validation ensures the right system was built; verification ensures it was built right."],
-      "correctAnswer": { "Concept": "Analysis", "Development": "Inspection", "Integration": "Test", "Operation": "Demonstration" },
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "hints": [
+        "Early stages favor analysis and inspection.",
+        "Later stages favor demonstration and test.",
+        "Validation ensures the right system was built; verification ensures it was built right."
+      ],
+      "correctAnswer": {
+        "Concept": "Analysis",
+        "Development": "Inspection",
+        "Integration": "Test",
+        "Operation": "Demonstration"
+      },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "stages": ["Concept", "Development", "Integration", "Operation"], "methods": ["Analysis", "Inspection", "Test", "Demonstration"] },
+      "config": {
+        "stages": [
+          "Concept",
+          "Development",
+          "Integration",
+          "Operation"
+        ],
+        "methods": [
+          "Analysis",
+          "Inspection",
+          "Test",
+          "Demonstration"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Verification & Validation Planning",
         "keyPoints": [
@@ -419,7 +2363,21 @@
         ],
         "example": "During Concept phase, use Analysis (simulate the design). During Integration, use Test (measure performance). During Operation, use Demonstration (show it works in the field).",
         "diagramType": "sequence"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Audit the test plans and ensure every requirement is fully verified."
+        }
+      ]
     },
     {
       "id": "4_2",
@@ -427,14 +2385,46 @@
       "title": "Test Case Design",
       "type": "edit",
       "learningObjective": "Write test cases from requirements",
-      "standardRef": { "incose": "verification", "iso15288": "verification" },
+      "standardRef": {
+        "incose": "verification",
+        "iso15288": "verification"
+      },
       "scenarioText": "Write test cases for the following requirements. Ensure each requirement has at least one test case.",
       "contextText": "Good test cases are traceable, repeatable, and have clear pass/fail criteria.",
-      "hints": ["A good test case has preconditions, inputs, expected results, and pass/fail criteria.", "Consider boundary values and equivalence classes.", "Each requirement should be traceable to at least one test case."],
-      "correctAnswer": { "REQ-01": "TC-01: Input valid credentials → Login succeeds.", "REQ-02": "TC-02: Input invalid password 3 times → Account locks.", "REQ-03": "TC-03: Request password reset → Email sent within 60s." },
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "hints": [
+        "A good test case has preconditions, inputs, expected results, and pass/fail criteria.",
+        "Consider boundary values and equivalence classes.",
+        "Each requirement should be traceable to at least one test case."
+      ],
+      "correctAnswer": {
+        "REQ-01": "TC-01: Input valid credentials → Login succeeds.",
+        "REQ-02": "TC-02: Input invalid password 3 times → Account locks.",
+        "REQ-03": "TC-03: Request password reset → Email sent within 60s."
+      },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "requirements": [{ "id": "REQ-01", "text": "User shall log in with valid credentials." }, { "id": "REQ-02", "text": "Account shall lock after 3 failed attempts." }, { "id": "REQ-03", "text": "Password reset email shall arrive within 60 seconds." }] },
+      "config": {
+        "requirements": [
+          {
+            "id": "REQ-01",
+            "text": "User shall log in with valid credentials."
+          },
+          {
+            "id": "REQ-02",
+            "text": "Account shall lock after 3 failed attempts."
+          },
+          {
+            "id": "REQ-03",
+            "text": "Password reset email shall arrive within 60 seconds."
+          }
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Writing Effective Test Cases",
         "keyPoints": [
@@ -445,7 +2435,21 @@
         ],
         "example": "For 'User shall log in with valid credentials': TC-01: Input valid username + password → Login succeeds. For 'Account locks after 3 failures': TC-02: Input wrong password 3 times → Account locks.",
         "diagramType": "flowchart"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Audit the test plans and ensure every requirement is fully verified."
+        }
+      ]
     },
     {
       "id": "4_3",
@@ -453,14 +2457,41 @@
       "title": "Review Preparation",
       "type": "select",
       "learningObjective": "Identify review checklist items for artifacts",
-      "standardRef": { "incose": "quality_assurance", "iso15288": "technical_management" },
+      "standardRef": {
+        "incose": "quality_assurance",
+        "iso15288": "technical_management"
+      },
       "scenarioText": "You are preparing for a design review. Select all checklist items that should be verified for the architecture document.",
       "contextText": "Design reviews catch defects early. A thorough checklist ensures nothing is missed.",
-      "hints": ["Check for completeness: are all requirements addressed?", "Check for consistency: are there contradictions?", "Check for clarity: can stakeholders understand it?"],
-      "correctAnswer": ["All requirements traced to design elements", "Interface definitions complete", "No unresolved hazards", "Stakeholder concerns addressed"],
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "hints": [
+        "Check for completeness: are all requirements addressed?",
+        "Check for consistency: are there contradictions?",
+        "Check for clarity: can stakeholders understand it?"
+      ],
+      "correctAnswer": [
+        "All requirements traced to design elements",
+        "Interface definitions complete",
+        "No unresolved hazards",
+        "Stakeholder concerns addressed"
+      ],
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "items": ["All requirements traced to design elements", "Interface definitions complete", "No unresolved hazards", "Stakeholder concerns addressed", "Code comments present", "Unit tests written"] },
+      "config": {
+        "items": [
+          "All requirements traced to design elements",
+          "Interface definitions complete",
+          "No unresolved hazards",
+          "Stakeholder concerns addressed",
+          "Code comments present",
+          "Unit tests written"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Design Review Preparation",
         "keyPoints": [
@@ -471,7 +2502,21 @@
         ],
         "example": "Before a PDR (Preliminary Design Review), verify: all requirements traced to design elements, interface definitions complete, no unresolved hazards, and stakeholder concerns addressed.",
         "diagramType": "sequence"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Audit the test plans and ensure every requirement is fully verified."
+        }
+      ]
     },
     {
       "id": "4_4",
@@ -479,14 +2524,37 @@
       "title": "RAMS Compliance",
       "type": "quiz",
       "learningObjective": "Audit requirements against EN 50126 RAMS criteria",
-      "standardRef": { "incose": "risk_management", "iso15288": "technical_management", "en50126": "risk_analysis" },
+      "standardRef": {
+        "incose": "risk_management",
+        "iso15288": "technical_management",
+        "en50126": "risk_analysis"
+      },
       "scenarioText": "Audit the following requirements set against EN 50126 RAMS criteria. Identify gaps in reliability, availability, maintainability, and safety.",
-      "contextText": "EN 50126 requires explicit RAMS targets for safety-critical railway systems.",
-      "hints": ["EN 50126 requires explicit RAMS targets for safety-critical systems.", "Consider quantitative targets (e.g., MTBF, availability percentage).", "Safety requirements must include hazard identification and risk acceptance criteria."],
+      "contextText": "EN 50126 requires explicit RAMS targets for safety-critical routingway systems.",
+      "hints": [
+        "EN 50126 requires explicit RAMS targets for safety-critical systems.",
+        "Consider quantitative targets (e.g., MTBF, availability percentage).",
+        "Safety requirements must include hazard identification and risk acceptance criteria."
+      ],
       "correctAnswer": "Missing quantitative availability target and hazard log reference",
-      "scoringRules": { "baseScore": 120, "hintPenalty": 12, "retryPenalty": 6, "timeBonus": 25, "perfectBonus": 60 },
+      "scoringRules": {
+        "baseScore": 120,
+        "hintPenalty": 12,
+        "retryPenalty": 6,
+        "timeBonus": 25,
+        "perfectBonus": 60
+      },
       "timeLimit": 120,
-      "config": { "question": "What is missing from these requirements for EN 50126 compliance?", "options": ["Nothing, they are complete", "Missing quantitative availability target and hazard log reference", "Missing only the safety case", "Missing only the verification plan"], "correctIndex": 1 },
+      "config": {
+        "question": "What is missing from these requirements for EN 50126 compliance?",
+        "options": [
+          "Nothing, they are complete",
+          "Missing quantitative availability target and hazard log reference",
+          "Missing only the safety case",
+          "Missing only the verification plan"
+        ],
+        "correctIndex": 1
+      },
       "lessonContent": {
         "conceptTitle": "EN 50126 RAMS Compliance",
         "keyPoints": [
@@ -497,7 +2565,21 @@
         ],
         "example": "A requirements set missing quantitative availability targets (e.g., '99.99% availability') and a hazard log reference would fail EN 50126 compliance review.",
         "diagramType": "matrix"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "Safety audit incoming. The regulators want to see our V&V matrix for the autonomous braking."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "If we miss a single test case, they pull our operational license. Compliance is non-negotiable."
+        },
+        {
+          "speaker": "avatar-pm",
+          "text": "Audit the test plans and ensure every requirement is fully verified."
+        }
+      ]
     },
     {
       "id": "5_1",
@@ -505,14 +2587,45 @@
       "title": "Configuration Management",
       "type": "sequence",
       "learningObjective": "Resolve version conflicts in a CM timeline",
-      "standardRef": { "incose": "configuration_management", "iso15288": "technical_management" },
+      "standardRef": {
+        "incose": "configuration_management",
+        "iso15288": "technical_management"
+      },
       "scenarioText": "Resolve the version conflicts in the configuration management timeline. Place each change in the correct sequence.",
       "contextText": "Baselines are established at major milestones. Changes must be approved before implementation.",
-      "hints": ["Baselines are established at major milestones.", "Changes must be approved before implementation.", "Trace each change to its originating request."],
-      "correctAnswer": ["Establish Baseline", "Submit Change Request", "Review Change Request", "Approve Change", "Implement Change", "Verify Change", "Update Baseline"],
-      "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
+      "hints": [
+        "Baselines are established at major milestones.",
+        "Changes must be approved before implementation.",
+        "Trace each change to its originating request."
+      ],
+      "correctAnswer": [
+        "Establish Baseline",
+        "Submit Change Request",
+        "Review Change Request",
+        "Approve Change",
+        "Implement Change",
+        "Verify Change",
+        "Update Baseline"
+      ],
+      "scoringRules": {
+        "baseScore": 150,
+        "hintPenalty": 15,
+        "retryPenalty": 8,
+        "timeBonus": 30,
+        "perfectBonus": 75
+      },
       "timeLimit": 150,
-      "config": { "steps": ["Update Baseline", "Implement Change", "Submit Change Request", "Verify Change", "Establish Baseline", "Approve Change", "Review Change Request"] },
+      "config": {
+        "steps": [
+          "Update Baseline",
+          "Implement Change",
+          "Submit Change Request",
+          "Verify Change",
+          "Establish Baseline",
+          "Approve Change",
+          "Review Change Request"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Configuration Management Process",
         "keyPoints": [
@@ -523,7 +2636,21 @@
         ],
         "example": "The CM process: Establish Baseline → Submit Change Request → Review → Approve → Implement → Verify → Update Baseline. Skipping any step risks uncontrolled changes.",
         "diagramType": "sequence"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "We're moving to integration, but the configuration management baseline is corrupted."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+        }
+      ]
     },
     {
       "id": "5_2",
@@ -531,14 +2658,50 @@
       "title": "Risk Assessment",
       "type": "drag-drop",
       "learningObjective": "Place risks on probability/impact matrix and define mitigations",
-      "standardRef": { "incose": "risk_management", "iso15288": "technical_management", "en50126": "risk_analysis" },
+      "standardRef": {
+        "incose": "risk_management",
+        "iso15288": "technical_management",
+        "en50126": "risk_analysis"
+      },
       "scenarioText": "Place each identified risk on the probability/impact matrix and select appropriate mitigation strategies.",
       "contextText": "Risks must be identified, analyzed, and mitigated throughout the project lifecycle.",
-      "hints": ["High probability + high impact = immediate action required.", "Mitigation strategies include avoidance, transfer, mitigation, and acceptance.", "Consider residual risk after mitigation."],
-      "correctAnswer": { "Signal failure": { "probability": "high", "impact": "high", "mitigation": "Redundant design" }, "Vendor delay": { "probability": "medium", "impact": "medium", "mitigation": "Penalty clause" }, "Staff turnover": { "probability": "low", "impact": "low", "mitigation": "Knowledge documentation" } },
-      "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
+      "hints": [
+        "High probability + high impact = immediate action required.",
+        "Mitigation strategies include avoidance, transfer, mitigation, and acceptance.",
+        "Consider residual risk after mitigation."
+      ],
+      "correctAnswer": {
+        "Signal failure": {
+          "probability": "high",
+          "impact": "high",
+          "mitigation": "Redundant design"
+        },
+        "Vendor delay": {
+          "probability": "medium",
+          "impact": "medium",
+          "mitigation": "Penalty clause"
+        },
+        "Staff turnover": {
+          "probability": "low",
+          "impact": "low",
+          "mitigation": "Knowledge documentation"
+        }
+      },
+      "scoringRules": {
+        "baseScore": 150,
+        "hintPenalty": 15,
+        "retryPenalty": 8,
+        "timeBonus": 30,
+        "perfectBonus": 75
+      },
       "timeLimit": 150,
-      "config": { "risks": ["Signal failure", "Vendor delay", "Staff turnover"] },
+      "config": {
+        "risks": [
+          "Signal failure",
+          "Vendor delay",
+          "Staff turnover"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Risk Assessment & Mitigation",
         "keyPoints": [
@@ -549,7 +2712,21 @@
         ],
         "example": "Signal failure: High probability + High impact → Mitigate with redundant design. Vendor delay: Medium → Transfer with penalty clause. Staff turnover: Low → Accept with knowledge documentation.",
         "diagramType": "matrix"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "We're moving to integration, but the configuration management baseline is corrupted."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+        }
+      ]
     },
     {
       "id": "5_3",
@@ -557,14 +2734,41 @@
       "title": "Integration Sequencing",
       "type": "sequence",
       "learningObjective": "Order integration steps to minimize stubs",
-      "standardRef": { "incose": "integration", "iso15288": "integration" },
+      "standardRef": {
+        "incose": "integration",
+        "iso15288": "integration"
+      },
       "scenarioText": "Order the integration steps to minimize the number of stubs and drivers needed. Detect any potential deadlock loops.",
       "contextText": "Integration order affects testing efficiency. Plan carefully.",
-      "hints": ["Integrate components with the most interfaces first.", "Bottom-up integration minimizes stubs but needs drivers.", "Top-down integration minimizes drivers but needs stubs."],
-      "correctAnswer": ["Integrate Core Library", "Integrate Database Layer", "Integrate Business Logic", "Integrate API Layer", "Integrate Frontend"],
-      "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
+      "hints": [
+        "Integrate components with the most interfaces first.",
+        "Bottom-up integration minimizes stubs but needs drivers.",
+        "Top-down integration minimizes drivers but needs stubs."
+      ],
+      "correctAnswer": [
+        "Integrate Core Library",
+        "Integrate Database Layer",
+        "Integrate Business Logic",
+        "Integrate API Layer",
+        "Integrate Frontend"
+      ],
+      "scoringRules": {
+        "baseScore": 150,
+        "hintPenalty": 15,
+        "retryPenalty": 8,
+        "timeBonus": 30,
+        "perfectBonus": 75
+      },
       "timeLimit": 150,
-      "config": { "steps": ["Integrate Frontend", "Integrate Business Logic", "Integrate Core Library", "Integrate API Layer", "Integrate Database Layer"] },
+      "config": {
+        "steps": [
+          "Integrate Frontend",
+          "Integrate Business Logic",
+          "Integrate Core Library",
+          "Integrate API Layer",
+          "Integrate Database Layer"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Integration Sequencing Strategy",
         "keyPoints": [
@@ -575,7 +2779,21 @@
         ],
         "example": "For a web application: Core Library → Database Layer → Business Logic → API Layer → Frontend. This bottom-up approach minimizes stubs and allows incremental testing.",
         "diagramType": "sequence"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "We're moving to integration, but the configuration management baseline is corrupted."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+        }
+      ]
     },
     {
       "id": "5_4",
@@ -583,14 +2801,62 @@
       "title": "SEMP Construction",
       "type": "build",
       "learningObjective": "Assemble a Systems Engineering Management Plan",
-      "standardRef": { "incose": "technical_planning", "iso15288": "technical_management" },
+      "standardRef": {
+        "incose": "technical_planning",
+        "iso15288": "technical_management"
+      },
       "scenarioText": "Assemble the Systems Engineering Management Plan by selecting the appropriate process building blocks for each section.",
       "contextText": "The SEMP defines how SE processes will be applied on the project.",
-      "hints": ["SEMP defines how the project will apply SE processes.", "Include technical processes, management processes, and support processes.", "Tailor the plan to project size and complexity."],
-      "correctAnswer": { "Technical Processes": ["Requirements Analysis", "Architecture Design", "Integration", "Verification"], "Management Processes": ["Planning", "Risk Management", "Configuration Management"], "Support Processes": ["Quality Assurance", "Measurement", "Review"] },
-      "scoringRules": { "baseScore": 150, "hintPenalty": 15, "retryPenalty": 8, "timeBonus": 30, "perfectBonus": 75 },
+      "hints": [
+        "SEMP defines how the project will apply SE processes.",
+        "Include technical processes, management processes, and support processes.",
+        "Tailor the plan to project size and complexity."
+      ],
+      "correctAnswer": {
+        "Technical Processes": [
+          "Requirements Analysis",
+          "Architecture Design",
+          "Integration",
+          "Verification"
+        ],
+        "Management Processes": [
+          "Planning",
+          "Risk Management",
+          "Configuration Management"
+        ],
+        "Support Processes": [
+          "Quality Assurance",
+          "Measurement",
+          "Review"
+        ]
+      },
+      "scoringRules": {
+        "baseScore": 150,
+        "hintPenalty": 15,
+        "retryPenalty": 8,
+        "timeBonus": 30,
+        "perfectBonus": 75
+      },
       "timeLimit": 150,
-      "config": { "sections": ["Technical Processes", "Management Processes", "Support Processes"], "blocks": ["Requirements Analysis", "Architecture Design", "Integration", "Verification", "Planning", "Risk Management", "Configuration Management", "Quality Assurance", "Measurement", "Review"] },
+      "config": {
+        "sections": [
+          "Technical Processes",
+          "Management Processes",
+          "Support Processes"
+        ],
+        "blocks": [
+          "Requirements Analysis",
+          "Architecture Design",
+          "Integration",
+          "Verification",
+          "Planning",
+          "Risk Management",
+          "Configuration Management",
+          "Quality Assurance",
+          "Measurement",
+          "Review"
+        ]
+      },
       "lessonContent": {
         "conceptTitle": "Systems Engineering Management Plan (SEMP)",
         "keyPoints": [
@@ -599,9 +2865,23 @@
           "Technical: Requirements Analysis, Architecture Design, Integration, Verification",
           "Tailor the plan to project size and complexity"
         ],
-        "example": "A SEMP for a railway project includes: Technical Processes (Requirements Analysis, Architecture Design, Integration, Verification), Management Processes (Planning, Risk Management, CM), and Support Processes (QA, Measurement, Review).",
+        "example": "A SEMP for a routingway project includes: Technical Processes (Requirements Analysis, Architecture Design, Integration, Verification), Management Processes (Planning, Risk Management, CM), and Support Processes (QA, Measurement, Review).",
         "diagramType": "hierarchy"
-      }
+      },
+      "introDialogue": [
+        {
+          "speaker": "avatar-pm",
+          "text": "We're moving to integration, but the configuration management baseline is corrupted."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "We have version conflicts in the neural net branch and deadlock risks in the integration sequence."
+        },
+        {
+          "speaker": "avatar-lead",
+          "text": "Execute the SEMP protocols. Resolve the timeline conflicts and order the integration steps to minimize stubs."
+        }
+      ]
     }
   ]
 }

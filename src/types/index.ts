@@ -1,19 +1,3 @@
-export interface PlayerProgress {
-  playerId: string;
-  currentModule: number;
-  modulesCompleted: number[];
-  totalScore: number;
-  achievements: string[];
-  scenarioHistory: ScenarioRecord[];
-  competencyScores: Record<string, number>;
-  levelScores: Record<string, number>;
-  levelStars: Record<string, number>;
-  streak: number;
-  sessionStart: string;
-  lastUpdated: string;
-  settings: GameSettings;
-}
-
 export interface GameSettings {
   masterVolume: number;
   musicVolume: number;
@@ -23,103 +7,246 @@ export interface GameSettings {
   reducedMotion: boolean;
 }
 
-export interface ScenarioRecord {
-  timestamp: string;
-  module: number;
-  levelId: string;
-  score: number;
-  hintsUsed: number;
-  retries: number;
+export type MetricKey =
+  | 'system_quality'
+  | 'stakeholder_trust'
+  | 'risk_exposure'
+  | 'delivery_confidence'
+  | 'team_capacity';
+
+export interface MetricState {
+  system_quality: number;
+  stakeholder_trust: number;
+  risk_exposure: number;
+  delivery_confidence: number;
+  team_capacity: number;
 }
 
-export interface ModuleMeta {
-  id: number;
+export type MetricDelta = Partial<Record<MetricKey, number>>;
+
+export interface StandardReference {
+  framework: string;
+  citation: string;
+  rationale: string;
+}
+
+export interface JournalReference {
   title: string;
-  subtitle: string;
-  description: string;
+  summary: string;
+  standards: StandardReference[];
+}
+
+export interface MissionBrief {
+  title: string;
+  location: string;
+  objective: string;
+  situation: string;
+  stakeholders: string[];
+  successSignals: string[];
+  prepNotes: string[];
+  journal: JournalReference[];
+}
+
+export interface ConsequencePayload {
+  summary: string;
+  metrics: MetricDelta;
+  unlock_note?: string;
+  set_condition?: string;
+  trigger_subgame?: boolean;
+  chapter_outcome_tag?: string;
+  critical_flag?: string;
+}
+
+export interface DecisionOption {
+  id: string;
+  title: string;
+  summary: string;
+  rationale: string;
+  consequence: ConsequencePayload;
+}
+
+export interface DecisionCard {
+  id: string;
+  label: string;
+  prompt: string;
+  context: string;
+  options: DecisionOption[];
+}
+
+export interface PrioritySubgameOption {
+  id: string;
+  label: string;
+  detail: string;
+}
+
+export interface MatchSubgamePair {
+  left: string;
+  right: string;
+}
+
+export interface TriageSubgameRisk {
+  id: string;
+  label: string;
+  detail: string;
+}
+
+export interface TriageCategory {
+  id: string;
+  label: string;
+}
+
+export interface SubgameBase {
+  id: string;
+  type: 'priority' | 'match' | 'sequence' | 'triage';
+  title: string;
+  prompt: string;
+  instructions: string;
+  successSummary: string;
+  failureSummary: string;
+  successMetricImpact: MetricDelta;
+  failureMetricImpact: MetricDelta;
+}
+
+export interface PrioritySubgameSpec extends SubgameBase {
+  type: 'priority';
+  maxSelections: number;
+  options: PrioritySubgameOption[];
+  correctIds: string[];
+}
+
+export interface MatchSubgameSpec extends SubgameBase {
+  type: 'match';
+  leftLabel: string;
+  rightLabel: string;
+  leftItems: string[];
+  rightOptions: string[];
+  correctPairs: MatchSubgamePair[];
+}
+
+export interface SequenceSubgameSpec extends SubgameBase {
+  type: 'sequence';
+  steps: string[];
+  correctOrder: string[];
+}
+
+export interface TriageSubgameSpec extends SubgameBase {
+  type: 'triage';
+  categories: TriageCategory[];
+  risks: TriageSubgameRisk[];
+  correctAssignments: Record<string, string>;
+}
+
+export type SubgameSpec =
+  | PrioritySubgameSpec
+  | MatchSubgameSpec
+  | SequenceSubgameSpec
+  | TriageSubgameSpec;
+
+export interface DebriefEntry {
+  principle: string;
+  strongSummary: string;
+  weakSummary: string;
+  journal: JournalReference[];
+}
+
+export interface CampaignChapter {
+  id: string;
+  order: number;
+  pillar: string;
   themeColor: string;
-  icon: string;
-  levels: LevelMeta[];
-  locked: boolean;
+  mapLabel: string;
+  thumbnail: string;
+  brief: MissionBrief;
+  decisions: DecisionCard[];
+  subgame: SubgameSpec;
+  debrief: DebriefEntry;
+}
+
+export interface CampaignManifest {
+  programTitle: string;
+  programSubtitle: string;
+  playerRole: string;
+  programSummary: string;
+  baselineMetrics: MetricState;
+  chapters: CampaignChapter[];
+}
+
+export interface DecisionHistoryEntry {
+  decisionId: string;
+  optionId: string;
+  optionTitle: string;
+  summary: string;
+  rationale: string;
+  metricsApplied: MetricDelta;
+  appliedAt: string;
+}
+
+export interface SubgameResult {
+  subgameId: string;
+  score: number;
+  passed: boolean;
+  summary: string;
+  response: string[] | Record<string, string>;
+  appliedMetrics: MetricDelta;
+}
+
+export interface MissionState {
+  chapterId: string;
+  startedAt: string;
+  decisionIndex: number;
+  metricsBefore: MetricState;
+  metricsCurrent: MetricState;
+  decisions: DecisionHistoryEntry[];
+  conditions: string[];
+  unlockedNotes: string[];
+  outcomeTags: string[];
+  criticalFlags: string[];
+  lastConsequenceSummary: string | null;
+  awaitingSubgame: boolean;
+  subgameResult: SubgameResult | null;
+}
+
+export type ChapterRating = 'Excellent' | 'Stable' | 'Fragile' | 'At Risk';
+
+export interface ChapterResult {
+  chapterId: string;
+  completedAt: string;
+  rating: ChapterRating;
+  headline: string;
+  summary: string;
+  principle: string;
+  finalMetrics: MetricState;
+  metricDelta: MetricDelta;
+  decisionHistory: DecisionHistoryEntry[];
+  unlockedNotes: string[];
+  outcomeTags: string[];
+  criticalFlags: string[];
+  subgameResult: SubgameResult | null;
+  standards: JournalReference[];
+}
+
+export interface ChapterProgress {
+  chapterId: string;
+  unlocked: boolean;
   completed: boolean;
+  result: ChapterResult | null;
 }
 
-export interface LevelMeta {
-  id: string;
-  moduleId: number;
-  title: string;
-  type: LevelType;
-  learningObjective: string;
-  standardRef: StandardRef;
-  scenarioText: string;
-  hints: string[];
-  scoringRules: ScoringRules;
-  locked: boolean;
-  completed: boolean;
-  bestScore: number;
+export interface CampaignState {
+  playerId: string;
+  startedAt: string;
+  updatedAt: string;
+  currentChapterId: string | null;
+  unlockedChapterIds: string[];
+  completedChapterIds: string[];
+  metrics: MetricState;
+  activeMission: MissionState | null;
+  chapterResults: Record<string, ChapterResult>;
+  resetNotice: string | null;
+  settings: GameSettings;
 }
 
-export type LevelType =
-  | 'drag-drop'
-  | 'quiz'
-  | 'trace'
-  | 'draw'
-  | 'sequence'
-  | 'match'
-  | 'edit'
-  | 'select'
-  | 'build';
-
-export interface StandardRef {
-  incose?: string;
-  iso15288?: string;
-  en50126?: string;
-  en50129?: string;
-}
-
-export interface ScoringRules {
-  baseScore: number;
-  hintPenalty: number;
-  retryPenalty: number;
-  timeBonus: number;
-  perfectBonus: number;
-}
-
-export interface LessonContent {
-  conceptTitle: string;
-  keyPoints: string[];
-  example: string;
-  diagramType: 'flowchart' | 'matrix' | 'hierarchy' | 'sequence';
-}
-
-export interface LevelData {
-  id: string;
-  moduleId: number;
-  title: string;
-  type: LevelType;
-  learningObjective: string;
-  standardRef: StandardRef;
-  scenarioText: string;
-  contextText?: string;
-  hints: string[];
-  correctAnswer: unknown;
-  scoringRules: ScoringRules;
-  timeLimit?: number;
-  config: Record<string, unknown>;
-  lessonContent?: LessonContent;
-}
-
-export interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  condition: string;
-}
-
-export interface GameState {
-  progress: PlayerProgress;
-  currentScene: string;
-  currentModule: number | null;
-  currentLevel: string | null;
+export interface SaveLoadResult {
+  state: CampaignState | null;
+  resetNotice: string | null;
 }

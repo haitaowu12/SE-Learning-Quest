@@ -1,131 +1,109 @@
 import * as Phaser from 'phaser';
-import { COLORS } from './designTokens.ts';
+
+function drawGrid(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x121212, alpha: number = 0.06, step: number = 60): void {
+  gfx.lineStyle(1, color, alpha);
+  for (let x = 0; x <= width; x += step) gfx.lineBetween(x, 0, x, height);
+  for (let y = 0; y <= height; y += step) gfx.lineBetween(0, y, width, y);
+}
+
+function drawCorridorLine(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number): void {
+  const points = [
+    new Phaser.Math.Vector2(width * 0.08, height * 0.75),
+    new Phaser.Math.Vector2(width * 0.22, height * 0.6),
+    new Phaser.Math.Vector2(width * 0.38, height * 0.54),
+    new Phaser.Math.Vector2(width * 0.53, height * 0.42),
+    new Phaser.Math.Vector2(width * 0.68, height * 0.45),
+    new Phaser.Math.Vector2(width * 0.85, height * 0.28),
+  ];
+
+  gfx.lineStyle(8, color, 0.18);
+  for (let index = 0; index < points.length - 1; index += 1) {
+    gfx.lineBetween(points[index].x, points[index].y, points[index + 1].x, points[index + 1].y);
+  }
+
+  gfx.fillStyle(color, 0.18);
+  points.forEach((point, index) => {
+    gfx.fillCircle(point.x, point.y, index === points.length - 1 ? 16 : 12);
+    gfx.lineStyle(2, color, 0.45);
+    gfx.strokeCircle(point.x, point.y, index === points.length - 1 ? 22 : 18);
+  });
+}
+
+function drawAccentRects(gfx: Phaser.GameObjects.Graphics, width: number, height: number, accent: number = 0xFF6B35): void {
+  gfx.lineStyle(3, accent, 0.2);
+  gfx.strokeRect(width * 0.08, height * 0.12, width * 0.34, height * 0.24);
+  gfx.strokeRect(width * 0.55, height * 0.18, width * 0.24, height * 0.18);
+  gfx.fillStyle(accent, 0.04);
+  gfx.fillRect(width * 0.08, height * 0.12, width * 0.34, height * 0.24);
+}
+
+function drawDiagonal(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x121212): void {
+  gfx.lineStyle(2, color, 0.08);
+  gfx.lineBetween(0, 0, width, height);
+  gfx.lineBetween(width, 0, 0, height);
+}
 
 export class ProceduralBG {
-  static draw(scene: Phaser.Scene, moduleId: number, width: number, height: number): Phaser.GameObjects.Graphics {
-    const gfx = scene.add.graphics();
-
-    gfx.fillGradientStyle(COLORS.bg, COLORS.bg, COLORS.panelBg, COLORS.panelBg, 1);
-    gfx.fillRect(0, 0, width, height);
-
-    switch (moduleId) {
-      case 1: ProceduralBG.drawBlueprint(gfx, width, height, 0x0ea5e9); break;
-      case 2: ProceduralBG.drawCircuit(gfx, width, height, 0x6366f1); break;
-      case 3: ProceduralBG.drawArchitecture(gfx, width, height, 0xf59e0b); break;
-      case 4: ProceduralBG.drawTestLab(gfx, width, height, 0x10b981); break;
-      case 5: ProceduralBG.drawMissionControl(gfx, width, height, 0xef4444); break;
-    }
-
-    return gfx;
-  }
-
-  private static drawBlueprint(gfx: Phaser.GameObjects.Graphics, w: number, h: number, color: number): void {
-    gfx.lineStyle(1, color, 0.06);
-    for (let x = 0; x < w; x += 40) gfx.lineBetween(x, 0, x, h);
-    for (let y = 0; y < h; y += 40) gfx.lineBetween(0, y, w, y);
-    gfx.fillStyle(color, 0.1);
-    for (let x = 0; x < w; x += 80) {
-      for (let y = 0; y < h; y += 80) {
-        gfx.fillCircle(x, y, 3);
-      }
-    }
-    gfx.lineStyle(1, color, 0.08);
-    for (let i = 0; i < 8; i++) {
-      const x1 = Math.floor(Math.random() * w / 80) * 80;
-      const y1 = Math.floor(Math.random() * h / 80) * 80;
-      const x2 = Math.floor(Math.random() * w / 80) * 80;
-      const y2 = Math.floor(Math.random() * h / 80) * 80;
-      gfx.lineBetween(x1, y1, x2, y2);
-    }
-  }
-
-  private static drawCircuit(gfx: Phaser.GameObjects.Graphics, w: number, h: number, color: number): void {
-    gfx.lineStyle(1, color, 0.05);
-    for (let y = 20; y < h; y += 60) {
-      const startX = Math.random() * w * 0.3;
-      const endX = startX + w * 0.3 + Math.random() * w * 0.4;
-      gfx.lineBetween(startX, y, endX, y);
-      if (Math.random() > 0.5) {
-        gfx.lineBetween(endX, y, endX, y + 60);
-      }
-    }
-    gfx.fillStyle(color, 0.08);
-    for (let i = 0; i < 15; i++) {
-      const cx = Math.random() * w;
-      const cy = Math.random() * h;
-      gfx.fillRoundedRect(cx - 8, cy - 4, 16, 8, 2);
-    }
-  }
-
-  private static drawArchitecture(gfx: Phaser.GameObjects.Graphics, w: number, h: number, color: number): void {
-    gfx.lineStyle(1, color, 0.06);
-    const layers = 5;
-    const layerH = h / (layers + 1);
-    for (let i = 1; i <= layers; i++) {
-      const y = i * layerH;
-      gfx.lineBetween(40, y, w - 40, y);
-      gfx.fillStyle(color, 0.04);
-      const boxCount = 2 + Math.floor(Math.random() * 3);
-      const boxW = (w - 120) / boxCount;
-      for (let j = 0; j < boxCount; j++) {
-        gfx.fillRoundedRect(60 + j * boxW, y - 15, boxW - 20, 30, 4);
-      }
-    }
-  }
-
-  private static drawTestLab(gfx: Phaser.GameObjects.Graphics, w: number, h: number, color: number): void {
-    gfx.lineStyle(1, color, 0.04);
-    for (let x = 0; x < w; x += 20) gfx.lineBetween(x, 0, x, h);
-    for (let y = 0; y < h; y += 20) gfx.lineBetween(0, y, w, y);
-    gfx.lineStyle(2, color, 0.08);
-    for (let i = 0; i < 6; i++) {
-      const cx = 100 + Math.random() * (w - 200);
-      const cy = 100 + Math.random() * (h - 200);
-      gfx.beginPath();
-      gfx.moveTo(cx - 10, cy);
-      gfx.lineTo(cx - 2, cy + 8);
-      gfx.lineTo(cx + 12, cy - 8);
-      gfx.strokePath();
-    }
-  }
-
-  private static drawMissionControl(gfx: Phaser.GameObjects.Graphics, w: number, h: number, color: number): void {
-    const cx = w * 0.7;
-    const cy = h * 0.6;
-    for (let r = 40; r < 200; r += 40) {
-      gfx.lineStyle(1, color, 0.05);
-      gfx.strokeCircle(cx, cy, r);
-    }
-    gfx.lineBetween(cx - 200, cy, cx + 200, cy);
-    gfx.lineBetween(cx, cy - 200, cx, cy + 200);
-    gfx.fillStyle(color, 0.06);
-    for (let i = 0; i < 4; i++) {
-      gfx.fillRoundedRect(30, 30 + i * 50, 150, 30, 4);
-    }
-  }
-
   static drawTitleBG(scene: Phaser.Scene, width: number, height: number): void {
     const gfx = scene.add.graphics();
-    gfx.fillGradientStyle(0x0c0f14, 0x0c0f14, 0x111820, 0x111820, 1);
+    gfx.fillStyle(0xFFD23F, 1);
     gfx.fillRect(0, 0, width, height);
-    gfx.lineStyle(1, COLORS.primary, 0.03);
-    for (let x = 0; x < width; x += 60) gfx.lineBetween(x, 0, x, height);
-    for (let y = 0; y < height; y += 60) gfx.lineBetween(0, y, width, y);
-    gfx.lineStyle(1, COLORS.primary, 0.05);
-    for (let i = 0; i < 6; i++) {
-      const hx = 100 + Math.random() * (width - 200);
-      const hy = 100 + Math.random() * (height - 200);
-      const r = 30 + Math.random() * 40;
-      gfx.beginPath();
-      for (let j = 0; j < 6; j++) {
-        const angle = (j * Math.PI) / 3;
-        const px = hx + r * Math.cos(angle);
-        const py = hy + r * Math.sin(angle);
-        if (j === 0) gfx.moveTo(px, py);
-        else gfx.lineTo(px, py);
+    drawGrid(gfx, width, height);
+    drawDiagonal(gfx, width, height);
+    drawCorridorLine(gfx, width, height, 0x121212);
+    drawAccentRects(gfx, width, height);
+  }
+
+  static drawOperationsMap(scene: Phaser.Scene, width: number, height: number): void {
+    const gfx = scene.add.graphics();
+    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillRect(0, 0, width, height);
+    drawGrid(gfx, width, height);
+    drawCorridorLine(gfx, width, height, 0x121212);
+
+    gfx.lineStyle(3, 0xFF6B35, 0.15);
+    gfx.strokeRect(width * 0.1, height * 0.14, width * 0.22, height * 0.12);
+    gfx.strokeRect(width * 0.68, height * 0.54, width * 0.18, height * 0.15);
+  }
+
+  static drawMissionBG(scene: Phaser.Scene, width: number, height: number, accent: number): void {
+    const gfx = scene.add.graphics();
+    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillRect(0, 0, width, height);
+    drawGrid(gfx, width, height);
+
+    gfx.lineStyle(3, accent, 0.2);
+    gfx.strokeRect(width * 0.08, height * 0.14, width * 0.32, height * 0.24);
+    gfx.strokeRect(width * 0.52, height * 0.2, width * 0.24, height * 0.18);
+    gfx.strokeRect(width * 0.42, height * 0.52, width * 0.28, height * 0.18);
+
+    gfx.lineStyle(4, accent, 0.16);
+    gfx.lineBetween(width * 0.24, height * 0.38, width * 0.54, height * 0.29);
+    gfx.lineBetween(width * 0.64, height * 0.38, width * 0.56, height * 0.52);
+    gfx.lineBetween(width * 0.3, height * 0.56, width * 0.52, height * 0.61);
+
+    gfx.fillStyle(accent, 0.18);
+    [0.24, 0.54, 0.64, 0.56, 0.3, 0.52].forEach((_value, index, values) => {
+      if (index % 2 === 0) {
+        gfx.fillCircle(width * values[index], height * values[index + 1], 9);
       }
-      gfx.closePath();
-      gfx.strokePath();
-    }
+    });
+  }
+
+  static drawDebriefBG(scene: Phaser.Scene, width: number, height: number, accent: number): void {
+    const gfx = scene.add.graphics();
+    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillRect(0, 0, width, height);
+    drawGrid(gfx, width, height);
+
+    gfx.lineStyle(3, accent, 0.2);
+    gfx.strokeRect(width * 0.08, height * 0.18, width * 0.26, height * 0.2);
+    gfx.strokeRect(width * 0.58, height * 0.16, width * 0.2, height * 0.22);
+
+    gfx.lineStyle(5, accent, 0.2);
+    gfx.strokeCircle(width * 0.76, height * 0.66, width * 0.1);
+    gfx.strokeCircle(width * 0.76, height * 0.66, width * 0.16);
+    gfx.lineBetween(width * 0.12, height * 0.76, width * 0.46, height * 0.58);
+    gfx.lineBetween(width * 0.46, height * 0.58, width * 0.62, height * 0.68);
   }
 }

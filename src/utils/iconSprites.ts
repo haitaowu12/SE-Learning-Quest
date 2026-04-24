@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import { COLORS } from './designTokens.ts';
 
 export class IconSprites {
-  static drawLock(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.textDim): void {
+  static drawLock(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.textOnPanel): void {
     const s = size;
     const hw = s * 0.4;
     const hh = s * 0.3;
@@ -97,7 +97,7 @@ export class IconSprites {
     gfx.fillPath();
   }
 
-  static drawPlay(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.primary): void {
+  static drawPlay(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.accent): void {
     gfx.fillStyle(color, 1);
     gfx.beginPath();
     gfx.moveTo(x - size * 0.15, y - size * 0.25);
@@ -107,7 +107,7 @@ export class IconSprites {
     gfx.fillPath();
   }
 
-  static drawArrowUp(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.primary): void {
+  static drawArrowUp(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.textOnPanel): void {
     gfx.fillStyle(color, 1);
     gfx.beginPath();
     gfx.moveTo(x, y - size * 0.25);
@@ -121,7 +121,7 @@ export class IconSprites {
     gfx.fillPath();
   }
 
-  static drawArrowDown(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.primary): void {
+  static drawArrowDown(gfx: Phaser.GameObjects.Graphics, x: number, y: number, size: number, color: number = COLORS.textOnPanel): void {
     gfx.fillStyle(color, 1);
     gfx.beginPath();
     gfx.moveTo(x, y + size * 0.25);
@@ -143,7 +143,7 @@ export class IconSprites {
       { key: 'icon-bulb', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawLightbulb(g, x, y, 40) },
       { key: 'icon-flame', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawFlame(g, x, y, 40) },
       { key: 'icon-star', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawStar(g, x, y, 40) },
-      { key: 'icon-star-empty', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawStar(g, x, y, 40, COLORS.border) },
+      { key: 'icon-star-empty', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawStar(g, x, y, 40, COLORS.textOnPanelMuted) },
       { key: 'icon-play', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawPlay(g, x, y, 40) },
       { key: 'icon-arrow-up', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawArrowUp(g, x, y, 30) },
       { key: 'icon-arrow-down', draw: (g: Phaser.GameObjects.Graphics, x: number, y: number) => IconSprites.drawArrowDown(g, x, y, 30) },
