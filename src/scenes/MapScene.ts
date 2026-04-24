@@ -242,12 +242,14 @@ export class MapScene extends Phaser.Scene {
       chartGfx.fillStyle(COLORS.primary, 1);
       chartGfx.fillCircle(pt.x, pt.y, 4);
 
-      this.add.text(pt.x, pt.y - 12, `${Math.round(scores[i])}`, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#0ea5e9',
-        fontFamily: FONT.family,
-        fontStyle: 'bold',
-      }).setOrigin(0.5);
+      if (value > 0 || i === 0) {
+        this.add.text(pt.x, pt.y - 12, `${Math.round(scores[i])}`, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#0ea5e9',
+          fontFamily: FONT.family,
+          fontStyle: 'bold',
+        }).setOrigin(0.5);
+      }
     }
 
     for (let i = 0; i < numAxes; i++) {
@@ -391,8 +393,12 @@ export class MapScene extends Phaser.Scene {
     this.moduleNodes.push(nodeEntry);
 
     if (!mod.locked) {
-      container.setSize(100, 100);
-      container.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
+      container.setSize(120, 120);
+      container.setInteractive({
+        hitArea: new Phaser.Geom.Circle(0, 0, 60),
+        hitAreaCallback: Phaser.Geom.Circle.Contains,
+        useHandCursor: true
+      });
 
       container.on('pointerover', () => {
         this.focusedIndex = this.moduleNodes.indexOf(nodeEntry);
@@ -402,17 +408,21 @@ export class MapScene extends Phaser.Scene {
         inner.fillCircle(0, 0, 52);
         inner.fillStyle(mod.locked ? 0x1e293b : 0x0f172a, 1);
         inner.fillCircle(0, 0, 46);
-        this.input.setDefaultCursor('pointer');
+        this.tweens.add({ targets: container, scale: 1.05, duration: 150, ease: 'Sine.easeOut' });
       });
 
       container.on('pointerout', () => {
         inner.clear();
         inner.fillStyle(mod.locked ? 0x1e293b : 0x0f172a, 1);
         inner.fillCircle(0, 0, 46);
-        this.input.setDefaultCursor('default');
+        this.tweens.add({ targets: container, scale: 1.0, duration: 150, ease: 'Sine.easeOut' });
       });
 
+      let clicked = false;
       container.on('pointerdown', () => {
+        if (clicked) return;
+        clicked = true;
+        this.tweens.add({ targets: container, scale: 0.9, duration: 50, yoyo: true });
         this.audioManager?.playSFX('sfx-click');
         TransitionManager.fadeOut(this, 300, () => {
           this.scene.start('ModuleScene', { moduleId: mod.id });
@@ -446,8 +456,12 @@ export class MapScene extends Phaser.Scene {
     }).setOrigin(0.5);
     container.add(title);
 
-    container.setSize(110, 110);
-    container.setInteractive(new Phaser.Geom.Circle(0, 0, 55), Phaser.Geom.Circle.Contains);
+    container.setSize(130, 130);
+    container.setInteractive({
+      hitArea: new Phaser.Geom.Circle(0, 0, 65),
+      hitAreaCallback: Phaser.Geom.Circle.Contains,
+      useHandCursor: true
+    });
 
     this.capstoneNode = { container, outer, pos };
 

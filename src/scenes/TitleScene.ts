@@ -223,8 +223,12 @@ export class TitleScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     btn.add([bg, label]);
-    btn.setSize(220, 48);
-    btn.setInteractive(new Phaser.Geom.Rectangle(-110, -24, 220, 48), Phaser.Geom.Rectangle.Contains);
+    btn.setSize(260, 56);
+    btn.setInteractive({
+      hitArea: new Phaser.Geom.Rectangle(-130, -28, 260, 56),
+      hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+      useHandCursor: true
+    });
 
     const entry = { container: btn, bg, callback };
     this.menuButtons.push(entry);
@@ -232,12 +236,18 @@ export class TitleScene extends Phaser.Scene {
     btn.on('pointerover', () => {
       this.focusedIndex = this.menuButtons.indexOf(entry);
       this.updateFocusVisual();
-      this.input.setDefaultCursor('pointer');
+      this.tweens.add({ targets: btn, scale: 1.03, duration: 100, ease: 'Sine.easeOut' });
     });
     btn.on('pointerout', () => {
-      this.input.setDefaultCursor('default');
+      this.tweens.add({ targets: btn, scale: 1.0, duration: 100, ease: 'Sine.easeOut' });
     });
-    btn.on('pointerdown', callback);
+    let clicked = false;
+    btn.on('pointerdown', () => {
+      if (clicked) return;
+      clicked = true;
+      this.tweens.add({ targets: btn, scale: 0.95, duration: 50, yoyo: true });
+      callback();
+    });
   }
 
   private showAchievements(): void {

@@ -77,78 +77,103 @@ export class LessonScene extends Phaser.Scene {
     }).setOrigin(0, 0.5);
 
     const contentY = 80;
-    let currentY = contentY + 20;
+    const contentHeight = height - contentY - 80;
+    const contentContainer = this.add.container(0, contentY);
+    let currentY = 20;
 
-    this.add.text(40, currentY, lesson.conceptTitle, {
+    const conceptText = this.add.text(40, currentY, lesson.conceptTitle, {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl)}px`,
       color: '#0ea5e9',
       fontFamily: FONT.heading,
       fontStyle: 'bold',
       wordWrap: { width: width - 80 },
     }).setOrigin(0);
-    currentY += 50;
+    contentContainer.add(conceptText);
+    currentY += conceptText.height + 20;
 
     if (lesson.keyPoints && lesson.keyPoints.length > 0) {
-      this.add.text(40, currentY, 'Key Concepts', {
+      const keyTitle = this.add.text(40, currentY, 'Key Concepts', {
         fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#94a3b8',
         fontFamily: FONT.family,
         fontStyle: 'bold',
       }).setOrigin(0);
-      currentY += 30;
+      contentContainer.add(keyTitle);
+      currentY += keyTitle.height + 15;
 
       lesson.keyPoints.forEach((point) => {
         const bullet = this.add.graphics();
         bullet.fillStyle(COLORS.primary, 1);
         bullet.fillCircle(52, currentY + 10, 4);
+        contentContainer.add(bullet);
 
-        this.add.text(64, currentY, point, {
+        const pt = this.add.text(64, currentY, point, {
           fontSize: `${scaledFontSize(this, FONT.sizes.md - 1)}px`,
           color: '#e2e8f0',
           fontFamily: FONT.family,
           wordWrap: { width: width - 120 },
         }).setOrigin(0);
-        currentY += 40;
+        contentContainer.add(pt);
+        currentY += pt.height + 15;
       });
+      currentY += 10;
     }
 
     if (lesson.example) {
-      currentY += 10;
-      const exampleBg = this.add.graphics();
-      exampleBg.fillStyle(COLORS.primarySoft, 1);
-      exampleBg.fillRoundedRect(40, currentY, width - 80, 80, RADIUS.md);
-      exampleBg.lineStyle(1, COLORS.primary, 0.5);
-      exampleBg.strokeRoundedRect(40, currentY, width - 80, 80, RADIUS.md);
-
-      this.add.text(60, currentY + 10, 'Example', {
+      const exTitle = this.add.text(60, currentY + 10, 'Example', {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
         color: '#0ea5e9',
         fontFamily: FONT.family,
         fontStyle: 'bold',
       }).setOrigin(0);
+      contentContainer.add(exTitle);
 
-      this.add.text(60, currentY + 32, lesson.example, {
+      const exText = this.add.text(60, currentY + 32, lesson.example, {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
         color: '#e2e8f0',
         fontFamily: FONT.family,
         wordWrap: { width: width - 140 },
       }).setOrigin(0);
-      currentY += 100;
+      contentContainer.add(exText);
+
+      const boxH = exText.height + 52;
+      const exampleBg = this.add.graphics();
+      exampleBg.fillStyle(COLORS.primarySoft, 1);
+      exampleBg.fillRoundedRect(40, currentY, width - 80, boxH, RADIUS.md);
+      exampleBg.lineStyle(1, COLORS.primary, 0.5);
+      exampleBg.strokeRoundedRect(40, currentY, width - 80, boxH, RADIUS.md);
+      contentContainer.add(exampleBg);
+      contentContainer.moveTo(exampleBg, 0);
+
+      currentY += boxH + 20;
     }
 
     if (lesson.diagramType) {
-      currentY += 10;
-      this.add.text(40, currentY, 'Visual Overview', {
+      const diagTitle = this.add.text(40, currentY, 'Visual Overview', {
         fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
         color: '#94a3b8',
         fontFamily: FONT.family,
         fontStyle: 'bold',
       }).setOrigin(0);
-      currentY += 30;
+      contentContainer.add(diagTitle);
+      currentY += diagTitle.height + 15;
 
-      this.renderDiagram(40, currentY, width - 80, 150, lesson.diagramType);
+      this.renderDiagram(40, currentY, width - 80, 150, lesson.diagramType, contentContainer);
       currentY += 170;
     }
+
+    const clipMask = this.make.graphics({}, false);
+    clipMask.fillStyle(0xffffff, 1);
+    clipMask.fillRect(0, contentY, width, contentHeight);
+    contentContainer.setMask(clipMask.createGeometryMask());
+
+    let contentScrollY = 0;
+    const maxContentScrollY = Math.max(0, currentY - contentHeight);
+
+    this.input.on('wheel', (_pointer: Phaser.Input.Pointer, _dx: number, dy: number) => {
+      contentScrollY = Phaser.Math.Clamp(contentScrollY + dy * 0.5, 0, maxContentScrollY);
+      contentContainer.y = contentY - contentScrollY;
+    });
 
     const btnY = height - 80;
     const btn = this.add.container(width / 2, btnY);
@@ -163,18 +188,28 @@ export class LessonScene extends Phaser.Scene {
     }).setOrigin(0.5);
     btn.add([btnBg, btnLabel]);
     btn.setSize(280, 48);
-    btn.setInteractive(new Phaser.Geom.Rectangle(-140, -24, 280, 48), Phaser.Geom.Rectangle.Contains);
+    btn.setInteractive({
+      hitArea: new Phaser.Geom.Rectangle(-140, -24, 280, 48),
+      hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+      useHandCursor: true
+    });
     btn.on('pointerover', () => {
       btnBg.clear();
       btnBg.fillStyle(COLORS.successSoft, 1);
       btnBg.fillRoundedRect(-140, -24, 280, 48, RADIUS.md);
+      this.tweens.add({ targets: btn, scale: 1.05, duration: 150, ease: 'Sine.easeOut' });
     });
     btn.on('pointerout', () => {
       btnBg.clear();
       btnBg.fillStyle(COLORS.success, 1);
       btnBg.fillRoundedRect(-140, -24, 280, 48, RADIUS.md);
+      this.tweens.add({ targets: btn, scale: 1.0, duration: 150, ease: 'Sine.easeOut' });
     });
+    let clicked = false;
     btn.on('pointerdown', () => {
+      if (clicked) return;
+      clicked = true;
+      this.tweens.add({ targets: btn, scale: 0.95, duration: 50, yoyo: true });
       TransitionManager.fadeOut(this, 300, () => {
         this.scene.start('LevelScene', { levelId: this.levelId });
       });
@@ -199,30 +234,31 @@ export class LessonScene extends Phaser.Scene {
     return gfx;
   }
 
-  private renderDiagram(x: number, y: number, w: number, h: number, type: string): void {
+  private renderDiagram(x: number, y: number, w: number, h: number, type: string, container: Phaser.GameObjects.Container): void {
     const gfx = this.add.graphics();
     gfx.fillStyle(COLORS.panelBg, 0.6);
     gfx.fillRoundedRect(x, y, w, h, RADIUS.md);
     gfx.lineStyle(1, COLORS.border, 1);
     gfx.strokeRoundedRect(x, y, w, h, RADIUS.md);
+    container.add(gfx);
 
     switch (type) {
       case 'flowchart':
-        this.renderFlowchartDiagram(x, y, w, h, gfx);
+        this.renderFlowchartDiagram(x, y, w, h, gfx, container);
         break;
       case 'matrix':
-        this.renderMatrixDiagram(x, y, w, h, gfx);
+        this.renderMatrixDiagram(x, y, w, h, gfx, container);
         break;
       case 'hierarchy':
-        this.renderHierarchyDiagram(x, y, w, h, gfx);
+        this.renderHierarchyDiagram(x, y, w, h, gfx, container);
         break;
       case 'sequence':
-        this.renderSequenceDiagram(x, y, w, h, gfx);
+        this.renderSequenceDiagram(x, y, w, h, gfx, container);
         break;
     }
   }
 
-  private renderFlowchartDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics): void {
+  private renderFlowchartDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics, container: Phaser.GameObjects.Container): void {
     const steps = ['Input', 'Process', 'Decision', 'Output'];
     const boxW = 80;
     const boxH = 36;
@@ -236,11 +272,13 @@ export class LessonScene extends Phaser.Scene {
       gfx.lineStyle(1, COLORS.primary, 1);
       gfx.strokeRoundedRect(bx, by, boxW, boxH, RADIUS.sm);
 
-      this.add.text(bx + boxW / 2, by + boxH / 2, step, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#e2e8f0',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
+      container.add(
+        this.add.text(bx + boxW / 2, by + boxH / 2, step, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#e2e8f0',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5)
+      );
 
       if (i < steps.length - 1) {
         const arrowStartX = bx + boxW;
@@ -254,23 +292,25 @@ export class LessonScene extends Phaser.Scene {
     });
   }
 
-  private renderMatrixDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics): void {
+  private renderMatrixDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics, container: Phaser.GameObjects.Container): void {
     const labels = ['High/Low', 'High/High', 'Low/Low', 'Low/High'];
     const cellW = (w - 60) / 2;
     const cellH = (h - 60) / 2;
     const startX = x + 40;
     const startY = y + 40;
 
-    this.add.text(x + 10, y + h / 2, 'Power', {
-      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-      color: '#94a3b8',
-      fontFamily: FONT.family,
-    }).setOrigin(0.5).setAngle(-90);
-    this.add.text(x + w / 2, y + 15, 'Interest', {
-      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-      color: '#94a3b8',
-      fontFamily: FONT.family,
-    }).setOrigin(0.5);
+    container.add([
+      this.add.text(x + 10, y + h / 2, 'Power', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+        color: '#94a3b8',
+        fontFamily: FONT.family,
+      }).setOrigin(0.5).setAngle(-90),
+      this.add.text(x + w / 2, y + 15, 'Interest', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+        color: '#94a3b8',
+        fontFamily: FONT.family,
+      }).setOrigin(0.5)
+    ]);
 
     const colors = [0x1e3a5f, 0x0f172a, 0x1a2230, 0x162d4a];
     labels.forEach((label, i) => {
@@ -282,15 +322,17 @@ export class LessonScene extends Phaser.Scene {
       gfx.fillRoundedRect(cx + 2, cy + 2, cellW - 4, cellH - 4, RADIUS.xs);
       gfx.lineStyle(1, COLORS.border, 1);
       gfx.strokeRoundedRect(cx + 2, cy + 2, cellW - 4, cellH - 4, RADIUS.xs);
-      this.add.text(cx + cellW / 2, cy + cellH / 2, label, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#94a3b8',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
+      container.add(
+        this.add.text(cx + cellW / 2, cy + cellH / 2, label, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#94a3b8',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5)
+      );
     });
   }
 
-  private renderHierarchyDiagram(x: number, y: number, w: number, _h: number, gfx: Phaser.GameObjects.Graphics): void {
+  private renderHierarchyDiagram(x: number, y: number, w: number, _h: number, gfx: Phaser.GameObjects.Graphics, container: Phaser.GameObjects.Container): void {
     const topX = x + w / 2;
     const topY = y + 20;
     const boxW = 80;
@@ -300,11 +342,13 @@ export class LessonScene extends Phaser.Scene {
     gfx.fillRoundedRect(topX - boxW / 2, topY, boxW, boxH, RADIUS.sm);
     gfx.lineStyle(1, COLORS.primary, 1);
     gfx.strokeRoundedRect(topX - boxW / 2, topY, boxW, boxH, RADIUS.sm);
-    this.add.text(topX, topY + boxH / 2, 'System', {
-      fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-      color: '#e2e8f0',
-      fontFamily: FONT.family,
-    }).setOrigin(0.5);
+    container.add(
+      this.add.text(topX, topY + boxH / 2, 'System', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+        color: '#e2e8f0',
+        fontFamily: FONT.family,
+      }).setOrigin(0.5)
+    );
 
     const children = ['Sub A', 'Sub B', 'Sub C'];
     const childY = topY + 70;
@@ -318,15 +362,17 @@ export class LessonScene extends Phaser.Scene {
       gfx.fillRoundedRect(cx - boxW / 2, childY, boxW, boxH, RADIUS.sm);
       gfx.lineStyle(1, COLORS.border, 1);
       gfx.strokeRoundedRect(cx - boxW / 2, childY, boxW, boxH, RADIUS.sm);
-      this.add.text(cx, childY + boxH / 2, label, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#e2e8f0',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
+      container.add(
+        this.add.text(cx, childY + boxH / 2, label, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#e2e8f0',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5)
+      );
     });
   }
 
-  private renderSequenceDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics): void {
+  private renderSequenceDiagram(x: number, y: number, w: number, h: number, gfx: Phaser.GameObjects.Graphics, container: Phaser.GameObjects.Container): void {
     const steps = ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'];
     const stepW = (w - 40) / steps.length;
 
@@ -339,17 +385,19 @@ export class LessonScene extends Phaser.Scene {
       gfx.fillCircle(sx, y + h / 2, 12);
       gfx.fillStyle(COLORS.bg, 1);
       gfx.fillCircle(sx, y + h / 2, 8);
-      this.add.text(sx, y + h / 2 - 24, step, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#e2e8f0',
-        fontFamily: FONT.family,
-      }).setOrigin(0.5);
-      this.add.text(sx, y + h / 2, `${i + 1}`, {
-        fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
-        color: '#3b82f6',
-        fontFamily: FONT.family,
-        fontStyle: 'bold',
-      }).setOrigin(0.5);
+      container.add([
+        this.add.text(sx, y + h / 2 - 24, step, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#e2e8f0',
+          fontFamily: FONT.family,
+        }).setOrigin(0.5),
+        this.add.text(sx, y + h / 2, `${i + 1}`, {
+          fontSize: `${scaledFontSize(this, FONT.sizes.xs)}px`,
+          color: '#3b82f6',
+          fontFamily: FONT.family,
+          fontStyle: 'bold',
+        }).setOrigin(0.5)
+      ]);
     });
   }
 
@@ -365,18 +413,28 @@ export class LessonScene extends Phaser.Scene {
     }).setOrigin(0.5);
     btn.add([bg, label]);
     btn.setSize(100, 36);
-    btn.setInteractive(new Phaser.Geom.Rectangle(-50, -18, 100, 36), Phaser.Geom.Rectangle.Contains);
+    btn.setInteractive({
+      hitArea: new Phaser.Geom.Rectangle(-50, -18, 100, 36),
+      hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+      useHandCursor: true
+    });
     btn.on('pointerover', () => {
       bg.clear();
       bg.fillStyle(COLORS.borderHover, 1);
       bg.fillRoundedRect(-50, -18, 100, 36, RADIUS.sm);
+      this.tweens.add({ targets: btn, scale: 1.05, duration: 150, ease: 'Sine.easeOut' });
     });
     btn.on('pointerout', () => {
       bg.clear();
       bg.fillStyle(COLORS.borderLight, 1);
       bg.fillRoundedRect(-50, -18, 100, 36, RADIUS.sm);
+      this.tweens.add({ targets: btn, scale: 1.0, duration: 150, ease: 'Sine.easeOut' });
     });
+    let clicked = false;
     btn.on('pointerdown', () => {
+      if (clicked) return;
+      clicked = true;
+      this.tweens.add({ targets: btn, scale: 0.95, duration: 50, yoyo: true });
       TransitionManager.fadeOut(this, 300, () => {
         this.scene.start('ModuleScene', { moduleId: this.levelData.moduleId });
       });

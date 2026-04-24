@@ -241,19 +241,21 @@ export class ModuleScene extends Phaser.Scene {
 
     if (!level.locked) {
       container.setSize(width, height);
-      container.setInteractive(new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height), Phaser.Geom.Rectangle.Contains);
+      container.setInteractive({
+        hitArea: new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height),
+        hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+        useHandCursor: true
+      });
 
       container.on('pointerover', () => {
         this.focusedIndex = this.levelCards.indexOf(cardEntry);
         this.updateFocusVisual();
         bg.clear();
         bg.fillStyle(0x3b82f6, 0.08);
-        bg.fillRoundedRect(-width / 2 - 4, -height / 2 - 4, width + 8, height + 8, RADIUS.md + 2);
-        bg.fillStyle(level.locked ? 0x1e293b : 0x0f172a, 1);
         bg.fillRoundedRect(-width / 2, -height / 2, width, height, RADIUS.md);
-        bg.lineStyle(2, COLORS.primary, 0.6);
+        bg.lineStyle(3, 0x38bdf8, 1);
         bg.strokeRoundedRect(-width / 2, -height / 2, width, height, RADIUS.md);
-        this.input.setDefaultCursor('pointer');
+        this.tweens.add({ targets: container, scale: 1.02, duration: 100, ease: 'Sine.easeOut' });
       });
 
       container.on('pointerout', () => {
@@ -262,10 +264,14 @@ export class ModuleScene extends Phaser.Scene {
         bg.fillRoundedRect(-width / 2, -height / 2, width, height, RADIUS.md);
         bg.lineStyle(2, color, 1);
         bg.strokeRoundedRect(-width / 2, -height / 2, width, height, RADIUS.md);
-        this.input.setDefaultCursor('default');
+        this.tweens.add({ targets: container, scale: 1.0, duration: 100, ease: 'Sine.easeOut' });
       });
 
+      let clicked = false;
       container.on('pointerdown', () => {
+        if (clicked) return;
+        clicked = true;
+        this.tweens.add({ targets: container, scale: 0.97, duration: 50, yoyo: true });
         this.audioManager?.playSFX('sfx-click');
         TransitionManager.fadeOut(this, 300, () => {
           if (level.completed) {

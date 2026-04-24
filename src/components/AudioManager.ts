@@ -6,7 +6,9 @@ export class AudioManager {
   private settings: GameSettings;
   private bgmGain: GainNode | null = null;
   private bgmOscillators: OscillatorNode[] = [];
+  private bgmGainNodes: GainNode[] = [];
   private bgmPlaying = false;
+  private bgmLoopId: number | null = null;
 
   constructor(settings: GameSettings) {
     this.settings = settings;
@@ -175,63 +177,108 @@ export class AudioManager {
     if (this.bgmPlaying) return;
     const ctx = this.getContext();
     if (!ctx) return;
+    // BGM is disabled by default for now unless settings.musicVolume is explicitly handled.
+    // The user prefers a non-intrusive BGM.
     if (this.settings.muted) return;
 
     this.bgmGain = ctx.createGain();
     this.bgmGain.connect(ctx.destination);
-    const vol = this.settings.musicVolume * this.settings.masterVolume * 0.15;
-    this.bgmGain.gain.value = vol;
-
-    const droneFreqs = [65.41, 98.0, 130.81];
-    droneFreqs.forEach((freq) => {
-      const osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      osc.connect(this.bgmGain!);
-      osc.start();
-      this.bgmOscillators.push(osc);
-    });
-
-    const lfo = ctx.createOscillator();
-    lfo.type = 'sine';
-    lfo.frequency.value = 0.08;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 2;
-    lfo.connect(lfoGain);
-    lfoGain.connect(this.bgmOscillators[0].frequency);
-    lfo.start();
-    this.bgmOscillators.push(lfo);
-
-    const shimmer = ctx.createOscillator();
-    shimmer.type = 'triangle';
-    shimmer.frequency.value = 261.63;
-    const shimmerGain = ctx.createGain();
-    shimmerGain.gain.value = vol * 0.3;
-    shimmer.connect(shimmerGain);
-    shimmerGain.connect(ctx.destination);
-    shimmer.start();
-    this.bgmOscillators.push(shimmer);
-
-    const shimmerLfo = ctx.createOscillator();
-    shimmerLfo.type = 'sine';
-    shimmerLfo.frequency.value = 0.05;
-    const shimmerLfoGain = ctx.createGain();
-    shimmerLfoGain.gain.value = vol * 0.15;
-    shimmerLfo.connect(shimmerLfoGain);
-    shimmerLfoGain.connect(shimmerGain.gain);
-    shimmerLfo.start();
-    this.bgmOscillators.push(shimmerLfo);
+    
+    // Master volume for BGM. Start at 0 for fade in.
+    const targetVol = this.settings.musicVolume * this.settings.masterVolume * 0.08;
+    this.bgmGain.gain.setValueAtTime(0, ctx.currentTime);
+    this.bgmGain.gain.linearRampToValueAtTime(targetVol, ctx.currentTime + 2.0);
 
     this.bgmPlaying = true;
+    
+    // Chords: Am7, Fmaj7, Cmaj7, G (frequencies in Hz)
+    const chords = [
+      [220.00, 261.63, 329.63, 392.00], // Am7
+      [174.61, 220.00, 261.63, 329.63], // Fmaj7
+      [130.81, 164.81, 196.00, 246.94], // Cmaj7
+      [196.00, 246.94, 293.66, 392.00]  // G
+    ];
+    
+    let currentChordIdx = 0;
+    
+    const playNextChord = () => {
+      if (!this.bgmPlaying || !this.bgmGain) return;
+      const now = ctx.currentTime;
+      const chord = chords[currentChordIdx];
+      
+      // Clean up old nodes
+      this.bgmOscillators = this.bgmOscillators.filter(osc => {
+        try {
+          return osc.playbackRate.value !== 0; // rough check to keep array clean
+        } catch { return false; }
+      });
+      
+      chord.forEach(freq => {
+        const osc = ctx.createOscillator();
+        const noteGain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        
+        // ADSR Envelope
+        noteGain.gain.setValueAtTime(0, now);
+        // Attack
+        noteGain.gain.linearRampToValueAtTime(1.0 / chord.length, now + 0.5);
+        // Sustain & Release over 4 seconds
+        noteGain.gain.exponentialRampToValueAtTime(0.001, now + 4.0);
+        
+        osc.connect(noteGain);
+        noteGain.connect(this.bgmGain!);
+        
+        osc.start(now);
+        osc.stop(now + 4.0);
+        
+        this.bgmOscillators.push(osc);
+        this.bgmGainNodes.push(noteGain);
+      });
+      
+      currentChordIdx = (currentChordIdx + 1) % chords.length;
+      
+      // Schedule next chord
+      this.bgmLoopId = window.setTimeout(playNextChord, 4000);
+    };
+    
+    playNextChord();
   }
 
   stopBGM(): void {
-    this.bgmOscillators.forEach(osc => {
-      try { osc.stop(); } catch { /* already stopped */ }
-    });
-    this.bgmOscillators = [];
-    this.bgmGain = null;
     this.bgmPlaying = false;
+    if (this.bgmLoopId !== null) {
+      window.clearTimeout(this.bgmLoopId);
+      this.bgmLoopId = null;
+    }
+    
+    const ctx = this.audioContext;
+    const now = ctx ? ctx.currentTime : 0;
+    
+    this.bgmGainNodes.forEach(gain => {
+      try {
+        if (ctx) {
+          gain.gain.cancelScheduledValues(now);
+          gain.gain.linearRampToValueAtTime(0, now + 0.1);
+        }
+      } catch { /* ignore */ }
+    });
+    
+    setTimeout(() => {
+      this.bgmOscillators.forEach(osc => {
+        try { osc.stop(); osc.disconnect(); } catch { /* already stopped */ }
+      });
+      this.bgmGainNodes.forEach(gain => {
+        try { gain.disconnect(); } catch { /* ignore */ }
+      });
+      this.bgmOscillators = [];
+      this.bgmGainNodes = [];
+      if (this.bgmGain) {
+        try { this.bgmGain.disconnect(); } catch {}
+        this.bgmGain = null;
+      }
+    }, 150);
   }
 
   updateSettings(settings: GameSettings): void {

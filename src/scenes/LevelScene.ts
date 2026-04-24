@@ -147,7 +147,7 @@ export class LevelScene extends Phaser.Scene {
     this.contentContainer.setMask(mask);
 
     this.input.on('wheel', (_pointer: Phaser.Input.Pointer, _dx: number, dy: number) => {
-      this.contentScrollY = Phaser.Math.Clamp(this.contentScrollY + dy * 0.5, -this.maxContentScrollY, 0);
+      this.contentScrollY = Phaser.Math.Clamp(this.contentScrollY + dy * 0.5, 0, this.maxContentScrollY);
       this.contentContainer.y = contentY - this.contentScrollY;
     });
 
@@ -717,7 +717,11 @@ export class LevelScene extends Phaser.Scene {
 
     container.add([bg, label, arrow]);
     container.setSize(w, h);
-    container.setInteractive(new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h), Phaser.Geom.Rectangle.Contains);
+    container.setInteractive({
+      hitArea: new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h),
+      hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+      useHandCursor: true
+    });
 
     let dropdownPanel: Phaser.GameObjects.Container | null = null;
 
@@ -753,7 +757,7 @@ export class LevelScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const optHit = this.add.zone(0, optY, w - 8, 34);
-        optHit.setInteractive();
+        optHit.setInteractive({ useHandCursor: true });
         optHit.on('pointerover', () => {
           optBg.clear();
           optBg.fillStyle(COLORS.primaryDim, 1);
@@ -762,7 +766,8 @@ export class LevelScene extends Phaser.Scene {
         optHit.on('pointerout', () => {
           optBg.clear();
         });
-        optHit.on('pointerdown', () => {
+        optHit.on('pointerdown', (pointer: Phaser.Input.Pointer, localX: number, localY: number, event: Phaser.Types.Input.EventData) => {
+          event.stopPropagation();
           onSelect(opt, i);
           label.setText(opt);
           label.setColor('#e2e8f0');
@@ -1272,6 +1277,22 @@ export class LevelScene extends Phaser.Scene {
         if (!isDragging) return;
         container.x = dragStartItemX + (pointer.x - dragStartPointerX);
         container.y = dragStartItemY + (pointer.y - dragStartPointerY);
+
+        const itemCenterX = container.x + (poolItemWidth - 4) / 2;
+        const itemCenterY = container.y + itemHeight / 2;
+
+        for (const zone of zoneRects) {
+          zone.bg.clear();
+          zone.bg.fillStyle(COLORS.panelBg, 0.6);
+          zone.bg.fillRoundedRect(zone.rect.x, zone.rect.y, zone.rect.width, zone.rect.height, RADIUS.sm);
+          
+          if (Phaser.Geom.Rectangle.Contains(zone.rect, itemCenterX, itemCenterY)) {
+            zone.bg.lineStyle(2, 0x38bdf8, 1);
+          } else {
+            zone.bg.lineStyle(2, placements[item.id] === zone.id ? COLORS.primary : COLORS.border, 1);
+          }
+          zone.bg.strokeRoundedRect(zone.rect.x, zone.rect.y, zone.rect.width, zone.rect.height, RADIUS.sm);
+        }
       };
 
       const handleDrop = () => {
@@ -1281,7 +1302,7 @@ export class LevelScene extends Phaser.Scene {
         this.input.off('pointermove', onPointerMove);
 
         const itemCenterX = container.x + (poolItemWidth - 4) / 2;
-        const itemCenterY = container.y + itemHeight / 2 + this.contentScrollY;
+        const itemCenterY = container.y + itemHeight / 2;
         const previousZone = placements[item.id];
         let placed = false;
 
@@ -1359,11 +1380,20 @@ export class LevelScene extends Phaser.Scene {
     }
 
     const statements = config.statements;
+
+    this.contentContainer.add(
+      this.add.text(x + 20, startY - 25, 'Rewrite each requirement to include the missing quality attributes below:', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+        color: '#38bdf8',
+        fontFamily: FONT.family,
+        fontStyle: 'italic',
+      })
+    );
+
     const inputState: { text: Phaser.GameObjects.Text; cursor: Phaser.GameObjects.Text; value: string; feedback: Phaser.GameObjects.Text; inputBg: Phaser.GameObjects.Graphics; rowY: number; placeholder: Phaser.GameObjects.Text }[] = [];
     let activeInputIndex = -1;
     let cursorTimer: Phaser.Time.TimerEvent | null = null;
 
-    const startY = y + 30;
     const rowHeight = 100;
 
     statements.forEach((stmt, i) => {
