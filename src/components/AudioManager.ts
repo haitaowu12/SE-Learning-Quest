@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import type { GameSettings } from '@/types/index.ts';
+import type { GameSettings } from '../types/index.ts';
 
 export class AudioManager {
   private audioContext: AudioContext | null = null;
@@ -43,19 +43,33 @@ export class AudioManager {
     switch (key) {
       case 'sfx-click': {
         const osc = ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.value = 440;
+        osc.type = 'triangle';
+        osc.frequency.value = 300;
         osc.connect(gain);
-        gain.gain.setValueAtTime(volume, now);
+        gain.gain.setValueAtTime(volume * 0.8, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
         osc.start(now);
         osc.stop(now + 0.05);
         break;
       }
-      case 'sfx-correct': {
+      case 'sfx-blip': {
+        // High-tech typewriter blip
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = 1200 + Math.random() * 200; // slight variation
+        osc.connect(gain);
+        gain.gain.setValueAtTime(volume * 0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        osc.start(now);
+        osc.stop(now + 0.03);
+        break;
+      }
+      case 'sfx-correct':
+      case 'sfx-success': {
+        // High-tech success chime
         const osc1 = ctx.createOscillator();
         osc1.type = 'sine';
-        osc1.frequency.value = 523;
+        osc1.frequency.value = 523.25; // C5
         osc1.connect(gain);
         gain.gain.setValueAtTime(volume, now);
         gain.gain.setValueAtTime(volume, now + 0.1);
@@ -68,57 +82,38 @@ export class AudioManager {
         gain2.connect(ctx.destination);
         gain2.gain.value = volume;
         osc2.type = 'sine';
-        osc2.frequency.value = 659;
+        osc2.frequency.value = 783.99; // G5
         osc2.connect(gain2);
         gain2.gain.setValueAtTime(0.001, now);
         gain2.gain.setValueAtTime(volume, now + 0.1);
-        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
         osc2.start(now + 0.1);
-        osc2.stop(now + 0.2);
+        osc2.stop(now + 0.4);
         break;
       }
-      case 'sfx-wrong': {
+      case 'sfx-wrong':
+      case 'sfx-error': {
+        // High-tech error buzz
         const osc1 = ctx.createOscillator();
-        osc1.type = 'square';
-        osc1.frequency.value = 330;
+        osc1.type = 'sawtooth';
+        osc1.frequency.value = 150;
         osc1.connect(gain);
         gain.gain.setValueAtTime(volume * 0.5, now);
-        gain.gain.setValueAtTime(volume * 0.5, now + 0.15);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
         osc1.start(now);
-        osc1.stop(now + 0.15);
+        osc1.stop(now + 0.2);
 
         const osc2 = ctx.createOscillator();
         const gain2 = ctx.createGain();
         gain2.connect(ctx.destination);
         gain2.gain.value = volume * 0.5;
         osc2.type = 'square';
-        osc2.frequency.value = 220;
+        osc2.frequency.value = 100;
         osc2.connect(gain2);
-        gain2.gain.setValueAtTime(0.001, now);
-        gain2.gain.setValueAtTime(volume * 0.5, now + 0.15);
+        gain2.gain.setValueAtTime(volume * 0.5, now + 0.1);
         gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc2.start(now + 0.15);
+        osc2.start(now + 0.1);
         osc2.stop(now + 0.3);
-        break;
-      }
-      case 'sfx-success': {
-        const notes = [523, 659, 784];
-        notes.forEach((freq, i) => {
-          const osc = ctx.createOscillator();
-          const noteGain = ctx.createGain();
-          noteGain.connect(ctx.destination);
-          noteGain.gain.value = volume;
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          osc.connect(noteGain);
-          const start = now + i * 0.12;
-          noteGain.gain.setValueAtTime(0.001, start);
-          noteGain.gain.setValueAtTime(volume, start + 0.02);
-          noteGain.gain.exponentialRampToValueAtTime(0.001, start + 0.3);
-          osc.start(start);
-          osc.stop(start + 0.3);
-        });
         break;
       }
       case 'sfx-level-complete': {

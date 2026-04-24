@@ -1,0 +1,1978 @@
+{
+  "programTitle": "Harbour Line Modernization",
+  "programSubtitle": "Interactive rail systems engineering campaign",
+  "playerRole": "Assistant Systems Engineer",
+  "programSummary": "Steer a live rail signaling modernization program through ambiguity, stakeholder pressure, interface risk, verification demands, and integration turbulence.",
+  "baselineMetrics": {
+    "system_quality": 56,
+    "stakeholder_trust": 54,
+    "risk_exposure": 46,
+    "delivery_confidence": 52,
+    "team_capacity": 58
+  },
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "order": 1,
+      "pillar": "Systems framing",
+      "themeColor": "#79d0ff",
+      "mapLabel": "Corridor Scope",
+      "thumbnail": "Program boundary workshop",
+      "brief": {
+        "title": "Chapter 1: Reframe the Program Boundary",
+        "location": "Program integration office",
+        "objective": "Stabilize scope and stakeholder alignment before the modernization baseline review.",
+        "situation": "The Harbour Line modernization team keeps absorbing requests from operations, city technology, and passenger information groups. Leadership wants a confident plan by Friday, but nobody agrees on what the signaling program actually owns.",
+        "stakeholders": [
+          "Program sponsor",
+          "Transit operations manager",
+          "Passenger information lead",
+          "Independent safety assessor"
+        ],
+        "successSignals": [
+          "Shared view of system boundary",
+          "High-power stakeholders actively engaged",
+          "No hidden external interfaces in baseline scope"
+        ],
+        "prepNotes": [
+          "You are advising the lead systems engineer two weeks before baseline approval.",
+          "Political pressure favors rapid commitments, not careful boundary work.",
+          "Any choice that masks external dependency risk will echo through later chapters."
+        ],
+        "journal": [
+          {
+            "title": "Why boundary clarity matters",
+            "summary": "Systems thinking starts with a credible boundary, interface picture, and stakeholder framing.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.2 Stakeholder Requirements Definition",
+                "rationale": "Early framing must reconcile stakeholder concerns before requirements harden."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.2 Stakeholder Requirements Definition",
+                "rationale": "Stakeholder viewpoints drive system-of-interest boundaries and need statements."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-1-d1",
+          "label": "Decision 1",
+          "prompt": "Sponsor asks for a one-page status slide. What do you do first?",
+          "context": "You have one morning before the sponsor review deck locks.",
+          "options": [
+            {
+              "id": "boundary-workshop",
+              "title": "Run a boundary and stakeholder workshop",
+              "summary": "Pull high-power stakeholders into a fast boundary alignment session.",
+              "rationale": "Slows the slide deck, but exposes assumptions before they become commitments.",
+              "consequence": {
+                "summary": "The workshop surfaces hidden external systems and gives leadership a sharper picture of what the program should own.",
+                "metrics": {
+                  "system_quality": 8,
+                  "stakeholder_trust": 6,
+                  "delivery_confidence": -2
+                },
+                "set_condition": "boundary_aligned",
+                "unlock_note": "Boundary assumptions documented in the sponsor brief.",
+                "chapter_outcome_tag": "scope_clarity"
+              }
+            },
+            {
+              "id": "promise-all-features",
+              "title": "Promise every requested feature in phase one",
+              "summary": "Signal confidence by absorbing all adjacent requests into the baseline.",
+              "rationale": "Feels decisive, but creates a blurred system boundary.",
+              "consequence": {
+                "summary": "The sponsor is impressed, but operations quietly assumes the signaling team now owns passenger systems and weather feeds.",
+                "metrics": {
+                  "stakeholder_trust": 2,
+                  "risk_exposure": 10,
+                  "team_capacity": -6
+                },
+                "critical_flag": "boundary_blur",
+                "chapter_outcome_tag": "scope_overreach"
+              }
+            },
+            {
+              "id": "defer-to-later",
+              "title": "Keep the slide generic and defer boundary questions",
+              "summary": "Avoid conflict for now and leave the harder framing work for the next review.",
+              "rationale": "Protects schedule today, but ambiguity remains.",
+              "consequence": {
+                "summary": "The meeting passes quietly, but each team leaves with a different mental model of the program scope.",
+                "metrics": {
+                  "delivery_confidence": 3,
+                  "system_quality": -4,
+                  "risk_exposure": 5
+                },
+                "chapter_outcome_tag": "deferred_scope"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-d2",
+          "label": "Decision 2",
+          "prompt": "Operations wants dispatch analytics inside the signaling baseline. How do you respond?",
+          "context": "The request is politically sensitive because dispatch staff suffered through the last program cutback.",
+          "options": [
+            {
+              "id": "treat-as-interface",
+              "title": "Define dispatch analytics as an external interface",
+              "summary": "Keep the modernization scope narrow, but document interface ownership and data needs.",
+              "rationale": "Protects core scope while respecting downstream operational needs.",
+              "consequence": {
+                "summary": "Dispatch accepts the decision because their data dependencies and ownership split are explicitly recorded.",
+                "metrics": {
+                  "system_quality": 6,
+                  "stakeholder_trust": 4,
+                  "risk_exposure": -4
+                },
+                "set_condition": "interfaces_named",
+                "unlock_note": "External dispatch analytics registered as controlled interface.",
+                "chapter_outcome_tag": "interface_discipline"
+              }
+            },
+            {
+              "id": "absorb-analytics",
+              "title": "Absorb analytics into the core modernization scope",
+              "summary": "Expand the program so operations sees immediate value.",
+              "rationale": "Improves goodwill, but burdens the team with extra data and UI work.",
+              "consequence": {
+                "summary": "Operations is pleased, but architecture and delivery teams now carry a product they never planned to sustain.",
+                "metrics": {
+                  "stakeholder_trust": 5,
+                  "team_capacity": -7,
+                  "risk_exposure": 6
+                },
+                "chapter_outcome_tag": "scope_expansion"
+              }
+            },
+            {
+              "id": "reject-without-path",
+              "title": "Reject the request without documenting an interface path",
+              "summary": "Keep the baseline pure and move on.",
+              "rationale": "Technically clean, but socially brittle.",
+              "consequence": {
+                "summary": "The scope stays small, but dispatch leaders stop trusting the systems team to consider operational realities.",
+                "metrics": {
+                  "system_quality": 2,
+                  "stakeholder_trust": -8,
+                  "delivery_confidence": -2
+                },
+                "chapter_outcome_tag": "stakeholder_friction"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-d3",
+          "label": "Decision 3",
+          "prompt": "Safety assurance asks for explicit boundary assumptions before endorsing baseline scope. What do you send?",
+          "context": "This decision closes the baseline package.",
+          "options": [
+            {
+              "id": "issue-assumptions-log",
+              "title": "Issue an assumptions and exclusions log with named owners",
+              "summary": "Package scope edges, open interfaces, and unresolved dependencies in one control document.",
+              "rationale": "Creates accountability and prepares the team for later integration challenges.",
+              "consequence": {
+                "summary": "The assessor supports baseline entry because assumptions are visible, owned, and testable.",
+                "metrics": {
+                  "system_quality": 7,
+                  "delivery_confidence": 4,
+                  "risk_exposure": -6
+                },
+                "trigger_subgame": true,
+                "set_condition": "assumptions_logged",
+                "unlock_note": "Baseline exclusions log accepted by safety assurance.",
+                "chapter_outcome_tag": "assurance_ready"
+              }
+            },
+            {
+              "id": "send-slide-only",
+              "title": "Send the sponsor slide and promise details later",
+              "summary": "Hope that leadership confidence offsets missing engineering detail.",
+              "rationale": "Fast today, but weak for assurance.",
+              "consequence": {
+                "summary": "The assessor approves conditionally and records multiple unresolved concerns against the baseline.",
+                "metrics": {
+                  "delivery_confidence": 2,
+                  "risk_exposure": 8,
+                  "system_quality": -5
+                },
+                "critical_flag": "assurance_gap",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "conditional_baseline"
+              }
+            },
+            {
+              "id": "delegate-without-review",
+              "title": "Delegate the response to a junior analyst without review",
+              "summary": "Free senior staff for the sponsor meeting.",
+              "rationale": "Creates capacity, but risks inconsistent framing.",
+              "consequence": {
+                "summary": "The package goes out on time, but conflicting boundary language appears across attachments.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "stakeholder_trust": -4,
+                  "risk_exposure": 7
+                },
+                "critical_flag": "inconsistent_boundary_language",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "document_drift"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-1-subgame",
+        "type": "priority",
+        "title": "Stakeholder Focus Board",
+        "prompt": "Choose the two stakeholders that require the most active management during baseline framing.",
+        "instructions": "Pick the pair whose power and interest mean they can most distort the scope if ignored.",
+        "maxSelections": 2,
+        "options": [
+          {
+            "id": "program-sponsor",
+            "label": "Program sponsor",
+            "detail": "Owns funding release and messaging to the board."
+          },
+          {
+            "id": "independent-safety-assessor",
+            "label": "Independent safety assessor",
+            "detail": "Can block progress if assumptions or interfaces remain ambiguous."
+          },
+          {
+            "id": "passenger-advocacy-group",
+            "label": "Passenger advocacy group",
+            "detail": "Influential in public narrative, but not baseline owner."
+          },
+          {
+            "id": "station-maintenance-contractor",
+            "label": "Station maintenance contractor",
+            "detail": "Affected by change, but not steering scope decisions this week."
+          }
+        ],
+        "correctIds": [
+          "program-sponsor",
+          "independent-safety-assessor"
+        ],
+        "successSummary": "You focused on the two actors most capable of reshaping scope and assurance posture.",
+        "failureSummary": "You spread attention too broadly and missed the people who could redefine the baseline.",
+        "successMetricImpact": {
+          "stakeholder_trust": 5,
+          "risk_exposure": -3
+        },
+        "failureMetricImpact": {
+          "stakeholder_trust": -3,
+          "risk_exposure": 4
+        }
+      },
+      "debrief": {
+        "principle": "Good systems framing makes scope, interfaces, and stakeholder power visible before requirements solidify.",
+        "strongSummary": "Your chapter choices created a bounded system-of-interest with named exclusions and credible stakeholder coverage.",
+        "weakSummary": "Your chapter choices left the program carrying blurred scope, undocumented interfaces, or weak ownership at the boundary.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "Scope clarity is not paperwork. It is the control mechanism that prevents downstream architecture and verification churn.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.10 System Analysis",
+                "rationale": "Boundary and interface analysis anchor credible trade studies."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.6 System Analysis",
+                "rationale": "System analysis converts concerns into controlled boundary decisions."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-2",
+      "order": 2,
+      "pillar": "Requirements engineering",
+      "themeColor": "#7ce7bd",
+      "mapLabel": "Requirements Baseline",
+      "thumbnail": "Traceability under pressure",
+      "brief": {
+        "title": "Chapter 2: Stabilize Requirements and Traceability",
+        "location": "Requirements war room",
+        "objective": "Turn stakeholder pressure into clear, verifiable system requirements before design starts running ahead.",
+        "situation": "The sponsor now wants visible progress, operations wants resilience metrics, and safety wants verifiable constraints. Designers are already sketching solutions faster than the requirements team can govern.",
+        "stakeholders": [
+          "Requirements lead",
+          "Operations resilience manager",
+          "Safety assurance team",
+          "Platform designer"
+        ],
+        "successSignals": [
+          "Requirements stay solution-neutral",
+          "Critical requirements trace to stakeholder concerns",
+          "Verification path is named early"
+        ],
+        "prepNotes": [
+          "Your mission is to convert broad demands into testable statements and trace them cleanly.",
+          "Designers are impatient and want freedom to lock architecture early.",
+          "Weak traceability will amplify redesign costs in later chapters."
+        ],
+        "journal": [
+          {
+            "title": "Requirements discipline",
+            "summary": "Strong requirements are specific, testable, and traceable back to real stakeholder concerns.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.3 System Requirements Definition",
+                "rationale": "Requirements transform stakeholder needs into actionable engineering constraints."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.3 System Requirements Definition",
+                "rationale": "Traceable, analyzable requirements support downstream verification and change control."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-2-d1",
+          "label": "Decision 1",
+          "prompt": "The sponsor asks for a requirement that the new system be \"future-ready.\" How do you respond?",
+          "context": "Everyone agrees with the intent. Nobody agrees on what it means.",
+          "options": [
+            {
+              "id": "convert-to-measures",
+              "title": "Translate it into explicit performance and changeability measures",
+              "summary": "Work with sponsor and operations to define measurable adaptability needs.",
+              "rationale": "Takes effort now, but creates verifiable language.",
+              "consequence": {
+                "summary": "The vague aspiration becomes concrete latency, interface, and upgrade constraints that design can actually use.",
+                "metrics": {
+                  "system_quality": 8,
+                  "delivery_confidence": 4
+                },
+                "set_condition": "requirements_measurable",
+                "chapter_outcome_tag": "requirements_clarity"
+              }
+            },
+            {
+              "id": "copy-phrase",
+              "title": "Copy the phrase directly into the baseline requirement set",
+              "summary": "Keep momentum by preserving sponsor language as-is.",
+              "rationale": "Fast, but impossible to verify.",
+              "consequence": {
+                "summary": "The baseline looks complete, yet teams immediately interpret \"future-ready\" in incompatible ways.",
+                "metrics": {
+                  "delivery_confidence": 2,
+                  "risk_exposure": 8,
+                  "system_quality": -6
+                },
+                "critical_flag": "ambiguous_requirement",
+                "chapter_outcome_tag": "vague_baseline"
+              }
+            },
+            {
+              "id": "ignore-request",
+              "title": "Ignore it and keep only existing technical statements",
+              "summary": "Protect the document from vague marketing language.",
+              "rationale": "Technically tidy, but politically risky.",
+              "consequence": {
+                "summary": "The document stays cleaner, but the sponsor no longer sees their strategic concern reflected in the baseline.",
+                "metrics": {
+                  "stakeholder_trust": -7,
+                  "system_quality": 2
+                },
+                "chapter_outcome_tag": "sponsor_disconnect"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-d2",
+          "label": "Decision 2",
+          "prompt": "Design proposes locking a subsystem architecture before traceability is finished. What do you do?",
+          "context": "They argue that waiting will cost schedule.",
+          "options": [
+            {
+              "id": "gate-with-traceability",
+              "title": "Gate architecture release on traceability for safety-critical requirements",
+              "summary": "Allow limited progress, but require traceability for the high-consequence set.",
+              "rationale": "Balances delivery pressure with control of the most important requirements.",
+              "consequence": {
+                "summary": "The design team keeps moving, but safety-critical requirements now anchor the release decision.",
+                "metrics": {
+                  "system_quality": 6,
+                  "delivery_confidence": 2,
+                  "team_capacity": -2
+                },
+                "set_condition": "critical_traceability_ready",
+                "unlock_note": "Safety-critical traceability gate inserted before architecture release.",
+                "chapter_outcome_tag": "disciplined_release"
+              }
+            },
+            {
+              "id": "let-design-run",
+              "title": "Let design run and update requirements afterward",
+              "summary": "Use architecture momentum to discover what the requirements should have said.",
+              "rationale": "Appears fast, but reverses engineering logic.",
+              "consequence": {
+                "summary": "Short-term energy rises, but requirements start chasing design decisions and losing neutrality.",
+                "metrics": {
+                  "delivery_confidence": 5,
+                  "risk_exposure": 9,
+                  "system_quality": -5
+                },
+                "critical_flag": "design_driving_requirements",
+                "chapter_outcome_tag": "architecture_ahead_of_requirements"
+              }
+            },
+            {
+              "id": "freeze-everything",
+              "title": "Freeze all design activity until full traceability is complete",
+              "summary": "Maximize control by stopping forward motion entirely.",
+              "rationale": "Safe on paper, but expensive in team momentum.",
+              "consequence": {
+                "summary": "Traceability improves, but design leadership now sees systems engineering as a delivery blocker.",
+                "metrics": {
+                  "system_quality": 5,
+                  "stakeholder_trust": -4,
+                  "team_capacity": -5
+                },
+                "chapter_outcome_tag": "control_overload"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-d3",
+          "label": "Decision 3",
+          "prompt": "Safety requests verification intent attached to the top requirements set before sign-off. How do you answer?",
+          "context": "This is the last decision before the traceability drill.",
+          "options": [
+            {
+              "id": "attach-verification-method",
+              "title": "Attach a provisional verification method to each critical requirement",
+              "summary": "Name inspection, analysis, test, or demonstration before design locks.",
+              "rationale": "Improves requirement quality and helps teams spot weak statements.",
+              "consequence": {
+                "summary": "Several vague requirements are rewritten immediately because nobody can explain how they would be verified.",
+                "metrics": {
+                  "system_quality": 7,
+                  "risk_exposure": -5,
+                  "delivery_confidence": 3
+                },
+                "trigger_subgame": true,
+                "set_condition": "verification_intent_linked",
+                "chapter_outcome_tag": "verifiable_requirements"
+              }
+            },
+            {
+              "id": "promise-later",
+              "title": "Promise verification methods later in the V&V phase",
+              "summary": "Keep the requirements package light and move the problem downstream.",
+              "rationale": "Common shortcut, but it hides unverifiable wording.",
+              "consequence": {
+                "summary": "The package advances, but safety logs a concern that the baseline still contains non-verifiable statements.",
+                "metrics": {
+                  "delivery_confidence": 2,
+                  "risk_exposure": 7,
+                  "stakeholder_trust": -3
+                },
+                "critical_flag": "verification_gap",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "unverifiable_requirements"
+              }
+            },
+            {
+              "id": "delegate-annotate",
+              "title": "Delegate the mapping to a junior analyst with no review pass",
+              "summary": "Create the appearance of coverage quickly.",
+              "rationale": "Buys time, but invites weak trace links.",
+              "consequence": {
+                "summary": "Every requirement gets a label, but half the trace links are shallow and inconsistent.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "system_quality": -4,
+                  "risk_exposure": 6
+                },
+                "critical_flag": "shallow_traceability",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "traceability_noise"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-2-subgame",
+        "type": "match",
+        "title": "Traceability Drill",
+        "prompt": "Map each stakeholder concern to the requirement statement that best traces it.",
+        "instructions": "Choose the requirement that preserves stakeholder intent without jumping to a design solution.",
+        "leftLabel": "Stakeholder concern",
+        "rightLabel": "Requirement statement",
+        "leftItems": [
+          "Peak-hour headway must remain predictable during degraded mode.",
+          "Safety wants field changes to stay auditable.",
+          "Maintenance wants shorter commissioning outages."
+        ],
+        "rightOptions": [
+          "The system shall maintain timetable deviation within 90 seconds during single-zone fallback operations.",
+          "The system shall provide configuration change audit records with user, timestamp, and approved baseline identifiers.",
+          "The system shall permit modular cutover of control areas so planned outages per commissioning window remain under four hours.",
+          "The architecture should be modern and resilient."
+        ],
+        "correctPairs": [
+          {
+            "left": "Peak-hour headway must remain predictable during degraded mode.",
+            "right": "The system shall maintain timetable deviation within 90 seconds during single-zone fallback operations."
+          },
+          {
+            "left": "Safety wants field changes to stay auditable.",
+            "right": "The system shall provide configuration change audit records with user, timestamp, and approved baseline identifiers."
+          },
+          {
+            "left": "Maintenance wants shorter commissioning outages.",
+            "right": "The system shall permit modular cutover of control areas so planned outages per commissioning window remain under four hours."
+          }
+        ],
+        "successSummary": "Your trace links preserved stakeholder intent and kept the requirements verifiable.",
+        "failureSummary": "Your trace links drifted into vague or solution-led language, weakening requirement quality.",
+        "successMetricImpact": {
+          "system_quality": 5,
+          "delivery_confidence": 4
+        },
+        "failureMetricImpact": {
+          "system_quality": -4,
+          "risk_exposure": 5
+        }
+      },
+      "debrief": {
+        "principle": "Requirements gain power when they remain traceable, measurable, and tied to verification intent.",
+        "strongSummary": "You protected requirement quality while still letting the program move.",
+        "weakSummary": "You let ambiguity, solution bias, or weak traceability leak into the baseline.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "Traceability is not a reporting artifact. It is how teams preserve engineering intent when schedules compress.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.7 Verification",
+                "rationale": "Verification planning pressure improves requirement quality early."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.9 Verification",
+                "rationale": "Verification considerations should influence requirement wording before implementation."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-3",
+      "order": 3,
+      "pillar": "Architecture and interfaces",
+      "themeColor": "#ffcf6d",
+      "mapLabel": "Architecture Split",
+      "thumbnail": "Interface discipline",
+      "brief": {
+        "title": "Chapter 3: Shape the Architecture and Interfaces",
+        "location": "Architecture integration lab",
+        "objective": "Allocate responsibilities across control center, wayside, trainborne, and passenger information systems without creating brittle seams.",
+        "situation": "Design teams are converging on subsystem concepts, but the integration board keeps finding unowned interfaces. The sponsor wants a convincing architecture story, while operations wants every subsystem handoff to be recoverable during degraded service.",
+        "stakeholders": [
+          "Chief architect",
+          "Subsystem design leads",
+          "Operations fallback coordinator",
+          "Cybersecurity representative"
+        ],
+        "successSignals": [
+          "Responsibilities are allocated cleanly",
+          "Interfaces have named owners and data contracts",
+          "Tradeoffs favor maintainable integration, not just elegant diagrams"
+        ],
+        "prepNotes": [
+          "Architecture arguments now influence schedule realism and integration confidence.",
+          "Subteams are tempted to optimize locally instead of owning cross-subsystem effects.",
+          "Interface discipline is your main lever."
+        ],
+        "journal": [
+          {
+            "title": "Architecture discipline",
+            "summary": "Architecture work is about allocating behavior and controlling interfaces, not just drawing blocks.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.4 Architecture Design",
+                "rationale": "Architectures must partition responsibilities and expose critical interfaces."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.4 Architecture Definition",
+                "rationale": "Architecture decisions create the structure later integration must live with."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-3-d1",
+          "label": "Decision 1",
+          "prompt": "The chief architect wants a clean subsystem split, but operations keeps asking who owns degraded mode choreography. What do you do?",
+          "context": "Everyone agrees degraded mode matters. Nobody wants to own the cross-cutting logic.",
+          "options": [
+            {
+              "id": "allocate-degraded-orchestrator",
+              "title": "Allocate degraded mode orchestration explicitly to the control center domain",
+              "summary": "Make one subsystem responsible for fallback coordination and interface contracts.",
+              "rationale": "Adds responsibility to one area, but prevents implicit cross-team ownership gaps.",
+              "consequence": {
+                "summary": "Architecture review accepts the split because degraded behavior now has a clear home and interface narrative.",
+                "metrics": {
+                  "system_quality": 7,
+                  "delivery_confidence": 3,
+                  "risk_exposure": -5
+                },
+                "set_condition": "orchestrator_allocated",
+                "chapter_outcome_tag": "explicit_behavior_ownership"
+              }
+            },
+            {
+              "id": "share-across-teams",
+              "title": "Let each subsystem own its piece of degraded mode",
+              "summary": "Avoid central authority and keep the architecture diagram symmetrical.",
+              "rationale": "Looks balanced, but invites coordination failure.",
+              "consequence": {
+                "summary": "Subsystem leads agree in theory, yet no team now owns the whole degraded sequence across interfaces.",
+                "metrics": {
+                  "delivery_confidence": 2,
+                  "risk_exposure": 8,
+                  "system_quality": -4
+                },
+                "critical_flag": "distributed_degraded_logic",
+                "chapter_outcome_tag": "implicit_crosscutting_ownership"
+              }
+            },
+            {
+              "id": "defer-to-procedures",
+              "title": "Push degraded mode choreography into operating procedures",
+              "summary": "Treat the problem as a process issue rather than a system allocation issue.",
+              "rationale": "Reduces architecture burden, but weakens system design realism.",
+              "consequence": {
+                "summary": "The architecture looks simpler, but operations warns that the system still lacks coherent degraded behavior.",
+                "metrics": {
+                  "team_capacity": 2,
+                  "stakeholder_trust": -5,
+                  "risk_exposure": 6
+                },
+                "chapter_outcome_tag": "procedure_substitution"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-3-d2",
+          "label": "Decision 2",
+          "prompt": "Cybersecurity asks to review the control-center-to-wayside interface before design freeze. How do you answer?",
+          "context": "The design team wants to postpone interface details until procurement completes.",
+          "options": [
+            {
+              "id": "review-interface-now",
+              "title": "Review interface semantics and trust boundaries now",
+              "summary": "Define the contract before suppliers and implementation details harden.",
+              "rationale": "Slows design freeze slightly, but prevents late rework across multiple teams.",
+              "consequence": {
+                "summary": "The review finds missing command authentication assumptions before they become an integration defect.",
+                "metrics": {
+                  "system_quality": 6,
+                  "risk_exposure": -6,
+                  "team_capacity": -2
+                },
+                "set_condition": "trust_boundary_reviewed",
+                "unlock_note": "Trust boundary assumptions captured in interface control notes.",
+                "chapter_outcome_tag": "interface_control"
+              }
+            },
+            {
+              "id": "wait-for-procurement",
+              "title": "Wait until procurement locks supplier detail",
+              "summary": "Assume interface issues can be solved once vendors are selected.",
+              "rationale": "Convenient, but pushes architecture uncertainty downstream.",
+              "consequence": {
+                "summary": "Design freeze stays on schedule, but key interface assumptions remain untested until vendor onboarding.",
+                "metrics": {
+                  "delivery_confidence": 4,
+                  "risk_exposure": 7,
+                  "system_quality": -5
+                },
+                "critical_flag": "unreviewed_trust_boundary",
+                "chapter_outcome_tag": "deferred_interface_risk"
+              }
+            },
+            {
+              "id": "delegate-to-vendor",
+              "title": "Let the future vendor define the interface contract",
+              "summary": "Treat the interface as an implementation detail outside architecture.",
+              "rationale": "Creates short-term clarity by exporting the decision, but weakens program control.",
+              "consequence": {
+                "summary": "The board hears a tidy answer, yet the program effectively surrenders architecture authority over a critical interface.",
+                "metrics": {
+                  "stakeholder_trust": -4,
+                  "risk_exposure": 9,
+                  "delivery_confidence": -2
+                },
+                "critical_flag": "vendor_defined_interface",
+                "chapter_outcome_tag": "outsourced_architecture"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-3-d3",
+          "label": "Decision 3",
+          "prompt": "The integration board asks for one architecture artifact that best exposes subsystem seams. What do you present?",
+          "context": "This choice determines how the architecture handoff lands.",
+          "options": [
+            {
+              "id": "present-interface-matrix",
+              "title": "Present an interface allocation matrix with owners and signals",
+              "summary": "Show who owns each boundary, data flow, and failure recovery path.",
+              "rationale": "Less visually glamorous than a concept graphic, but much more useful for integration.",
+              "consequence": {
+                "summary": "The board can finally see where responsibilities sit and which seams still need contract detail.",
+                "metrics": {
+                  "system_quality": 8,
+                  "delivery_confidence": 4,
+                  "stakeholder_trust": 3
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "integration_ready_architecture"
+              }
+            },
+            {
+              "id": "present-vision-render",
+              "title": "Present a polished vision architecture poster",
+              "summary": "Use a high-level diagram to sell the concept and keep detailed interface talk for later.",
+              "rationale": "Looks confident, but leaves engineering seams hidden.",
+              "consequence": {
+                "summary": "Leadership likes the story, but the integration board leaves without answers to the hardest interface questions.",
+                "metrics": {
+                  "stakeholder_trust": 3,
+                  "system_quality": -4,
+                  "risk_exposure": 6
+                },
+                "critical_flag": "interface_seams_hidden",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "architecture_theater"
+              }
+            },
+            {
+              "id": "present-code-prototype",
+              "title": "Present a prototype from one subsystem team",
+              "summary": "Demonstrate progress through code instead of architecture control artifacts.",
+              "rationale": "Shows movement, but narrows the conversation to one team's implementation.",
+              "consequence": {
+                "summary": "The prototype is impressive, yet it says little about cross-subsystem boundaries or future integration pain.",
+                "metrics": {
+                  "delivery_confidence": 5,
+                  "system_quality": -3,
+                  "team_capacity": -2
+                },
+                "chapter_outcome_tag": "implementation_bias",
+                "trigger_subgame": true
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-3-subgame",
+        "type": "match",
+        "title": "Interface Allocation Board",
+        "prompt": "Assign each interface responsibility to the subsystem best positioned to own it.",
+        "instructions": "Choose the owner that can control the behavior, monitor the interface, and recover failures.",
+        "leftLabel": "Responsibility",
+        "rightLabel": "Owning subsystem",
+        "leftItems": [
+          "Fallback traffic management logic",
+          "Trackside movement authority publication",
+          "Passenger disruption message release"
+        ],
+        "rightOptions": [
+          "Control center",
+          "Wayside zone controller",
+          "Passenger information service",
+          "Trainborne software"
+        ],
+        "correctPairs": [
+          {
+            "left": "Fallback traffic management logic",
+            "right": "Control center"
+          },
+          {
+            "left": "Trackside movement authority publication",
+            "right": "Wayside zone controller"
+          },
+          {
+            "left": "Passenger disruption message release",
+            "right": "Passenger information service"
+          }
+        ],
+        "successSummary": "Your allocations matched controllability and integration accountability.",
+        "failureSummary": "Your allocations blurred who owns behavior at the subsystem seams.",
+        "successMetricImpact": {
+          "system_quality": 5,
+          "delivery_confidence": 3
+        },
+        "failureMetricImpact": {
+          "system_quality": -4,
+          "risk_exposure": 5
+        }
+      },
+      "debrief": {
+        "principle": "Architecture succeeds when responsibility and interface ownership are explicit, testable, and resilient under degraded operation.",
+        "strongSummary": "You treated architecture as a control problem, not a presentation artifact.",
+        "weakSummary": "You left subsystem seams under-owned or hid interface risk behind elegant diagrams.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "Subsystem decomposition is only useful when teams can explain who owns cross-boundary behavior and recovery.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.6 Integration",
+                "rationale": "Integration pain is usually decided during architecture allocation, not during test execution."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.8 Integration",
+                "rationale": "Integration readiness depends on interface control and ownership."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-4",
+      "order": 4,
+      "pillar": "Implementation",
+      "themeColor": "#ff9e5e",
+      "mapLabel": "Build & Procure",
+      "thumbnail": "Supplier qualification and build control",
+      "brief": {
+        "title": "Chapter 4: Realize the System",
+        "location": "Procurement and build coordination office",
+        "objective": "Manage supplier selection, build decisions, and implementation verification so the realized system elements match their design intent.",
+        "situation": "Architecture is approved and the program moves into procurement and build. Two signaling suppliers are shortlisted, each with different risk profiles. The integration team warns that supplier evidence quality will determine how smooth later verification becomes. Meanwhile, configuration control during the build phase is already slipping as teams make informal changes.",
+        "stakeholders": [
+          "Procurement lead",
+          "Supplier delivery managers",
+          "Configuration manager",
+          "Integration test coordinator"
+        ],
+        "successSignals": [
+          "Supplier selection balances capability and evidence quality",
+          "Implementation verification catches defects before integration",
+          "Configuration baselines stay controlled during build"
+        ],
+        "prepNotes": [
+          "You are now at the Vee apex where design becomes real.",
+          "Supplier choices here determine integration and verification difficulty later.",
+          "Configuration discipline during build prevents costly rework during commissioning."
+        ],
+        "journal": [
+          {
+            "title": "Implementation discipline",
+            "summary": "Implementation is where design intent meets physical and organizational reality. Supplier management and configuration control are not overhead—they are the mechanisms that preserve system integrity through the build phase.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.7 Implementation",
+                "rationale": "Implementation realizes system elements from architecture and design, requiring verification of each element before integration."
+              },
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.5 Implementation",
+                "rationale": "Build decisions and supplier management determine downstream integration and verification outcomes."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-4-d1",
+          "label": "Decision 1",
+          "prompt": "Two suppliers are shortlisted. Supplier A has a proven CBTC platform but limited customization flexibility. Supplier B offers a tailored solution with novel features but a shorter track record. The integration team wants to know who you recommend.",
+          "context": "Supplier selection will shape integration and verification difficulty for the rest of the program.",
+          "options": [
+            {
+              "id": "select-proven-supplier",
+              "title": "Select Supplier A — proven platform with strong evidence heritage",
+              "summary": "Prioritize evidence quality and integration predictability over novel capability.",
+              "rationale": "Reduces downstream verification risk and gives the integration team a known quantity.",
+              "consequence": {
+                "summary": "The integration team gains confidence from a supplier with strong evidence heritage, though some customization requests will need workarounds.",
+                "metrics": {
+                  "system_quality": 7,
+                  "risk_exposure": -6,
+                  "delivery_confidence": 4
+                },
+                "set_condition": "proven_supplier_selected",
+                "chapter_outcome_tag": "evidence_first_procurement"
+              }
+            },
+            {
+              "id": "select-novel-supplier",
+              "title": "Select Supplier B — tailored solution with novel capabilities",
+              "summary": "Prioritize feature fit and innovation over evidence maturity.",
+              "rationale": "Better feature match, but unproven evidence practices will stress verification.",
+              "consequence": {
+                "summary": "The solution looks closer to the ideal feature set, but the integration team immediately flags concerns about evidence quality and verification burden.",
+                "metrics": {
+                  "stakeholder_trust": 4,
+                  "risk_exposure": 8,
+                  "system_quality": -3
+                },
+                "critical_flag": "novel_supplier_risk",
+                "chapter_outcome_tag": "innovation_over_evidence"
+              }
+            },
+            {
+              "id": "split-procurement",
+              "title": "Split the scope — proven platform for core signaling, tailored for passenger-facing features",
+              "summary": "Use each supplier where their strengths matter most.",
+              "rationale": "Balances risk and capability, but adds integration complexity across two supplier boundaries.",
+              "consequence": {
+                "summary": "Core signaling gets proven evidence, and passenger features get tailored capability, but the program now manages two supplier interfaces instead of one.",
+                "metrics": {
+                  "system_quality": 5,
+                  "risk_exposure": 3,
+                  "team_capacity": -3
+                },
+                "chapter_outcome_tag": "split_procurement"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-d2",
+          "label": "Decision 2",
+          "prompt": "The build team asks whether to verify each system element against its specification before integration, or wait and verify during the integration campaign.",
+          "context": "Element-level verification takes effort now but prevents compound defects later.",
+          "options": [
+            {
+              "id": "verify-before-integration",
+              "title": "Verify each element against its specification before integration begins",
+              "summary": "Catch defects at the element level before they compound across interfaces.",
+              "rationale": "More effort now, but dramatically reduces integration surprises.",
+              "consequence": {
+                "summary": "Several element-level defects are caught early, and the integration team enters with higher confidence in each building block.",
+                "metrics": {
+                  "system_quality": 7,
+                  "delivery_confidence": 3,
+                  "risk_exposure": -5
+                },
+                "set_condition": "element_verification_ready",
+                "chapter_outcome_tag": "progressive_build_verification"
+              }
+            },
+            {
+              "id": "skip-element-verification",
+              "title": "Skip element-level verification and rely on integration testing to catch issues",
+              "summary": "Save effort now and let integration testing find the problems.",
+              "rationale": "Appears efficient, but makes defect isolation much harder later.",
+              "consequence": {
+                "summary": "The build phase moves faster, but integration testing now carries the burden of finding both element and interface defects simultaneously.",
+                "metrics": {
+                  "team_capacity": 4,
+                  "risk_exposure": 9,
+                  "system_quality": -6
+                },
+                "critical_flag": "skipped_element_verification",
+                "chapter_outcome_tag": "deferred_build_verification"
+              }
+            },
+            {
+              "id": "verify-safety-critical-only",
+              "title": "Verify only safety-critical elements before integration, defer the rest",
+              "summary": "Focus verification effort where the consequences of defects are highest.",
+              "rationale": "Pragmatic compromise, but leaves non-safety element risk unaddressed.",
+              "consequence": {
+                "summary": "Safety-critical elements are verified, but non-safety defects discovered during integration will still cause rework and delay.",
+                "metrics": {
+                  "system_quality": 4,
+                  "risk_exposure": 3,
+                  "team_capacity": 1
+                },
+                "chapter_outcome_tag": "partial_build_verification"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-d3",
+          "label": "Decision 3",
+          "prompt": "Field teams are making uncontrolled changes to the build configuration to resolve installation issues. The configuration manager is overwhelmed.",
+          "context": "Every informal change risks creating a gap between the designed and realized system.",
+          "options": [
+            {
+              "id": "rapid-config-control",
+              "title": "Establish a rapid configuration control board with same-day turnaround",
+              "summary": "Keep changes flowing but make every one visible and approved.",
+              "rationale": "Balances speed and control so field issues get resolved without baseline drift.",
+              "consequence": {
+                "summary": "Changes continue to flow, but each one is now recorded, assessed, and traceable to the baseline.",
+                "metrics": {
+                  "system_quality": 6,
+                  "delivery_confidence": 4,
+                  "team_capacity": -2
+                },
+                "trigger_subgame": true,
+                "set_condition": "rapid_config_control",
+                "chapter_outcome_tag": "controlled_build"
+              }
+            },
+            {
+              "id": "allow-informal-changes",
+              "title": "Allow informal changes until integration starts, then lock the baseline",
+              "summary": "Prioritize field throughput now and enforce discipline later.",
+              "rationale": "Practical in the moment, but creates configuration debt that compounds.",
+              "consequence": {
+                "summary": "Installation issues resolve quickly, but the baseline drifts and nobody can confirm which configuration is actually in the field.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "risk_exposure": 8,
+                  "system_quality": -5
+                },
+                "critical_flag": "build_configuration_drift",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "uncontrolled_build"
+              }
+            },
+            {
+              "id": "freeze-all-changes",
+              "title": "Freeze all changes and require formal change requests for every modification",
+              "summary": "Maximize control by stopping all informal field changes.",
+              "rationale": "Protects the baseline, but can stall critical installation progress.",
+              "consequence": {
+                "summary": "The baseline stays clean, but field teams lose the agility to resolve real installation issues and morale drops.",
+                "metrics": {
+                  "system_quality": 4,
+                  "team_capacity": -5,
+                  "stakeholder_trust": -2
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "overcontrolled_build"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-4-subgame",
+        "type": "sequence",
+        "title": "Build Verification Sequence",
+        "prompt": "Arrange the implementation verification activities in the order that best builds confidence before integration.",
+        "instructions": "Start with the activities that establish element correctness, then progress toward interface readiness.",
+        "steps": [
+          "Verify each system element meets its specification",
+          "Confirm interface contracts between realized elements",
+          "Validate supplier evidence against program requirements",
+          "Establish configuration baseline for integration entry"
+        ],
+        "correctOrder": [
+          "Verify each system element meets its specification",
+          "Confirm interface contracts between realized elements",
+          "Validate supplier evidence against program requirements",
+          "Establish configuration baseline for integration entry"
+        ],
+        "successSummary": "You built verification confidence progressively from element through interface to integration readiness.",
+        "failureSummary": "You left gaps in the build verification chain that will surface during integration.",
+        "successMetricImpact": {
+          "system_quality": 5,
+          "delivery_confidence": 4
+        },
+        "failureMetricImpact": {
+          "risk_exposure": 5,
+          "system_quality": -3
+        }
+      },
+      "debrief": {
+        "principle": "Implementation quality is determined by supplier discipline, element verification, and configuration control—not just whether parts arrive on time.",
+        "strongSummary": "You treated the build phase as a systems engineering activity, not a procurement exercise.",
+        "weakSummary": "You let supplier risk, verification shortcuts, or configuration drift undermine the transition to integration.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "The Vee apex is where design intent meets reality. Every shortcut in implementation verification and configuration control creates compound interest in integration risk.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.7 Implementation",
+                "rationale": "Implementation outcomes must be verified and traceable before integration begins."
+              },
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.2.4 Configuration Management",
+                "rationale": "Configuration baselines established during implementation anchor all downstream verification and change control."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-5",
+      "order": 5,
+      "pillar": "Integration",
+      "themeColor": "#d7b8ff",
+      "mapLabel": "Integration Strategy",
+      "thumbnail": "Progressive assembly and interface activation",
+      "brief": {
+        "title": "Chapter 5: Integrate and Prove the Seams",
+        "location": "Commissioning control room",
+        "objective": "Sequence integration to expose the riskiest seams early and build progressive confidence in the assembled system.",
+        "situation": "Realized system elements are arriving from suppliers. The integration team must decide how to assemble subsystems progressively so that interface defects surface early enough to fix before verification. The sponsor wants visible progress, but the hardest seams are still untested.",
+        "stakeholders": [
+          "Commissioning manager",
+          "Configuration manager",
+          "Operations director",
+          "Supplier delivery leads"
+        ],
+        "successSignals": [
+          "Integration sequence exposes the riskiest seams early enough",
+          "Configuration control stays intact during fast change",
+          "Interface activation is controlled and reversible"
+        ],
+        "prepNotes": [
+          "You are now balancing evidence, schedule, and human capacity at once.",
+          "The program can still fail if integration order hides the hardest risks until the final window.",
+          "Configuration discipline is a delivery accelerator here, not paperwork."
+        ],
+        "journal": [
+          {
+            "title": "Integration control",
+            "summary": "Integration is where architecture, requirements, verification, and management discipline finally collide.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.2.4 Configuration Management / §4.3.6 Integration",
+                "rationale": "Integration pace depends on controlled baselines and deliberate build sequence."
+              },
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.8 Integration",
+                "rationale": "Integration should combine elements in a sequence that reveals risk and preserves control."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-5-d1",
+          "label": "Decision 1",
+          "prompt": "Suppliers want to integrate the easiest subsystems first to show visible momentum. What is your call?",
+          "context": "The sponsor likes quick wins, but the hardest seams are elsewhere.",
+          "options": [
+            {
+              "id": "front-load-risky-seams",
+              "title": "Front-load the riskiest subsystem seams with controlled rehearsal windows",
+              "summary": "Expose the hardest integration points before the final integration window.",
+              "rationale": "Harder politically, but better for true delivery confidence.",
+              "consequence": {
+                "summary": "The plan feels less glamorous, yet it gives the program real learning time on the interfaces most likely to fail.",
+                "metrics": {
+                  "delivery_confidence": 6,
+                  "risk_exposure": -7,
+                  "team_capacity": -2
+                },
+                "set_condition": "risk_first_integration",
+                "chapter_outcome_tag": "truthful_schedule"
+              }
+            },
+            {
+              "id": "easy-wins-first",
+              "title": "Integrate the easiest pieces first and save the hardest seam for later",
+              "summary": "Generate visible progress and hope the tough seam follows.",
+              "rationale": "Comforting optics, but dangerous sequence logic.",
+              "consequence": {
+                "summary": "Status reports improve, but the hardest coupling now sits at the end of the plan with little contingency left.",
+                "metrics": {
+                  "stakeholder_trust": 3,
+                  "risk_exposure": 10,
+                  "delivery_confidence": -4
+                },
+                "critical_flag": "late_integration_discovery",
+                "chapter_outcome_tag": "optimistic_sequence"
+              }
+            },
+            {
+              "id": "parallel-everything",
+              "title": "Attempt broad parallel integration across all subsystems",
+              "summary": "Compress time by pushing every interface in parallel.",
+              "rationale": "Aggressive, but often overwhelms coordination capacity.",
+              "consequence": {
+                "summary": "Activity explodes across the program, but issue ownership and configuration discipline start to collapse.",
+                "metrics": {
+                  "team_capacity": -8,
+                  "risk_exposure": 8,
+                  "delivery_confidence": 2
+                },
+                "critical_flag": "parallel_overload",
+                "chapter_outcome_tag": "coordination_saturation"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-d2",
+          "label": "Decision 2",
+          "prompt": "Field teams are swapping configuration packages informally to stay fast. How do you react?",
+          "context": "The changes are helping local throughput, but auditability is slipping.",
+          "options": [
+            {
+              "id": "enforce-fast-baseline-control",
+              "title": "Create a fast-turn configuration control cell",
+              "summary": "Keep speed, but route all field changes through a visible control point.",
+              "rationale": "Adds discipline without reverting to slow bureaucratic gates.",
+              "consequence": {
+                "summary": "Teams complain briefly, then start resolving interface defects faster because everyone can see the active baseline.",
+                "metrics": {
+                  "system_quality": 6,
+                  "delivery_confidence": 5,
+                  "team_capacity": -1
+                },
+                "unlock_note": "Rapid change-control cell stood up for commissioning windows.",
+                "chapter_outcome_tag": "controlled_speed"
+              }
+            },
+            {
+              "id": "let-it-flow",
+              "title": "Let teams keep moving informally until integration completes",
+              "summary": "Prioritize local speed and postpone formal control.",
+              "rationale": "Feels practical, but destroys baseline integrity.",
+              "consequence": {
+                "summary": "Issues appear to clear quickly, yet nobody can reliably explain which software and interface set is actually in the field.",
+                "metrics": {
+                  "team_capacity": 4,
+                  "system_quality": -7,
+                  "risk_exposure": 9
+                },
+                "critical_flag": "configuration_drift",
+                "chapter_outcome_tag": "uncontrolled_change"
+              }
+            },
+            {
+              "id": "freeze-all-changes",
+              "title": "Freeze every change except executive approvals",
+              "summary": "Regain control by shutting down local initiative.",
+              "rationale": "Strong governance, but can stall critical defect resolution.",
+              "consequence": {
+                "summary": "Baseline clarity improves, but field teams lose the agility needed to solve emerging integration defects.",
+                "metrics": {
+                  "system_quality": 4,
+                  "team_capacity": -6,
+                  "stakeholder_trust": -3
+                },
+                "chapter_outcome_tag": "heavy_control"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-d3",
+          "label": "Decision 3",
+          "prompt": "The integration team has completed the first build. The next step is activating the control-center-to-wayside interface for the first time. How do you approach this?",
+          "context": "This is the most critical interface in the system and it has never been exercised live.",
+          "options": [
+            {
+              "id": "controlled-rehearsal",
+              "title": "Activate the interface in a controlled rehearsal with rollback capability before live commissioning",
+              "summary": "Test the interface under controlled conditions where you can safely back out.",
+              "rationale": "Adds a rehearsal step, but protects against first-activation failures during commissioning.",
+              "consequence": {
+                "summary": "The rehearsal reveals two interface timing issues that would have caused a commissioning delay. The team fixes them before the live window.",
+                "metrics": {
+                  "system_quality": 6,
+                  "delivery_confidence": 5,
+                  "risk_exposure": -5
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "controlled_interface_activation"
+              }
+            },
+            {
+              "id": "live-first-activation",
+              "title": "Activate the interface during the first commissioning window to save time",
+              "summary": "Skip the rehearsal and go live on the first available window.",
+              "rationale": "Faster schedule, but the first activation happens under real pressure.",
+              "consequence": {
+                "summary": "The activation proceeds, but unexpected timing behavior forces an emergency rollback that erodes sponsor confidence.",
+                "metrics": {
+                  "delivery_confidence": 3,
+                  "risk_exposure": 8,
+                  "team_capacity": 2
+                },
+                "critical_flag": "live_first_activation",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "uncontrolled_activation"
+              }
+            },
+            {
+              "id": "delay-until-fully-verified",
+              "title": "Delay interface activation until all subsystems are fully verified individually",
+              "summary": "Wait for complete individual verification before any cross-subsystem activation.",
+              "rationale": "Maximizes individual readiness, but delays the earliest possible integration learning.",
+              "consequence": {
+                "summary": "Individual subsystems are well-verified, but the program loses the earliest opportunity to discover interface-level defects.",
+                "metrics": {
+                  "system_quality": 4,
+                  "team_capacity": -4,
+                  "delivery_confidence": -2
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "delayed_integration"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-5-subgame",
+        "type": "sequence",
+        "title": "Integration Build Sequence",
+        "prompt": "Arrange the integration activities in the order that best exposes risk progressively.",
+        "instructions": "Start with the activities that test the riskiest interfaces earliest, then build toward full system assembly.",
+        "steps": [
+          "Activate control-center-to-wayside interface in controlled rehearsal",
+          "Integrate trainborne subsystem with wayside zone controller",
+          "Run degraded-mode integration scenarios across all subsystems",
+          "Demonstrate full operational sequence end-to-end"
+        ],
+        "correctOrder": [
+          "Activate control-center-to-wayside interface in controlled rehearsal",
+          "Integrate trainborne subsystem with wayside zone controller",
+          "Run degraded-mode integration scenarios across all subsystems",
+          "Demonstrate full operational sequence end-to-end"
+        ],
+        "successSummary": "You exposed the riskiest seams first and built integration confidence progressively.",
+        "failureSummary": "Your integration sequence left the hardest interfaces until late, reducing time to resolve defects.",
+        "successMetricImpact": {
+          "system_quality": 5,
+          "delivery_confidence": 4
+        },
+        "failureMetricImpact": {
+          "risk_exposure": 6,
+          "delivery_confidence": -3
+        }
+      },
+      "debrief": {
+        "principle": "Integration succeeds when sequence logic exposes the hardest seams early enough to learn and recover.",
+        "strongSummary": "You treated integration as a progressive discovery process, not a final assembly event.",
+        "weakSummary": "You let integration sequence hide the hardest risks until recovery time was gone.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "Integration sequence determines whether the program discovers interface defects in time to fix them. Risk-first integration is uncomfortable but honest.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.8 Integration",
+                "rationale": "Integration should combine elements progressively to reveal interface risk and preserve configuration control."
+              },
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.6 Integration",
+                "rationale": "Integration planning should prioritize the interfaces and behaviors most likely to fail."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-6",
+      "order": 6,
+      "pillar": "Verification",
+      "themeColor": "#f8a1b2",
+      "mapLabel": "Verification Evidence",
+      "thumbnail": "Progressive verification logic",
+      "brief": {
+        "title": "Chapter 6: Verify Against Requirements",
+        "location": "Test planning suite",
+        "objective": "Build progressive verification evidence that traces each requirement to objective proof before the system enters operational validation.",
+        "situation": "The integrated system is ready for verification. The board wants credible evidence that every requirement has been met. Teams are tempted to run a single end-to-end test campaign and declare success, but safety wants evidence organized by criticality and traced to specific requirements.",
+        "stakeholders": [
+          "Verification manager",
+          "Safety assurance lead",
+          "Operations training lead",
+          "Commissioning manager"
+        ],
+        "successSignals": [
+          "Verification logic reflects requirement criticality",
+          "Early evidence is produced before full integration",
+          "Evidence chain is coherent and traceable"
+        ],
+        "prepNotes": [
+          "Verification is about building evidence progressively, not only executing tests at the end.",
+          "Every requirement needs objective evidence, and the evidence chain must be coherent.",
+          "You need both structure and rigor."
+        ],
+        "journal": [
+          {
+            "title": "Progressive evidence",
+            "summary": "Verification should mature evidence step by step, with each layer building confidence before the next.",
+            "standards": [
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.7 Verification",
+                "rationale": "Progressive verification reduces late-stage risk and builds stakeholder confidence incrementally."
+              },
+              {
+                "framework": "EN 50126-1:2017",
+                "citation": "§11 RAMS Verification and Validation",
+                "rationale": "Rail evidence must connect technical checks with structured verification progression."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-6-d1",
+          "label": "Decision 1",
+          "prompt": "The board asks for one verification strategy headline. What do you propose?",
+          "context": "The team needs a plan everyone can follow.",
+          "options": [
+            {
+              "id": "progressive-verification",
+              "title": "Progressive verification from component through integrated fallback scenarios",
+              "summary": "Build evidence in layers, tied to requirement criticality and interface risk.",
+              "rationale": "Creates earlier signal and isolates failure sources.",
+              "consequence": {
+                "summary": "The plan feels more demanding, but teams gain a clearer ladder of evidence before full verification.",
+                "metrics": {
+                  "system_quality": 7,
+                  "risk_exposure": -5,
+                  "delivery_confidence": 3
+                },
+                "set_condition": "progressive_vv",
+                "chapter_outcome_tag": "layered_evidence"
+              }
+            },
+            {
+              "id": "single-big-test",
+              "title": "One major end-to-end campaign near commissioning",
+              "summary": "Concentrate effort into the final verification window.",
+              "rationale": "Appears efficient, but hides defects until late.",
+              "consequence": {
+                "summary": "The schedule looks cleaner, yet failure discovery is now dangerously back-loaded.",
+                "metrics": {
+                  "delivery_confidence": 4,
+                  "risk_exposure": 10,
+                  "system_quality": -6
+                },
+                "critical_flag": "late_test_strategy",
+                "chapter_outcome_tag": "backloaded_evidence"
+              }
+            },
+            {
+              "id": "vendor-test-reuse",
+              "title": "Rely mainly on supplier test evidence",
+              "summary": "Assume subsystem suppliers already know how to prove compliance.",
+              "rationale": "Reduces immediate load, but weakens program-level assurance.",
+              "consequence": {
+                "summary": "Supplier evidence helps, but it does not cover program-level interfaces or system-level requirements.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "risk_exposure": 7,
+                  "stakeholder_trust": -4
+                },
+                "critical_flag": "supplier_evidence_gap",
+                "chapter_outcome_tag": "outsourced_assurance"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-d2",
+          "label": "Decision 2",
+          "prompt": "The verification team asks how to handle requirements that can only be verified through analysis rather than physical test. What do you advise?",
+          "context": "Some requirements are inherently analytical — physical testing is not feasible for every requirement.",
+          "options": [
+            {
+              "id": "balanced-verification-methods",
+              "title": "Use analysis for applicable requirements, but cross-validate with at least one physical test where feasible",
+              "summary": "Accept analysis as a legitimate method, but anchor it with physical evidence where possible.",
+              "rationale": "Method-appropriate verification with physical cross-checks builds the strongest evidence.",
+              "consequence": {
+                "summary": "The verification plan uses the right method for each requirement while maintaining physical evidence anchors that safety and the assessor trust.",
+                "metrics": {
+                  "system_quality": 6,
+                  "risk_exposure": -4,
+                  "delivery_confidence": 3
+                },
+                "set_condition": "balanced_verification_methods",
+                "chapter_outcome_tag": "method_rigor"
+              }
+            },
+            {
+              "id": "analysis-only-shortcut",
+              "title": "Accept analysis-only evidence for all non-safety requirements",
+              "summary": "Use analysis broadly and reserve physical testing for safety-critical items only.",
+              "rationale": "Efficient, but may leave non-safety requirements with weaker evidence than stakeholders expect.",
+              "consequence": {
+                "summary": "The verification campaign runs faster, but several non-safety requirements lack the concrete evidence that operations and the board expected.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "risk_exposure": 5,
+                  "system_quality": -3
+                },
+                "critical_flag": "analysis_only_shortcut",
+                "chapter_outcome_tag": "verification_shortcut"
+              }
+            },
+            {
+              "id": "require-physical-everything",
+              "title": "Require physical testing for every requirement regardless of feasibility",
+              "summary": "Insist on physical evidence across the board, even where analysis is the appropriate method.",
+              "rationale": "Maximizes physical evidence, but is impractical and wastes resources on infeasible tests.",
+              "consequence": {
+                "summary": "The verification plan demands physical tests that cannot be executed for some requirements, creating schedule risk and evidence gaps.",
+                "metrics": {
+                  "system_quality": 4,
+                  "team_capacity": -6,
+                  "delivery_confidence": -2
+                },
+                "chapter_outcome_tag": "verification_overkill"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-d3",
+          "label": "Decision 3",
+          "prompt": "Safety asks for a clean ordering of verification activities. What sequence do you emphasize?",
+          "context": "This will shape the verification campaign briefing.",
+          "options": [
+            {
+              "id": "sequence-by-evidence",
+              "title": "Sequence from analysis through inspection, demonstration, and test — each layer building on the last",
+              "summary": "Teach the team how each evidence layer enables and strengthens the next.",
+              "rationale": "Improves coherence and keeps late-stage surprises smaller.",
+              "consequence": {
+                "summary": "The verification manager can now explain why each activity exists and what evidence it should produce.",
+                "metrics": {
+                  "system_quality": 6,
+                  "delivery_confidence": 4,
+                  "risk_exposure": -4
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "evidence_chain"
+              }
+            },
+            {
+              "id": "sequence-by-calendar",
+              "title": "Sequence by calendar windows and site availability",
+              "summary": "Let access dates and site availability drive the verification logic.",
+              "rationale": "Practical, but can destroy evidence coherence.",
+              "consequence": {
+                "summary": "The schedule feels convenient, yet the campaign loses its logic for proving the system progressively and coherently.",
+                "metrics": {
+                  "delivery_confidence": 3,
+                  "system_quality": -4,
+                  "risk_exposure": 6
+                },
+                "critical_flag": "calendar_driven_verification",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "logistics_over_logic"
+              }
+            },
+            {
+              "id": "sequence-by-owner",
+              "title": "Let each team verify in whatever order suits them",
+              "summary": "Trust specialists to sort their own sequences independently.",
+              "rationale": "Feels empowering, but fragments the overall evidence chain.",
+              "consequence": {
+                "summary": "Local teams feel free, but the program loses a shared picture of evidence maturity and verification progress.",
+                "metrics": {
+                  "team_capacity": 2,
+                  "system_quality": -3,
+                  "stakeholder_trust": -3
+                },
+                "critical_flag": "fragmented_verification",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "fragmented_evidence"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-6-subgame",
+        "type": "sequence",
+        "title": "Verification Evidence Sequence",
+        "prompt": "Arrange the verification activities in the order that builds evidence most coherently.",
+        "instructions": "Start with activities that establish analytical confidence, then progress through increasingly concrete verification methods.",
+        "steps": [
+          "Analysis and simulation of safety-critical behaviors",
+          "Inspection of configuration and interface records",
+          "Demonstration of functional capabilities under controlled conditions",
+          "Formal test of requirements against acceptance criteria"
+        ],
+        "correctOrder": [
+          "Analysis and simulation of safety-critical behaviors",
+          "Inspection of configuration and interface records",
+          "Demonstration of functional capabilities under controlled conditions",
+          "Formal test of requirements against acceptance criteria"
+        ],
+        "successSummary": "You built a verification evidence chain that matures progressively from analysis through test.",
+        "failureSummary": "You scrambled the evidence chain and made it harder to trust verification results.",
+        "successMetricImpact": {
+          "risk_exposure": -4,
+          "delivery_confidence": 4
+        },
+        "failureMetricImpact": {
+          "risk_exposure": 5,
+          "delivery_confidence": -2
+        }
+      },
+      "debrief": {
+        "principle": "Verification builds objective evidence that the system meets its specified requirements. Progressive, method-appropriate verification is more trustworthy than a single late-stage test event.",
+        "strongSummary": "You connected verification logic to requirement criticality and built evidence progressively.",
+        "weakSummary": "You treated verification as a late-stage event or let logistics replace evidence logic.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "Verification answers 'did we build the system right?' — each requirement needs objective evidence, and the evidence chain must be coherent and traceable.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.9 Verification",
+                "rationale": "Verification confirms that each requirement has been met through appropriate methods and objective evidence."
+              },
+              {
+                "framework": "INCOSE SEHBv5",
+                "citation": "§4.3.7 Verification",
+                "rationale": "Progressive verification reduces late-stage risk and builds stakeholder confidence incrementally."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "chapter-7",
+      "order": 7,
+      "pillar": "Validation and transition",
+      "themeColor": "#79d0ff",
+      "mapLabel": "Go Live",
+      "thumbnail": "Operational validation and service transition",
+      "brief": {
+        "title": "Chapter 7: Validate, Transition, and Go Live",
+        "location": "Operations control center and commissioning suite",
+        "objective": "Validate the system in its operational context, plan the transition to service, and make the go/no-go decision for passenger operations.",
+        "situation": "The verified system must now prove itself in real operational conditions with actual controllers, dispatch staff, and passenger scenarios. The sponsor wants a launch date, operations wants proof the system works under real pressure, and safety wants evidence that the system fulfills its ConOps in the operational environment. This is where the Vee closes — validation traces back to the stakeholder needs and ConOps defined in Chapter 1.",
+        "stakeholders": [
+          "Operations director",
+          "Safety assurance lead",
+          "Commissioning manager",
+          "Training and readiness coordinator"
+        ],
+        "successSignals": [
+          "Validation includes degraded and recovery scenarios with real operators",
+          "Transition plan covers training, procedures, and rollback",
+          "Go/no-go decision integrates evidence, readiness, and residual risk"
+        ],
+        "prepNotes": [
+          "Validation answers 'did we build the right system?' — it traces back to ConOps and stakeholder needs, not just requirements.",
+          "Transition is about installing the system in its operational environment and making it sustainably operational.",
+          "The go/no-go decision is the final systems engineering judgment of the program."
+        ],
+        "journal": [
+          {
+            "title": "Validation and transition discipline",
+            "summary": "Validation confirms the right system was built by testing in the real operational environment. Transition ensures the system can be operated, maintained, and supported sustainably. Both trace back to the ConOps that started the Vee.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.10 Transition / §6.4.11 Validation",
+                "rationale": "Transition installs the verified system into its operational environment. Validation confirms the system fulfills stakeholder needs in that environment."
+              },
+              {
+                "framework": "EN 50126-1:2017",
+                "citation": "§11 RAMS Verification and Validation",
+                "rationale": "Rail validation must demonstrate system performance under real operational conditions including degraded scenarios."
+              }
+            ]
+          }
+        ]
+      },
+      "decisions": [
+        {
+          "id": "chapter-7-d1",
+          "label": "Decision 1",
+          "prompt": "Operations asks what scope the operational validation should cover. Some want a narrow demonstration of nominal service; others want to include degraded scenarios with real controllers under pressure.",
+          "context": "Narrow validation is faster, but may miss the conditions where the system matters most.",
+          "options": [
+            {
+              "id": "include-degraded-scenarios",
+              "title": "Include degraded and recovery scenarios with real operators in the validation scope",
+              "summary": "Validate the system where operator cognition and recovery matter most.",
+              "rationale": "Adds realism and protects against technically narrow validation.",
+              "consequence": {
+                "summary": "Operations becomes more confident because validation now reflects the realities of service disruption and operator response.",
+                "metrics": {
+                  "stakeholder_trust": 6,
+                  "system_quality": 5,
+                  "risk_exposure": -5
+                },
+                "set_condition": "operational_validation_scope",
+                "chapter_outcome_tag": "realistic_validation"
+              }
+            },
+            {
+              "id": "nominal-only-validation",
+              "title": "Limit validation to nominal service demonstration only",
+              "summary": "Avoid complicating the campaign with edge cases.",
+              "rationale": "Simplifies planning, but leaves recovery behavior under-examined.",
+              "consequence": {
+                "summary": "The validation runs smoothly, but operators warn it will miss the moments when the system matters most.",
+                "metrics": {
+                  "delivery_confidence": 3,
+                  "stakeholder_trust": -6,
+                  "risk_exposure": 6
+                },
+                "critical_flag": "thin_validation",
+                "chapter_outcome_tag": "nominal_only_validation"
+              }
+            },
+            {
+              "id": "document-defer-degraded",
+              "title": "Document degraded scenarios but defer them to early operations",
+              "summary": "Acknowledge the need without fully committing resources now.",
+              "rationale": "Political middle ground, but execution risk remains.",
+              "consequence": {
+                "summary": "The validation plan looks comprehensive, yet nobody owns how the degraded scenarios will actually run in early operations.",
+                "metrics": {
+                  "stakeholder_trust": 1,
+                  "delivery_confidence": 1,
+                  "risk_exposure": 5
+                },
+                "chapter_outcome_tag": "paper_validation"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-7-d2",
+          "label": "Decision 2",
+          "prompt": "The transition team asks how to structure the handover from project to operations. What do you recommend?",
+          "context": "Transition determines whether the system becomes sustainably operational or just technically delivered.",
+          "options": [
+            {
+              "id": "readiness-pillars",
+              "title": "Structure transition around operational readiness pillars: complete, correct, mitigated, proven, reliable",
+              "summary": "Define explicit readiness criteria across all dimensions of sustainable operations.",
+              "rationale": "Structured readiness gives operations and safety a shared framework for judging transition maturity.",
+              "consequence": {
+                "summary": "The transition framework gives both project and operations a common language for readiness, and gaps become visible early enough to address.",
+                "metrics": {
+                  "system_quality": 6,
+                  "stakeholder_trust": 5,
+                  "delivery_confidence": 4
+                },
+                "set_condition": "readiness_pillars_defined",
+                "chapter_outcome_tag": "structured_transition"
+              }
+            },
+            {
+              "id": "checklist-handover",
+              "title": "Hand over the system with a standard commissioning checklist and assume operations will adapt",
+              "summary": "Use a standard checklist and trust operations to fill the gaps.",
+              "rationale": "Fast, but assumes operational adaptation that may not happen smoothly.",
+              "consequence": {
+                "summary": "The checklist is completed, but operations discovers gaps in training, procedures, and support that the checklist never covered.",
+                "metrics": {
+                  "team_capacity": 3,
+                  "risk_exposure": 7,
+                  "stakeholder_trust": -4
+                },
+                "critical_flag": "checklist_transition",
+                "chapter_outcome_tag": "shallow_transition"
+              }
+            },
+            {
+              "id": "delay-until-perfect",
+              "title": "Delay transition until every open issue is closed, regardless of severity",
+              "summary": "Wait for complete closure before any handover.",
+              "rationale": "Maximizes system maturity, but delays operational benefit and demoralizes the team.",
+              "consequence": {
+                "summary": "The system is mature, but the program burns schedule and team energy chasing closure on minor issues that operations could manage.",
+                "metrics": {
+                  "system_quality": 4,
+                  "team_capacity": -6,
+                  "delivery_confidence": -3
+                },
+                "chapter_outcome_tag": "perfectionist_transition"
+              }
+            }
+          ]
+        },
+        {
+          "id": "chapter-7-d3",
+          "label": "Decision 3",
+          "prompt": "The sponsor asks for your go/no-go recommendation for passenger service. What factors drive your answer?",
+          "context": "This is the final systems engineering judgment of the program.",
+          "options": [
+            {
+              "id": "integrated-go-nogo",
+              "title": "Integrate evidence maturity, operational readiness, residual risk, and rollback confidence into the recommendation",
+              "summary": "Treat the go/no-go as a systems decision across all dimensions.",
+              "rationale": "More complex to explain, but much closer to operational reality.",
+              "consequence": {
+                "summary": "The board gets a firmer recommendation because technical evidence, operational readiness, and rollback posture are all visible together.",
+                "metrics": {
+                  "delivery_confidence": 6,
+                  "stakeholder_trust": 5,
+                  "risk_exposure": -5
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "integrated_go_nogo"
+              }
+            },
+            {
+              "id": "low-bar-go",
+              "title": "Recommend go if no catastrophic defects remain open",
+              "summary": "Use the absence of catastrophic defects as the primary decision rule.",
+              "rationale": "Simple, but dangerously detached from operational readiness.",
+              "consequence": {
+                "summary": "The schedule narrative stays strong, yet the program is now biased toward ignoring readiness concerns that fall short of catastrophic.",
+                "metrics": {
+                  "stakeholder_trust": 2,
+                  "risk_exposure": 8,
+                  "delivery_confidence": -3
+                },
+                "critical_flag": "low_bar_go",
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "permissive_go"
+              }
+            },
+            {
+              "id": "risk-averse-nogo",
+              "title": "Recommend no-go until every minor issue is resolved",
+              "summary": "Wait for complete resolution before recommending passenger service.",
+              "rationale": "Maximizes safety margin, but may be impractical and erode stakeholder confidence.",
+              "consequence": {
+                "summary": "The recommendation is conservative, but the sponsor and operations lose confidence in the program's ability to make pragmatic risk decisions.",
+                "metrics": {
+                  "system_quality": 3,
+                  "team_capacity": -5,
+                  "stakeholder_trust": -3
+                },
+                "trigger_subgame": true,
+                "chapter_outcome_tag": "risk_averse_nogo"
+              }
+            }
+          ]
+        }
+      ],
+      "subgame": {
+        "id": "chapter-7-subgame",
+        "type": "triage",
+        "title": "Readiness Assessment",
+        "prompt": "Assign each readiness concern to the most appropriate transition action.",
+        "instructions": "Classify by the action the program should take before passenger service begins.",
+        "categories": [
+          {
+            "id": "block-go",
+            "label": "Block go-live"
+          },
+          {
+            "id": "mitigate-before-launch",
+            "label": "Mitigate before launch"
+          },
+          {
+            "id": "accept-and-monitor",
+            "label": "Accept and monitor"
+          }
+        ],
+        "risks": [
+          {
+            "id": "r1",
+            "label": "Rollback procedure not rehearsed with current configuration",
+            "detail": "Rollback exists on paper but has not been exercised on the operational baseline."
+          },
+          {
+            "id": "r2",
+            "label": "Controller training completion at 85% for degraded-mode procedures",
+            "detail": "Most controllers are trained, but a gap remains for fallback operations."
+          },
+          {
+            "id": "r3",
+            "label": "Minor passenger display formatting inconsistency on one platform type",
+            "detail": "Cosmetic issue with no safety or operational impact."
+          }
+        ],
+        "correctAssignments": {
+          "r1": "block-go",
+          "r2": "mitigate-before-launch",
+          "r3": "accept-and-monitor"
+        },
+        "successSummary": "You correctly identified which readiness gaps must block go-live versus which can be managed.",
+        "failureSummary": "Your readiness assessment either allowed critical gaps through or blocked the program on minor issues.",
+        "successMetricImpact": {
+          "risk_exposure": -5,
+          "delivery_confidence": 5
+        },
+        "failureMetricImpact": {
+          "risk_exposure": 6,
+          "stakeholder_trust": -3
+        }
+      },
+      "debrief": {
+        "principle": "Validation closes the Vee by confirming the system fulfills its ConOps in the operational environment. Transition ensures sustainable operations. The go/no-go decision is the final systems engineering judgment.",
+        "strongSummary": "You closed the Vee with operational realism, structured transition, and an integrated readiness decision.",
+        "weakSummary": "You treated validation as a formality, transition as a handover checklist, or the go/no-go as a simple pass/fail.",
+        "journal": [
+          {
+            "title": "Chapter takeaway",
+            "summary": "The Vee closes when validation confirms the right system was built and transition makes it sustainably operational. Every shortcut in earlier chapters compounds here.",
+            "standards": [
+              {
+                "framework": "ISO/IEC/IEEE 15288:2023",
+                "citation": "§6.4.10 Transition / §6.4.11 Validation",
+                "rationale": "Transition and validation together close the Vee by confirming the system works in its intended operational environment."
+              },
+              {
+                "framework": "EN 50126-1:2017",
+                "citation": "§11 Verification and Validation",
+                "rationale": "Rail validation must demonstrate that the system meets its ConOps under real operational conditions."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
