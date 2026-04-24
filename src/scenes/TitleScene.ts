@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { GameManager } from '@/game/GameManager.ts';
+import { LevelManager } from '@/game/LevelManager.ts';
 import { AudioManager } from '@/components/AudioManager.ts';
 import { TransitionManager } from '@/components/TransitionManager.ts';
 import { COLORS, RADIUS, FONT } from '@/utils/designTokens.ts';
@@ -40,12 +41,17 @@ export class TitleScene extends Phaser.Scene {
     this.menuButtons = [];
     this.bgCircles = this.add.container();
 
+    this.audioManager?.playBGM('bgm-ambient');
+
     const width = this.scale.width;
     const height = this.scale.height;
 
     this.bgGraphics = this.add.graphics();
-    this.bgGraphics.fillStyle(COLORS.bg, 1);
+    this.bgGraphics.fillGradientStyle(0x0c0f14, 0x0c0f14, 0x111820, 0x111820, 1);
     this.bgGraphics.fillRect(0, 0, width, height);
+    this.bgGraphics.lineStyle(1, 0x3b82f6, 0.03);
+    for (let x = 0; x < width; x += 60) this.bgGraphics.lineBetween(x, 0, x, height);
+    for (let y = 0; y < height; y += 60) this.bgGraphics.lineBetween(0, y, width, y);
 
     for (let i = 0; i < 24; i++) {
       const cx = Phaser.Math.Between(0, width);
@@ -114,8 +120,28 @@ export class TitleScene extends Phaser.Scene {
 
     this.createButton(width / 2, btnY + btnSpacing, 'Continue', () => {
       this.audioManager?.playSFX('sfx-click');
+      const progress = this.gameManager.getProgress();
+      const levelManager = LevelManager.getInstance();
+      const modules = levelManager.getModules(progress);
+
+      let targetLevelId: string | null = null;
+      for (const mod of modules) {
+        if (mod.locked) continue;
+        for (const lvl of mod.levels) {
+          if (!lvl.locked && !lvl.completed) {
+            targetLevelId = lvl.id;
+            break;
+          }
+        }
+        if (targetLevelId) break;
+      }
+
       TransitionManager.fadeOut(this, 300, () => {
-        this.scene.start('MapScene');
+        if (targetLevelId) {
+          this.scene.start('LessonScene', { levelId: targetLevelId });
+        } else {
+          this.scene.start('MapScene');
+        }
       });
     });
 
@@ -166,13 +192,17 @@ export class TitleScene extends Phaser.Scene {
     this.menuButtons.forEach((btn, i) => {
       btn.bg.clear();
       if (i === this.focusedIndex) {
-        btn.bg.fillStyle(COLORS.primaryDim, 1);
+        btn.bg.fillStyle(0x3b82f6, 0.15);
+        btn.bg.fillRoundedRect(-116, -30, 232, 60, RADIUS.lg);
+        btn.bg.fillGradientStyle(0x60a5fa, 0x93c5fd, 0x3b82f6, 0x60a5fa, 1);
         btn.bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
-        btn.bg.lineStyle(2, COLORS.primaryHover, 0.8);
+        btn.bg.lineStyle(2, 0x93c5fd, 0.8);
         btn.bg.strokeRoundedRect(-110, -24, 220, 48, RADIUS.md);
       } else {
-        btn.bg.fillStyle(COLORS.primary, 1);
+        btn.bg.fillGradientStyle(0x3b82f6, 0x60a5fa, 0x2563eb, 0x3b82f6, 1);
         btn.bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
+        btn.bg.lineStyle(1, 0x60a5fa, 0.3);
+        btn.bg.strokeRoundedRect(-110, -24, 220, 48, RADIUS.md);
       }
     });
   }
@@ -180,12 +210,14 @@ export class TitleScene extends Phaser.Scene {
   private createButton(x: number, y: number, text: string, callback: () => void): void {
     const btn = this.add.container(x, y);
     const bg = this.add.graphics();
-    bg.fillStyle(COLORS.primary, 1);
+    bg.fillGradientStyle(0x3b82f6, 0x60a5fa, 0x2563eb, 0x3b82f6, 1);
     bg.fillRoundedRect(-110, -24, 220, 48, RADIUS.md);
+    bg.lineStyle(1, 0x60a5fa, 0.3);
+    bg.strokeRoundedRect(-110, -24, 220, 48, RADIUS.md);
 
     const label = this.add.text(0, 0, text, {
       fontSize: `${scaledFontSize(this, FONT.sizes.md)}px`,
-      color: hexColor(COLORS.textBright),
+      color: '#ffffff',
       fontFamily: FONT.family,
       fontStyle: 'bold',
     }).setOrigin(0.5);
@@ -300,10 +332,9 @@ export class TitleScene extends Phaser.Scene {
         const lockOverlay = this.add.graphics();
         lockOverlay.fillStyle(COLORS.bg, 0.5);
         lockOverlay.fillRoundedRect(-cardW / 2, -cardH / 2, cardW, cardH, RADIUS.sm);
-        const lockIcon = this.add.text(0, -2, '🔒', {
-          fontSize: `${scaledFontSize(this, FONT.sizes.lg)}px`,
-          fontFamily: FONT.family,
-        }).setOrigin(0.5);
+        const lockIcon = this.add.image(0, -2, 'icon-lock');
+        lockIcon.setScale(0.45);
+        lockIcon.setTint(COLORS.textDim);
         card.add([lockOverlay, lockIcon]);
       }
 

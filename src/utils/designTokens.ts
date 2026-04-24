@@ -48,7 +48,7 @@ export const RADIUS = {
 
 export const FONT = {
   family: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
-  heading: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+  heading: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
   sizes: {
     xs: 11,
     sm: 13,

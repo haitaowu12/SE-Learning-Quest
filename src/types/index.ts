@@ -7,6 +7,7 @@ export interface PlayerProgress {
   scenarioHistory: ScenarioRecord[];
   competencyScores: Record<string, number>;
   levelScores: Record<string, number>;
+  levelStars: Record<string, number>;
   streak: number;
   sessionStart: string;
   lastUpdated: string;
@@ -84,6 +85,13 @@ export interface ScoringRules {
   perfectBonus: number;
 }
 
+export interface LessonContent {
+  conceptTitle: string;
+  keyPoints: string[];
+  example: string;
+  diagramType: 'flowchart' | 'matrix' | 'hierarchy' | 'sequence';
+}
+
 export interface LevelData {
   id: string;
   moduleId: number;
@@ -98,6 +106,7 @@ export interface LevelData {
   scoringRules: ScoringRules;
   timeLimit?: number;
   config: Record<string, unknown>;
+  lessonContent?: LessonContent;
 }
 
 export interface Achievement {
