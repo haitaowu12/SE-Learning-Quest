@@ -47,24 +47,6 @@ export class LessonScene extends Phaser.Scene {
     bg.fillGradientStyle(COLORS.bg, COLORS.bg, COLORS.panelBg, COLORS.panelBg, 1);
     bg.fillRect(0, 0, width, height);
 
-    const guideX = 50;
-    const guideY = height / 2;
-    this.drawGuideAvatar(guideX, guideY);
-
-    const bubbleGfx = this.add.graphics();
-    bubbleGfx.fillStyle(COLORS.panelBg, 1);
-    bubbleGfx.fillRoundedRect(70, guideY - 30, 20, 20, 4);
-    bubbleGfx.fillStyle(COLORS.panelBg, 1);
-    bubbleGfx.fillRoundedRect(80, guideY - 80, 200, 100, RADIUS.md);
-    bubbleGfx.lineStyle(1, COLORS.border, 1);
-    bubbleGfx.strokeRoundedRect(80, guideY - 80, 200, 100, RADIUS.md);
-    this.add.text(90, guideY - 70, 'Let me explain\nthis concept!', {
-      fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-      color: '#e2e8f0',
-      fontFamily: FONT.family,
-      wordWrap: { width: 180 },
-    });
-
     const titleBar = this.add.graphics();
     titleBar.fillStyle(COLORS.panelBg, 1);
     titleBar.fillRect(0, 0, width, 60);
@@ -83,13 +65,36 @@ export class LessonScene extends Phaser.Scene {
 
     const conceptText = this.add.text(40, currentY, lesson.conceptTitle, {
       fontSize: `${scaledFontSize(this, FONT.sizes.xl)}px`,
-      color: '#0ea5e9',
+      color: '#38bdf8',
       fontFamily: FONT.heading,
       fontStyle: 'bold',
       wordWrap: { width: width - 80 },
     }).setOrigin(0);
     contentContainer.add(conceptText);
-    currentY += conceptText.height + 20;
+    currentY += conceptText.height + 30;
+
+    const guideX = 60;
+    const guideY = currentY + 30;
+    contentContainer.add(this.drawGuideAvatar(guideX, guideY));
+
+    const bubbleGfx = this.add.graphics();
+    bubbleGfx.fillStyle(0x0f172a, 1);
+    bubbleGfx.fillRoundedRect(80, guideY - 10, 20, 20, 4);
+    bubbleGfx.fillRoundedRect(90, guideY - 30, 240, 50, RADIUS.md);
+    bubbleGfx.lineStyle(1, 0x38bdf8, 0.5);
+    bubbleGfx.strokeRoundedRect(90, guideY - 30, 240, 50, RADIUS.md);
+    contentContainer.add(bubbleGfx);
+
+    contentContainer.add(
+      this.add.text(105, guideY - 5, 'Let me explain this concept!', {
+        fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
+        color: '#e2e8f0',
+        fontFamily: FONT.family,
+        fontStyle: 'italic'
+      }).setOrigin(0, 0.5)
+    );
+
+    currentY += 80;
 
     if (lesson.keyPoints && lesson.keyPoints.length > 0) {
       const keyTitle = this.add.text(40, currentY, 'Key Concepts', {
@@ -120,32 +125,33 @@ export class LessonScene extends Phaser.Scene {
     }
 
     if (lesson.example) {
-      const exTitle = this.add.text(60, currentY + 10, 'Example', {
+      const exTitle = this.add.text(60, currentY + 15, 'Example', {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-        color: '#0ea5e9',
+        color: '#fcd34d',
         fontFamily: FONT.family,
         fontStyle: 'bold',
       }).setOrigin(0);
       contentContainer.add(exTitle);
 
-      const exText = this.add.text(60, currentY + 32, lesson.example, {
+      const exText = this.add.text(60, currentY + 40, lesson.example, {
         fontSize: `${scaledFontSize(this, FONT.sizes.sm)}px`,
-        color: '#e2e8f0',
+        color: '#f8fafc',
         fontFamily: FONT.family,
         wordWrap: { width: width - 140 },
+        lineSpacing: 4
       }).setOrigin(0);
       contentContainer.add(exText);
 
-      const boxH = exText.height + 52;
+      const boxH = exText.height + 60;
       const exampleBg = this.add.graphics();
-      exampleBg.fillStyle(COLORS.primarySoft, 1);
+      exampleBg.fillStyle(0x1e293b, 1);
       exampleBg.fillRoundedRect(40, currentY, width - 80, boxH, RADIUS.md);
-      exampleBg.lineStyle(1, COLORS.primary, 0.5);
+      exampleBg.lineStyle(1, 0xf59e0b, 0.5);
       exampleBg.strokeRoundedRect(40, currentY, width - 80, boxH, RADIUS.md);
       contentContainer.add(exampleBg);
       contentContainer.moveTo(exampleBg, 0);
 
-      currentY += boxH + 20;
+      currentY += boxH + 40;
     }
 
     if (lesson.diagramType) {
@@ -158,8 +164,8 @@ export class LessonScene extends Phaser.Scene {
       contentContainer.add(diagTitle);
       currentY += diagTitle.height + 15;
 
-      this.renderDiagram(40, currentY, width - 80, 150, lesson.diagramType, contentContainer);
-      currentY += 170;
+      this.renderDiagram(40, currentY, width - 80, 280, lesson.diagramType, contentContainer);
+      currentY += 320;
     }
 
     const clipMask = this.make.graphics({}, false);
@@ -312,14 +318,14 @@ export class LessonScene extends Phaser.Scene {
       }).setOrigin(0.5)
     ]);
 
-    const colors = [0x1e3a5f, 0x0f172a, 0x1a2230, 0x162d4a];
+    const colors = [0x0369a1, 0x0f766e, 0x334155, 0xb45309];
     labels.forEach((label, i) => {
       const col = i % 2;
       const row = Math.floor(i / 2);
       const cx = startX + col * cellW;
       const cy = startY + row * cellH;
       gfx.fillStyle(colors[i], 1);
-      gfx.fillRoundedRect(cx + 2, cy + 2, cellW - 4, cellH - 4, RADIUS.xs);
+      gfx.fillRoundedRect(cx + 2, cy + 2, cellW - 4, cellH - 4, RADIUS.md);
       gfx.lineStyle(1, COLORS.border, 1);
       gfx.strokeRoundedRect(cx + 2, cy + 2, cellW - 4, cellH - 4, RADIUS.xs);
       container.add(
