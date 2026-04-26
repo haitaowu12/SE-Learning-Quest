@@ -202,8 +202,17 @@ function buildProjectHealth(state: { metrics: MetricState; completedChapterIds: 
   const excellentCount = ratings.filter(r => r === 'Excellent').length;
   const fragileCount = ratings.filter(r => r === 'Fragile' || r === 'At Risk').length;
 
-  const avgMetric = METRIC_KEYS.reduce((sum, key) => sum + state.metrics[key], 0) / METRIC_KEYS.length;
-  const healthPct = Math.round(avgMetric);
+  const adjustedMetrics = METRIC_KEYS.map(key =>
+    key === 'risk_exposure' ? (100 - state.metrics[key]) : state.metrics[key]
+  );
+  const avgMetric = adjustedMetrics.reduce((sum, val) => sum + val, 0) / METRIC_KEYS.length;
+
+  const totalCriticalFlags = state.completedChapterIds.reduce((count, id) => {
+    return count + (state.chapterResults[id]?.criticalFlags?.length ?? 0);
+  }, 0);
+  const flagPenalty = totalCriticalFlags * 3;
+
+  const healthPct = Math.max(0, Math.min(100, Math.round(avgMetric - flagPenalty)));
 
   let healthLabel = 'Critical';
   let healthClass = 'health-critical';
@@ -406,6 +415,14 @@ export class OperationsMapScene extends Phaser.Scene {
         </aside>
       </div>
     `);
+
+    requestAnimationFrame(() => {
+      const chapterList = document.querySelector('.chapter-list');
+      const nextChapter = chapterList?.querySelector('.chapter-card:not(.locked):not(.active)');
+      if (nextChapter && chapterList) {
+        nextChapter.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
 
     this.ui.on('click', '.js-open-chapter', (target) => {
       const chapterId = target.dataset.chapterId;
