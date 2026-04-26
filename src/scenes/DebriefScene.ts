@@ -25,6 +25,45 @@ function deltaText(change: number | undefined): string {
   return `${change > 0 ? '+' : ''}${change}`;
 }
 
+interface Recommendation {
+  icon: string;
+  text: string;
+  priority: 'high' | 'medium';
+}
+
+function generateRecommendations(metrics: Record<string, number>, criticalFlags: string[], rating: string): Recommendation[] {
+  const recs: Recommendation[] = [];
+
+  if (metrics.system_quality < 50) {
+    recs.push({ icon: '⚠', text: 'System quality is below threshold. Prioritize verification and design discipline in upcoming chapters.', priority: 'high' });
+  }
+  if (metrics.risk_exposure > 60) {
+    recs.push({ icon: '🔴', text: 'Risk exposure is elevated. Address open risks before proceeding to integration activities.', priority: 'high' });
+  }
+  if (metrics.stakeholder_trust < 45) {
+    recs.push({ icon: '👥', text: 'Stakeholder trust is eroding. Re-engage key stakeholders and make boundary decisions visible.', priority: 'high' });
+  }
+  if (metrics.delivery_confidence < 45) {
+    recs.push({ icon: '📉', text: 'Delivery confidence is low. Strengthen evidence chains and resolve open verification gaps.', priority: 'medium' });
+  }
+  if (metrics.team_capacity < 40) {
+    recs.push({ icon: '🔋', text: 'Team capacity is strained. Avoid scope expansion and protect core delivery resources.', priority: 'medium' });
+  }
+
+  if (criticalFlags.length > 0) {
+    const flagNames = criticalFlags.map(f => f.replace(/_/g, ' ')).join(', ');
+    recs.push({ icon: '🚩', text: `Active concerns: ${flagNames}. These will compound if not addressed in later chapters.`, priority: 'high' });
+  }
+
+  if (rating === 'Excellent' || rating === 'Stable') {
+    if (recs.length === 0) {
+      recs.push({ icon: '✅', text: 'Strong position. Maintain discipline and avoid complacency as complexity increases.', priority: 'medium' });
+    }
+  }
+
+  return recs;
+}
+
 export class DebriefScene extends Phaser.Scene {
   private gameManager!: GameManager;
   private levelManager!: LevelManager;
@@ -102,6 +141,19 @@ export class DebriefScene extends Phaser.Scene {
           <div class="signal-card">
             <h4>SE principle reinforced</h4>
             <p class="signal-copy">${this.result.principle}</p>
+          </div>
+          <div class="signal-card recommendations-card">
+            <h4>Recommendations for next chapter</h4>
+            <ul class="recommendation-list">${generateRecommendations(
+              Object.fromEntries(Object.entries(this.result.finalMetrics)) as Record<string, number>,
+              this.result.criticalFlags,
+              this.result.rating
+            ).map(rec => `
+              <li class="recommendation-item priority-${rec.priority}">
+                <span class="rec-icon">${rec.icon}</span>
+                <span class="rec-text">${rec.text}</span>
+              </li>
+            `).join('')}</ul>
           </div>
           <div class="delta-grid">${deltas || '<div class="delta-card"><span class="metric-label">Metric change</span><span class="metric-value">0</span></div>'}</div>
           <div class="result-actions">

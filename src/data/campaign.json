@@ -431,7 +431,7 @@
               "consequence": {
                 "summary": "Short-term energy rises, but requirements start chasing design decisions and losing neutrality.",
                 "metrics": {
-                  "delivery_confidence": 5,
+                  "delivery_confidence": 2,
                   "risk_exposure": 9,
                   "system_quality": -5
                 },
@@ -718,7 +718,7 @@
               "consequence": {
                 "summary": "Design freeze stays on schedule, but key interface assumptions remain untested until vendor onboarding.",
                 "metrics": {
-                  "delivery_confidence": 4,
+                  "delivery_confidence": 2,
                   "risk_exposure": 7,
                   "system_quality": -5
                 },
@@ -774,7 +774,7 @@
               "consequence": {
                 "summary": "Leadership likes the story, but the integration board leaves without answers to the hardest interface questions.",
                 "metrics": {
-                  "stakeholder_trust": 3,
+                  "stakeholder_trust": 2,
                   "system_quality": -4,
                   "risk_exposure": 6
                 },
@@ -948,7 +948,7 @@
               "consequence": {
                 "summary": "The solution looks closer to the ideal feature set, but the integration team immediately flags concerns about evidence quality and verification burden.",
                 "metrics": {
-                  "stakeholder_trust": 4,
+                  "stakeholder_trust": 2,
                   "risk_exposure": 8,
                   "system_quality": -3
                 },
@@ -1218,7 +1218,7 @@
               "consequence": {
                 "summary": "Status reports improve, but the hardest coupling now sits at the end of the plan with little contingency left.",
                 "metrics": {
-                  "stakeholder_trust": 3,
+                  "stakeholder_trust": 2,
                   "risk_exposure": 10,
                   "delivery_confidence": -4
                 },
@@ -1274,7 +1274,7 @@
               "consequence": {
                 "summary": "Issues appear to clear quickly, yet nobody can reliably explain which software and interface set is actually in the field.",
                 "metrics": {
-                  "team_capacity": 4,
+                  "team_capacity": 2,
                   "system_quality": -7,
                   "risk_exposure": 9
                 },
@@ -1329,7 +1329,7 @@
               "consequence": {
                 "summary": "The activation proceeds, but unexpected timing behavior forces an emergency rollback that erodes sponsor confidence.",
                 "metrics": {
-                  "delivery_confidence": 3,
+                  "delivery_confidence": 2,
                   "risk_exposure": 8,
                   "team_capacity": 2
                 },
@@ -1488,7 +1488,7 @@
               "consequence": {
                 "summary": "The schedule looks cleaner, yet failure discovery is now dangerously back-loaded.",
                 "metrics": {
-                  "delivery_confidence": 4,
+                  "delivery_confidence": 2,
                   "risk_exposure": 10,
                   "system_quality": -6
                 },
@@ -1504,7 +1504,7 @@
               "consequence": {
                 "summary": "Supplier evidence helps, but it does not cover program-level interfaces or system-level requirements.",
                 "metrics": {
-                  "team_capacity": 3,
+                  "team_capacity": 2,
                   "risk_exposure": 7,
                   "stakeholder_trust": -4
                 },
@@ -1544,7 +1544,7 @@
               "consequence": {
                 "summary": "The verification campaign runs faster, but several non-safety requirements lack the concrete evidence that operations and the board expected.",
                 "metrics": {
-                  "team_capacity": 3,
+                  "team_capacity": 2,
                   "risk_exposure": 5,
                   "system_quality": -3
                 },
@@ -1599,7 +1599,7 @@
               "consequence": {
                 "summary": "The schedule feels convenient, yet the campaign loses its logic for proving the system progressively and coherently.",
                 "metrics": {
-                  "delivery_confidence": 3,
+                  "delivery_confidence": 2,
                   "system_quality": -4,
                   "risk_exposure": 6
                 },
@@ -1759,7 +1759,7 @@
               "consequence": {
                 "summary": "The validation runs smoothly, but operators warn it will miss the moments when the system matters most.",
                 "metrics": {
-                  "delivery_confidence": 3,
+                  "delivery_confidence": 2,
                   "stakeholder_trust": -6,
                   "risk_exposure": 6
                 },
@@ -1814,7 +1814,7 @@
               "consequence": {
                 "summary": "The checklist is completed, but operations discovers gaps in training, procedures, and support that the checklist never covered.",
                 "metrics": {
-                  "team_capacity": 3,
+                  "team_capacity": 2,
                   "risk_exposure": 7,
                   "stakeholder_trust": -4
                 },
