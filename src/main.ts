@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
 import './styles/ui.css';
 import { BootScene } from './scenes/BootScene.ts';
+import { CoffeeLabScene } from './scenes/CoffeeLabScene.ts';
+import { EpisodeSelectScene } from './scenes/EpisodeSelectScene.ts';
 import { TitleScene } from './scenes/TitleScene.ts';
 import { OperationsMapScene } from './scenes/OperationsMapScene.ts';
 import { MissionScene } from './scenes/MissionScene.ts';
@@ -11,12 +13,12 @@ const config: Phaser.Types.Core.GameConfig = {
   parent: 'game-container',
   width: window.innerWidth,
   height: window.innerHeight,
-  backgroundColor: '#FFD23F',
+  backgroundColor: '#f7f8f4',
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, TitleScene, OperationsMapScene, MissionScene, DebriefScene],
+  scene: [BootScene, EpisodeSelectScene, CoffeeLabScene, TitleScene, OperationsMapScene, MissionScene, DebriefScene],
   audio: {
     disableWebAudio: false,
   },

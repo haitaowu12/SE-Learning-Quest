@@ -25,6 +25,11 @@ function deltaText(change: number | undefined): string {
   return `${change > 0 ? '+' : ''}${change}`;
 }
 
+function standardCitation(citation: string): string {
+  if (!citation.startsWith('https://')) return citation;
+  return `<a href="${citation}" target="_blank" rel="noreferrer">${citation}</a>`;
+}
+
 interface Recommendation {
   icon: string;
   text: string;
@@ -124,7 +129,7 @@ export class DebriefScene extends Phaser.Scene {
       <div class="journal-card">
         <h4>${journal.title}</h4>
         <p class="small-copy">${journal.summary}</p>
-        <ul class="drawer-list">${journal.standards.map((standard) => `<li>${standard.framework} · ${standard.citation}<br /><span class="small-copy">${standard.rationale}</span></li>`).join('')}</ul>
+        <ul class="drawer-list">${journal.standards.map((standard) => `<li>${standard.framework} · ${standardCitation(standard.citation)}<br /><span class="small-copy">${standard.rationale}</span></li>`).join('')}</ul>
       </div>
     `).join('');
 

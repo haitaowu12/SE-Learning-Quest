@@ -47,6 +47,100 @@ export interface MissionBrief {
   journal: JournalReference[];
 }
 
+export interface EpisodeSummary {
+  id: string;
+  format: 'lab' | 'campaign';
+  code: string;
+  title: string;
+  subtitle: string;
+  scenario: string;
+  audience: string;
+  difficulty: string;
+  duration: string;
+  status: 'available' | 'coming-soon';
+  routeLabel: string;
+  accentColor: string;
+  heroImage: string;
+  overview: string;
+  learningMode: string;
+  bestFor: string;
+  prerequisite: string;
+  nextEpisodeId?: string;
+  outcomes: string[];
+  standards: StandardReference[];
+}
+
+export interface EpisodeCatalog {
+  platformTitle: string;
+  platformSubtitle: string;
+  publicUrl: string;
+  episodes: EpisodeSummary[];
+}
+
+export interface CoffeeLabReference {
+  label: string;
+  url: string;
+  note: string;
+}
+
+export interface CoffeeLabTerm {
+  term: string;
+  plain: string;
+  example: string;
+}
+
+export interface CoffeeLabPractice {
+  title: string;
+  activityType: 'sort' | 'rewrite' | 'allocate' | 'inspect' | 'sequence' | 'audit' | 'triage' | 'recommend';
+  why: string;
+  prompt: string;
+  steps: string[];
+  checklist: string[];
+  artifact: string;
+}
+
+export interface CoffeeLabUnit {
+  id: string;
+  order: number;
+  cluster: string;
+  title: string;
+  plainQuestion: string;
+  lifecycleFocus: string;
+  diagram: 'lifecycle' | 'boundary' | 'trace' | 'requirements' | 'architecture' | 'analysis' | 'rams' | 'implementation' | 'integration' | 'proof' | 'operate' | 'gate' | 'retirement';
+  processes: string[];
+  supportingPractices: string[];
+  learningGoal: string;
+  story: string;
+  concept: string;
+  keyActivities: string[];
+  keyConsiderations: string[];
+  artifacts: string[];
+  terms: CoffeeLabTerm[];
+  practice: CoffeeLabPractice;
+  references: CoffeeLabReference[];
+}
+
+export interface CoffeeLabCourse {
+  id: string;
+  title: string;
+  subtitle: string;
+  overview: string;
+  role: string;
+  duration: string;
+  finalOutcome: string;
+  units: CoffeeLabUnit[];
+}
+
+export interface CoffeeLabProgressState {
+  version: number;
+  courseId: string;
+  currentUnitId: string;
+  visitedUnitIds: string[];
+  completedUnitIds: string[];
+  artifactNotes: Record<string, string>;
+  updatedAt: string;
+}
+
 export interface ConsequencePayload {
   summary: string;
   metrics: MetricDelta;
@@ -233,6 +327,7 @@ export interface ChapterProgress {
 }
 
 export interface CampaignState {
+  episodeId: string;
   playerId: string;
   startedAt: string;
   updatedAt: string;

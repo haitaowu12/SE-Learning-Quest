@@ -1,0 +1,1103 @@
+{
+  "id": "ep1-coffee-lab",
+  "title": "Coffee Service Systems Lab",
+  "subtitle": "A beginner workbench for learning systems engineering through one escalating office-service story.",
+  "overview": "You improve an office coffee service across eight connected lifecycle chapters. Each chapter changes project evidence, asks a different type of activity, and explains why the activity protects later decisions.",
+  "role": "Office systems engineer",
+  "duration": "3-5 hours self-paced",
+  "finalOutcome": "A lifecycle evidence pack that traces one need through requirements, architecture, interface control, RAMS, implementation, integration, proof, operation, retirement, and final gate recommendation.",
+  "units": [
+    {
+      "id": "frame",
+      "order": 1,
+      "cluster": "Frame",
+      "title": "Frame the Mission and Boundary",
+      "plainQuestion": "What are we actually improving?",
+      "lifecycleFocus": "Business or mission analysis",
+      "diagram": "boundary",
+      "processes": ["Business or Mission Analysis"],
+      "supportingPractices": ["Decision Management", "Measurement", "Information Management"],
+      "learningGoal": "Turn a vague request for a better machine into a bounded service problem with stakeholders, objectives, measures, assumptions, interfaces to watch, and an early concept of operations.",
+      "story": "The office asks for a faster coffee machine after missed morning meetings. A systems engineer first checks whether the problem is the machine, the service workflow, the space, the support model, or the way all of those interact. The first concept of operations describes how people, equipment, support, and measures will work during a normal morning.",
+      "concept": "Framing defines the problem, opportunity, system boundary, objectives, constraints, assumptions, and success measures before solution choices harden too early. A concept of operations explains how the system is expected to be used in context.",
+      "keyActivities": [
+        "Write the problem in mission terms before naming a product.",
+        "Draw the system-of-interest and its external actors.",
+        "Draft a concept of operations for the normal morning service.",
+        "Write one operational scenario and one MOE/MOP pair for the morning rush.",
+        "Identify enabling systems in the system context, such as facilities, supplier support, cleaning, and waste handling.",
+        "Name success measures that can be observed during pilot operation.",
+        "Record assumptions and early interfaces that need later control."
+      ],
+      "keyConsiderations": [
+        "A machine-only boundary hides supplies, cleaning, queue flow, support, and users.",
+        "Stakeholders belong in the frame because they define value and constraints.",
+        "A concept of operations is a working hypothesis about real use, not a polished final procedure.",
+        "Enabling systems often sit outside the boundary but still determine whether the service can work.",
+        "Interfaces can be visible before they are fully controlled.",
+        "Measures should connect to the original pain, not only to equipment specifications. MOE/MOP keeps value and technical performance separate."
+      ],
+      "artifacts": ["Mission problem statement", "System boundary", "System context sketch", "Stakeholder map", "Concept of operations sketch", "Operational scenario", "MOE/MOP pair", "Initial measures and assumptions"],
+      "terms": [
+        {
+          "term": "System-of-interest",
+          "plain": "The system we are responsible for understanding, changing, and proving.",
+          "example": "The office coffee service, not just the espresso machine."
+        },
+        {
+          "term": "Boundary",
+          "plain": "The line that separates what the project controls from what it must interface with.",
+          "example": "Supplies and cleaning may sit inside the service boundary; finance and vendor support remain external actors."
+        },
+        {
+          "term": "Measure",
+          "plain": "A signal used to decide whether the project improved the situation.",
+          "example": "Average peak wait time and stockout complaints per week."
+        },
+        {
+          "term": "Concept of operations",
+          "plain": "A plain-language description of how the system will be used, by whom, in what environment, and under what operating conditions.",
+          "example": "During the morning rush, employees self-serve coffee while facilities keeps the counter clean and vendor support handles equipment faults."
+        },
+        {
+          "term": "Stakeholder",
+          "plain": "A person or organization with needs, constraints, responsibilities, or decision authority affected by the system.",
+          "example": "Employees, facilities, finance, vendor support, and waste handling."
+        },
+        {
+          "term": "Assumption",
+          "plain": "Something treated as true until it is checked or replaced with evidence.",
+          "example": "Facilities can inspect the counter every afternoon."
+        },
+        {
+          "term": "Interface",
+          "plain": "A handoff or interaction between system elements, people, organizations, data, materials, or environments.",
+          "example": "Facilities provides clean counter space for the coffee service."
+        },
+        {
+          "term": "Operational scenario",
+          "plain": "A short description of a real use situation that exposes actors, timing, environment, constraints, and expected behavior.",
+          "example": "Five employees arrive before standup while facilities still needs access to clean the counter."
+        },
+        {
+          "term": "System context",
+          "plain": "The environment, external actors, enabling systems, and constraints around the system-of-interest.",
+          "example": "Kitchen layout, utilities, vendor support, waste handling, finance approval, and office routines."
+        },
+        {
+          "term": "Enabling system",
+          "plain": "A supporting system needed to develop, operate, maintain, support, or retire the system-of-interest.",
+          "example": "Cleaning service, supplier ordering, support ticketing, and waste disposal."
+        },
+        {
+          "term": "MOE/MOP",
+          "plain": "Measures of effectiveness describe mission value; measures of performance describe technical or service performance.",
+          "example": "MOE: fewer missed meetings. MOP: average peak wait time below 3 minutes."
+        }
+      ],
+      "practice": {
+        "title": "Sort the mission frame",
+        "activityType": "sort",
+        "why": "Sorting prevents the first request from becoming the final answer. It shows what the project controls, what it must coordinate, and what evidence will matter later.",
+        "prompt": "Sort the coffee-service facts into system elements, external actors, success measures, and assumptions.",
+        "steps": [
+          "Place machine, supplies, cleaning routine, instructions, support log, and queue area inside the system-of-interest.",
+          "Keep employees, finance, facilities utilities, vendor, waste handling, and budget approval outside as stakeholders or interfaces.",
+          "Write one user measure and one operations measure.",
+          "Record one assumption that must be tested before design."
+        ],
+        "checklist": [
+          "Boundary includes service elements, not equipment only.",
+          "Stakeholders and interfaces are visible.",
+          "Measures can be observed during pilot operation.",
+          "At least one assumption has a later check."
+        ],
+        "artifact": "Mission frame and boundary"
+      },
+      "references": [
+        {
+          "label": "SEBoK: Business or Mission Analysis",
+          "url": "https://sebokwiki.org/wiki/Business_or_Mission_Analysis",
+          "note": "Public background on why projects start with problem and mission analysis."
+        }
+      ]
+    },
+    {
+      "id": "define",
+      "order": 2,
+      "cluster": "Define",
+      "title": "Define Needs, Requirements, and Proof Intent",
+      "plainQuestion": "Who needs what, and how will we prove it?",
+      "lifecycleFocus": "Stakeholder needs and system requirements",
+      "diagram": "trace",
+      "processes": ["Stakeholder Needs and Requirements Definition", "System Requirements Definition"],
+      "supportingPractices": ["Configuration Management", "Information Management", "Quality Assurance"],
+      "learningGoal": "Translate raw comments into stakeholder needs and testable system requirements without losing why each requirement exists.",
+      "story": "Employees care about meeting disruption. Facilities cares about clean space. Finance cares about predictable cost. The team needs a traceable requirement set, not a pile of comments.",
+      "concept": "Needs explain stakeholder intent. Requirements state what the system must do or satisfy. Proof intent states how the team expects to know whether the requirement has been met.",
+      "keyActivities": [
+        "Collect stakeholder comments and context-of-use scenarios.",
+        "Build a ConOps-to-needs trace so operational scenarios explain why needs matter.",
+        "Classify raw inputs as need, requirement, constraint, assumption, risk, or solution idea.",
+        "Write requirements with condition, behavior, threshold, rationale, acceptance criteria, and verification intent.",
+        "Trace each system requirement back to a stakeholder need and validation criteria."
+      ],
+      "keyConsiderations": [
+        "A need can be informal; a requirement must be clear enough to guide design and proof.",
+        "Not every concern becomes a requirement; some become risks, constraints, or RAMS assumptions.",
+        "Requirement rationale helps future practitioners understand why a requirement exists when tradeoffs appear.",
+        "Requirement quality attributes make ambiguity, unverifiability, and hidden solution bias easier to find.",
+        "Proof intent belongs early so bad requirements are exposed before design.",
+        "Traceability should explain decisions, not create paperwork."
+      ],
+      "artifacts": ["Stakeholder needs table", "Requirement set", "Proof intent", "Need-to-requirement trace"],
+      "terms": [
+        {
+          "term": "Stakeholder need",
+          "plain": "A stakeholder's desired outcome or problem to be solved.",
+          "example": "Employees need coffee access without disrupting morning meetings."
+        },
+        {
+          "term": "System requirement",
+          "plain": "A verifiable statement of what the system must do or satisfy.",
+          "example": "During 8:30-9:30 a.m., the service shall keep average wait time at or below 3 minutes."
+        },
+        {
+          "term": "Proof intent",
+          "plain": "Early statement of the evidence method expected for a requirement.",
+          "example": "Verify peak wait time through five days of timed pilot observations."
+        },
+        {
+          "term": "Stakeholder voice",
+          "plain": "The raw language people use to describe their problem, goal, concern, or preferred fix.",
+          "example": "I need coffee without missing my standup."
+        },
+        {
+          "term": "Verifiable behavior",
+          "plain": "A system behavior stated clearly enough that evidence can prove whether it happened.",
+          "example": "During 8:30-9:30 a.m., average wait time stays at or below 3 minutes."
+        },
+        {
+          "term": "Traceability",
+          "plain": "The visible connection from a source need to a requirement, design choice, and proof.",
+          "example": "Meeting disruption need -> peak wait requirement -> two-station design -> timed pilot evidence."
+        },
+        {
+          "term": "Context-of-use scenario",
+          "plain": "A short situation that explains who uses the system, when, where, and under what constraints.",
+          "example": "Five employees arrive between 8:30 and 8:45 before standup while cleaning access must remain open."
+        },
+        {
+          "term": "Constraint",
+          "plain": "A limit the solution must respect, even if it is not the primary need.",
+          "example": "The coffee service must fit the existing counter and monthly supply budget."
+        },
+        {
+          "term": "Risk",
+          "plain": "An uncertain event or condition that can affect objectives, evidence, cost, safety, or service value.",
+          "example": "A vendor response delay could leave the office without service during peak demand."
+        },
+        {
+          "term": "Verification method",
+          "plain": "The planned way to prove whether a requirement has been met.",
+          "example": "Inspection, analysis, demonstration, or timed pilot test."
+        },
+        {
+          "term": "ConOps-to-needs trace",
+          "plain": "A visible connection from an operational scenario to stakeholder needs and later requirements.",
+          "example": "Morning-rush scenario -> no missed standup need -> average wait requirement."
+        },
+        {
+          "term": "Acceptance criteria",
+          "plain": "The specific conditions used to decide whether a requirement, interface, item, or result is acceptable.",
+          "example": "Average wait is at or below 3 minutes during five observed peak periods."
+        },
+        {
+          "term": "Requirement rationale",
+          "plain": "The reason a requirement exists and the decision it protects.",
+          "example": "The wait-time threshold protects the stakeholder need to avoid missed morning meetings."
+        },
+        {
+          "term": "Requirement quality attributes",
+          "plain": "Checks that a requirement is necessary, singular, clear, feasible, verifiable, traceable, and solution-neutral.",
+          "example": "The machine shall be fast fails because it is ambiguous and not verifiable."
+        },
+        {
+          "term": "Validation criteria",
+          "plain": "Conditions used to decide whether the solution fits the stakeholder's intended use.",
+          "example": "Employees can get coffee before standup without disrupting the meeting."
+        }
+      ],
+      "practice": {
+        "title": "Rewrite weak requirements",
+        "activityType": "rewrite",
+        "why": "Rewriting helps practitioners separate stakeholder voice from verifiable behavior. It reduces later proof gaps.",
+        "prompt": "Improve 'The machine shall be fast' so it can guide architecture and verification.",
+        "steps": [
+          "Name the operating condition where speed matters.",
+          "State the service behavior instead of a product preference.",
+          "Add a measurable threshold.",
+          "Attach a proof method and source need."
+        ],
+        "checklist": [
+          "Requirement is singular.",
+          "Threshold is measurable.",
+          "Requirement traces to a stakeholder need.",
+          "Verification method is visible."
+        ],
+        "artifact": "Need-to-requirement trace"
+      },
+      "references": [
+        {
+          "label": "SEBoK: Stakeholder Needs and Requirements",
+          "url": "https://sebokwiki.org/wiki/Stakeholder_Needs_and_Requirements",
+          "note": "Public overview of stakeholder needs and requirements work."
+        },
+        {
+          "label": "SEBoK: System Requirements",
+          "url": "https://sebokwiki.org/wiki/System_Requirements",
+          "note": "Public background on system requirement definition."
+        }
+      ]
+    },
+    {
+      "id": "architect",
+      "order": 3,
+      "cluster": "Architect",
+      "title": "Architect Interfaces and RAMS",
+      "plainQuestion": "What parts, handoffs, and risks shape the solution?",
+      "lifecycleFocus": "Architecture, design, system analysis, interfaces, and RAMS",
+      "diagram": "rams",
+      "processes": ["Architecture Definition", "Design Definition", "System Analysis"],
+      "supportingPractices": ["Decision Management", "Risk Management", "Measurement"],
+      "learningGoal": "Allocate functions, compare service patterns, control important interfaces, draft the concept of maintenance, and surface reliability, availability, maintainability, and safety assumptions before design locks in.",
+      "story": "One large machine, two self-serve stations, or a vendor cart can each reduce queue pain. The best answer depends on interfaces, support burden, hazards, the concept of maintenance, and RAMS assumptions, not just speed.",
+      "concept": "Architecture defines structure, functions, allocation, and interfaces. Design makes the selected architecture buildable. System analysis compares options, including RAMS, concept of maintenance, and lifecycle consequences.",
+      "keyActivities": [
+        "Map functions such as brew, queue, restock, clean, report fault, and dispose waste.",
+        "Allocate functions to equipment, people, information, and support processes.",
+        "Create an interface register with owner, exchange, acceptance check, evidence, escalation, and change trigger.",
+        "Draft the concept of maintenance for restoring service after stockout, cleaning miss, leak, or equipment fault.",
+        "Compare options using wait time, cost, reliability, availability, maintainability, safety, and rollout risk."
+      ],
+      "keyConsiderations": [
+        "Architecture is not a product shortlist.",
+        "An interface is controlled only when the exchange, owner, acceptance criterion, and change authority are known.",
+        "RAMS makes everyday service failure modes visible before launch and supports risk tolerability decisions.",
+        "An interface control document or small interface register should capture interface requirements before dry-run pressure.",
+        "A lightweight interface control working group can be one named owner meeting, not a bureaucracy.",
+        "RAMS requirements and RAMS acceptance criteria should shape the architecture trade, not appear only at final approval.",
+        "A trade study is defensible only when criteria, assumptions, and sensitivity are visible."
+      ],
+      "artifacts": ["Function allocation map", "Interface register", "RAMS mini-log", "Concept of maintenance sketch", "Architecture trade study"],
+      "terms": [
+        {
+          "term": "Interface register",
+          "plain": "A controlled list of important handoffs across elements or organizations.",
+          "example": "Facilities provides clean counter space; vendor support receives QR ticket; office admin maintains restock threshold."
+        },
+        {
+          "term": "RAMS",
+          "plain": "Reliability, availability, maintainability, and safety considerations used to shape and judge the system.",
+          "example": "Leak hazard: cause, consequence, control, verification evidence, owner, accepted residual risk, and monitoring trigger."
+        },
+        {
+          "term": "Hazard log",
+          "plain": "A simple list of safety concerns, controls, proof, owner, acceptance decision, and remaining risk.",
+          "example": "Leak below station B: isolate station, add drip tray, verify dry counter after pilot, facilities accepts residual risk, monitor weekly."
+        },
+        {
+          "term": "Trade study",
+          "plain": "Structured comparison of options against criteria and assumptions.",
+          "example": "Compare one large machine, two smaller stations, and vendor cart across wait time, cost, RAMS, and support risk."
+        },
+        {
+          "term": "Function allocation",
+          "plain": "Assigning required functions to equipment, people, information, software, suppliers, or procedures.",
+          "example": "Restock is allocated to office admin plus vendor supply reporting, not to the coffee machine alone."
+        },
+        {
+          "term": "Acceptance criterion",
+          "plain": "The condition that must be met before an item, interface, control, or result is accepted.",
+          "example": "Facilities accepts the cleaning interface only if the counter is dry and clear by 2 p.m."
+        },
+        {
+          "term": "Change authority",
+          "plain": "The person or group allowed to approve a controlled change to an interface, baseline, or operating rule.",
+          "example": "Facilities and office management approve changes to cleaning access and queue layout."
+        },
+        {
+          "term": "Sensitivity",
+          "plain": "A factor that could change the preferred option if the assumption behind it changes.",
+          "example": "Two stations win only if cleaning time stays below ten minutes per day."
+        },
+        {
+          "term": "Residual risk",
+          "plain": "Risk that remains after planned controls and evidence.",
+          "example": "A small leak risk remains after tray installation and inspection."
+        },
+        {
+          "term": "Concept of maintenance",
+          "plain": "A plain-language description of how capability will be sustained or restored, including owners, intervals, tools, spares, isolation, and return-to-service checks.",
+          "example": "Facilities isolates a leaking station, vendor support repairs it, and the service returns only after dry-counter inspection."
+        },
+        {
+          "term": "Interface control document",
+          "plain": "A controlled record of interface requirements, owners, exchanges, acceptance checks, and change rules.",
+          "example": "The coffee service ICD names facilities as provider of clean counter space and office admin as restock owner."
+        },
+        {
+          "term": "Interface requirement",
+          "plain": "A requirement that defines a necessary handoff or interaction between system elements or organizations.",
+          "example": "The support QR code shall route faults to the vendor help queue during business hours."
+        },
+        {
+          "term": "Interface control working group",
+          "plain": "The people responsible for agreeing and controlling important interface decisions.",
+          "example": "Facilities, office admin, vendor support, and finance review cleaning access and support route changes."
+        },
+        {
+          "term": "RAMS requirements",
+          "plain": "Requirements that define needed reliability, availability, maintainability, or safety behavior.",
+          "example": "The service shall restore a stockout within one business hour during the pilot."
+        },
+        {
+          "term": "Risk tolerability",
+          "plain": "The judgment of whether remaining risk is acceptable for the situation and decision.",
+          "example": "A minor stockout risk may be tolerable; an uncontrolled leak risk is not."
+        },
+        {
+          "term": "Hazard analysis",
+          "plain": "Structured thinking about causes, consequences, controls, evidence, and remaining safety risk.",
+          "example": "Analyze leak causes, slip consequence, drip-tray control, inspection evidence, and accepted residual risk."
+        },
+        {
+          "term": "RAMS acceptance",
+          "plain": "The decision that RAMS evidence and residual risk are good enough for the next lifecycle step.",
+          "example": "Facilities accepts leak control after dry-counter inspection and monitoring are in place."
+        }
+      ],
+      "practice": {
+        "title": "Allocate interfaces and RAMS controls",
+        "activityType": "allocate",
+        "why": "Allocation shows who or what performs each function. Interface and RAMS controls reveal failure paths that a simple product comparison would miss.",
+        "prompt": "Build one interface register row and one RAMS mini-log row for the preferred service architecture.",
+        "steps": [
+          "Pick one function and allocate it to equipment, person, information, or supplier support.",
+          "Write an interface row with provider, consumer, exchange, owner, acceptance check, evidence, and escalation path.",
+          "Write a RAMS row with hazard or service failure, cause, consequence, control, verification evidence, owner, acceptance decision, and residual risk.",
+          "Explain how one RAMS or interface assumption could change the preferred option."
+        ],
+        "checklist": [
+          "Function allocation is visible.",
+          "Interface row has owner and acceptance evidence.",
+          "RAMS row includes control, evidence, owner, acceptance decision, and residual risk.",
+          "Trade rationale names at least one sensitivity."
+        ],
+        "artifact": "Architecture, interface, and RAMS board"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Architecture Design Definition",
+          "url": "https://sebokwiki.org/wiki/System_Architecture_Design_Definition",
+          "note": "Public explanation of architecture and design work."
+        },
+        {
+          "label": "SEBoK: System Analysis",
+          "url": "https://sebokwiki.org/wiki/System_Analysis",
+          "note": "Public background on analysis supporting decisions."
+        }
+      ]
+    },
+    {
+      "id": "implement",
+      "order": 4,
+      "cluster": "Implement",
+      "title": "Implement Controlled Elements",
+      "plainQuestion": "Did we build or procure the pieces correctly?",
+      "lifecycleFocus": "Implementation and configuration control",
+      "diagram": "implementation",
+      "processes": ["Implementation"],
+      "supportingPractices": ["Configuration Management", "Quality Assurance", "Risk Management"],
+      "learningGoal": "Confirm that delivered elements match the approved design, implementation baseline, configuration, support assumptions, enabling-system readiness, and element-level acceptance checks before integration starts.",
+      "story": "The boxes arrive. Machines, labels, support QR code, cleaning kit, and restock forms must match the selected baseline before anyone calls the service integrated. Supplier items, waivers, and enabling-system readiness are checked before they create integration noise.",
+      "concept": "Implementation realizes system elements. Element readiness checks protect integration by finding wrong versions, missing support items, incomplete instructions, supplier deviations, or weak configuration status accounting early.",
+      "keyActivities": [
+        "Identify controlled elements and configuration versions.",
+        "Inspect delivered items against the design package and interface assumptions.",
+        "Record nonconformances, deviations, waivers, and owner actions.",
+        "Check enabling-system readiness for cleaning, support ticketing, spares, and supplier response.",
+        "Confirm each element is ready for integration, not just physically present."
+      ],
+      "keyConsiderations": [
+        "Installed equipment is not yet integrated service.",
+        "Configuration control applies to labels, forms, support scripts, settings, and supplier commitments.",
+        "Supplier substitutions can affect requirements, interfaces, RAMS, training, proof, and retirement.",
+        "Element checks should be completed before public pilot pressure."
+      ],
+      "artifacts": ["Implementation baseline", "Configuration item list", "Element acceptance checklist", "Nonconformance log", "Deviation and waiver log", "Configuration status accounting", "Integration entry criteria"],
+      "terms": [
+        {
+          "term": "Implementation",
+          "plain": "Creating or obtaining the system elements that will later be integrated.",
+          "example": "Machine installed, labels printed, restock form created, and cleaning kit placed."
+        },
+        {
+          "term": "Configuration item",
+          "plain": "An element or information item whose approved version must be controlled.",
+          "example": "Support QR code, cleaning checklist, machine settings, supplier contact, and restock form."
+        },
+        {
+          "term": "Nonconformance",
+          "plain": "A delivered item or result that does not match the approved baseline or acceptance criteria.",
+          "example": "Quick-start label routes users to the old support email."
+        },
+        {
+          "term": "Baseline",
+          "plain": "The approved version of a design, item, document, setting, or support arrangement used for comparison and control.",
+          "example": "Approved machine settings, QR support route, restock form, and cleaning checklist."
+        },
+        {
+          "term": "Disposition",
+          "plain": "The decision about what to do with a mismatch or defect.",
+          "example": "Fix before integration, accept with condition, or raise a change request."
+        },
+        {
+          "term": "Entry criteria",
+          "plain": "Conditions that must be satisfied before an item or activity can move into the next lifecycle step.",
+          "example": "The QR support route must pass before the service enters dry-run integration."
+        },
+        {
+          "term": "Supplier substitution",
+          "plain": "A supplier-provided change to an agreed item, material, part, service, or support route.",
+          "example": "Vendor ships a different filter model that changes cleaning time and spare stock."
+        },
+        {
+          "term": "Implementation baseline",
+          "plain": "The approved set of items, documents, settings, and support arrangements used to judge delivered elements.",
+          "example": "Machine model, QR route, cleaning checklist, restock form, and support contact version."
+        },
+        {
+          "term": "Deviation",
+          "plain": "A known departure from the approved baseline that needs evaluation and disposition.",
+          "example": "The delivered tray is a different size than the approved layout assumed."
+        },
+        {
+          "term": "Waiver",
+          "plain": "Formal acceptance of a nonconformance or deviation under stated conditions.",
+          "example": "Accept temporary paper instructions only until permanent labels arrive Friday."
+        },
+        {
+          "term": "COTS item",
+          "plain": "A commercial off-the-shelf item used as part of the solution.",
+          "example": "A purchased espresso machine or stock bin."
+        },
+        {
+          "term": "Build-to package",
+          "plain": "The approved instructions and information used to build, configure, procure, or prepare an element.",
+          "example": "Layout sketch, machine settings, label file, support QR route, and cleaning kit list."
+        },
+        {
+          "term": "Configuration status accounting",
+          "plain": "Tracking the current approved version, status, and change history of controlled items.",
+          "example": "Support QR version 2 is approved; old email label version 1 is blocked."
+        },
+        {
+          "term": "Enabling-system readiness",
+          "plain": "Evidence that support systems needed for integration, operation, maintenance, or retirement are ready.",
+          "example": "Cleaning service, support queue, spare filters, and waste pickup are available before the pilot."
+        }
+      ],
+      "practice": {
+        "title": "Inspect the implementation baseline",
+        "activityType": "inspect",
+        "why": "Inspection keeps integration from becoming rework. It catches wrong versions and supplier assumptions before they spread into test and operation.",
+        "prompt": "Inspect the delivered elements before the dry run.",
+        "steps": [
+          "List four configuration items that must match the baseline.",
+          "Pick one delivered mismatch and classify it as defect, change request, or acceptable deviation.",
+          "Name the owner and fix or acceptance path.",
+          "State whether the element can enter integration."
+        ],
+        "checklist": [
+          "Configuration items include information and support assets.",
+          "Mismatch has owner and disposition.",
+          "Entry-to-integration decision is explicit.",
+          "Impact on interfaces or RAMS is considered."
+        ],
+        "artifact": "Implementation readiness record"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Implementation",
+          "url": "https://sebokwiki.org/wiki/System_Implementation",
+          "note": "Public background on implementation."
+        }
+      ]
+    },
+    {
+      "id": "integrate",
+      "order": 5,
+      "cluster": "Integrate",
+      "title": "Integrate the Service",
+      "plainQuestion": "Do the pieces work together through their interfaces?",
+      "lifecycleFocus": "Integration, defect handling, and rollback",
+      "diagram": "integration",
+      "processes": ["Integration"],
+      "supportingPractices": ["Risk Management", "Configuration Management", "Quality Assurance"],
+      "learningGoal": "Activate interfaces in a deliberate sequence, log defects, retest fixes, and protect rollback before the service is exposed to full use.",
+      "story": "The machines work in isolation. The dry run fails when the support QR code routes issues to the wrong owner and the queue tape blocks the cleaning path.",
+      "concept": "Integration combines system elements through interfaces and checks whether the resulting service works as a whole. Defect handling and regression checks are part of integration, not cleanup.",
+      "keyActivities": [
+        "Choose an integration plan and sequence that starts with controllable interfaces.",
+        "Set entry/exit criteria for each dry-run step and integration readiness review.",
+        "Activate physical, information, human, supplier, and procedural handoffs.",
+        "Log defects with owner, severity, fix, retest, regression suite, and interface verification impact.",
+        "Maintain rollback or safe-state options until critical interfaces are proven."
+      ],
+      "keyConsiderations": [
+        "A component can pass alone and still fail at an interface.",
+        "Interface defects need retest evidence, not just verbal closure.",
+        "Integration sequence should reduce uncertainty before public launch.",
+        "Rollback planning prevents a pilot problem from becoming an operational failure."
+      ],
+      "artifacts": ["Integration plan", "Integration sequence", "Entry/exit criteria", "Integration readiness review", "Interface activation evidence", "Defect and retest log", "Rollback plan"],
+      "terms": [
+        {
+          "term": "Integration",
+          "plain": "Combining elements and checking their interfaces.",
+          "example": "Run the machine, queue flow, restock process, cleaning routine, and support ticket path together."
+        },
+        {
+          "term": "Regression",
+          "plain": "A fix or change creates a new problem in something that previously worked.",
+          "example": "Moving queue tape fixes wait flow but blocks the cleaning cart."
+        },
+        {
+          "term": "Rollback",
+          "plain": "A controlled path back to a known acceptable state.",
+          "example": "Keep the old machine available until the support interface and cleaning path pass retest."
+        },
+        {
+          "term": "Interface activation",
+          "plain": "The moment a planned handoff is connected and tested in the real sequence.",
+          "example": "The support QR code is scanned and confirmed to reach the named vendor queue."
+        },
+        {
+          "term": "Defect",
+          "plain": "A discovered problem that can affect requirements, interfaces, RAMS, operation, or evidence confidence.",
+          "example": "Queue tape blocks the cleaning route."
+        },
+        {
+          "term": "Retest",
+          "plain": "A focused check that confirms a defect fix worked.",
+          "example": "Scan the corrected support QR code and confirm the new ticket owner receives it."
+        },
+        {
+          "term": "Regression check",
+          "plain": "A check that confirms a fix did not break another behavior or interface.",
+          "example": "After moving queue tape, verify cleaning access still works."
+        },
+        {
+          "term": "Safe state",
+          "plain": "A known condition that protects people, assets, service value, or evidence when something goes wrong.",
+          "example": "Station B is isolated and the old machine remains available during leak investigation."
+        },
+        {
+          "term": "Integration plan",
+          "plain": "The ordered strategy for combining elements, activating interfaces, checking evidence, and managing rollback.",
+          "example": "Power and support route first, then queue flow, cleaning access, restock, and waste handoff."
+        },
+        {
+          "term": "Exit criteria",
+          "plain": "Conditions that must be satisfied before leaving an integration step.",
+          "example": "Support ticket route passes, defect log has no open severity-one items, and rollback remains available."
+        },
+        {
+          "term": "Integration readiness review",
+          "plain": "A check that required items, people, interfaces, environment, and evidence are ready before integration begins.",
+          "example": "Confirm machine setup, support owner, cleaning access, spare filters, and old-machine rollback."
+        },
+        {
+          "term": "Interface verification",
+          "plain": "Evidence that an interface satisfies its requirement and works in the intended sequence.",
+          "example": "Facilities confirms cleaning access after queue tape is installed."
+        },
+        {
+          "term": "Compatibility",
+          "plain": "The ability of elements or organizations to work together without conflict.",
+          "example": "The queue layout is compatible with cleaning cart access."
+        },
+        {
+          "term": "Regression suite",
+          "plain": "A small set of checks repeated after fixes to catch unintended breakage.",
+          "example": "After QR repair, recheck support routing, user instructions, and escalation owner."
+        }
+      ],
+      "practice": {
+        "title": "Sequence interface activation",
+        "activityType": "sequence",
+        "why": "Sequencing controls learning. It lets the team expose one handoff at a time, fix defects, and avoid a messy launch.",
+        "prompt": "Build a dry-run sequence that proves service interfaces before full launch.",
+        "steps": [
+          "Start with machine, power, and support-ticket checks.",
+          "Add queue, cleaning, restock, and waste handoffs.",
+          "Log one defect with owner, fix, retest, and regression concern.",
+          "Define the rollback condition that keeps the old service available."
+        ],
+        "checklist": [
+          "Sequence starts with controllable checks.",
+          "At least one cross-organization interface is tested.",
+          "Defect has owner, fix, retest, and regression note.",
+          "Rollback condition is stated."
+        ],
+        "artifact": "Integration and retest plan"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Integration",
+          "url": "https://sebokwiki.org/wiki/System_Integration",
+          "note": "Public background on integration."
+        }
+      ]
+    },
+    {
+      "id": "prove",
+      "order": 6,
+      "cluster": "Prove",
+      "title": "Prove Claims and Transition",
+      "plainQuestion": "What evidence proves readiness, fit, and safe move into use?",
+      "lifecycleFocus": "Verification, transition, validation, and assurance evidence",
+      "diagram": "proof",
+      "processes": ["Verification", "Transition", "Validation"],
+      "supportingPractices": ["Quality Assurance", "Information Management", "Measurement"],
+      "learningGoal": "Separate requirement proof, operational validation, transition readiness, VCRM trace, RAMS demonstration, and assurance evidence quality before recommending launch.",
+      "story": "The dry run proves dispense speed, but launch still depends on queue behavior in a representative environment, backup cleaning coverage, support response, and whether users can actually get coffee before meetings.",
+      "concept": "Verification checks requirements. Validation checks fit for intended use. Transition checks readiness to move into use. Assurance connects claims to evidence with clear source, method, configuration, result, independence, and disposition. A VCRM keeps the requirement, method, result, and decision status visible.",
+      "keyActivities": [
+        "Create a VCRM from requirements, acceptance criteria, methods, results, and status.",
+        "Sort evidence into verification, operational validation, transition plan, interface, and RAMS claims.",
+        "Run an operational readiness review for people, support, environment, training, rollback, and concept of maintenance readiness.",
+        "Check evidence quality: source, date, configuration, method, result, independence, pass/fail criterion, and defect disposition.",
+        "Name launch conditions instead of hiding missing evidence."
+      ],
+      "keyConsiderations": [
+        "Verification and validation answer different questions.",
+        "Transition evidence protects people, support, training, rollback, concept of maintenance, and operating environment.",
+        "Operational validation needs a representative environment; a bench demonstration alone is not enough.",
+        "A small assurance case can explain why a decision-maker should trust the evidence.",
+        "Weak evidence can be more dangerous than no evidence because it creates false confidence.",
+        "A launch recommendation should explain claim, evidence, gap, owner, and decision impact."
+      ],
+      "artifacts": ["VCRM", "Validation scenario results", "Operational readiness review", "Transition plan", "RAMS demonstration", "Assurance case slice"],
+      "terms": [
+        {
+          "term": "Verification",
+          "plain": "Evidence that the system meets specified requirements.",
+          "example": "Timed pilot confirms average peak wait is at or below 3 minutes."
+        },
+        {
+          "term": "Validation",
+          "plain": "Evidence that the system fits intended use and stakeholder need.",
+          "example": "Employees can get coffee before meetings without disrupting work."
+        },
+        {
+          "term": "Assurance evidence",
+          "plain": "Evidence used to justify a claim, with enough context to trust it.",
+          "example": "Five-day pilot result tied to the approved service configuration and recorded defect disposition."
+        },
+        {
+          "term": "Claim",
+          "plain": "A statement the team wants a decision-maker to believe based on evidence.",
+          "example": "The service is ready for launch with cleaning coverage condition."
+        },
+        {
+          "term": "Evidence quality",
+          "plain": "The trustworthiness of evidence based on source, method, configuration, date, criterion, result, independence, and disposition.",
+          "example": "Timed pilot data is stronger when tied to the approved two-station setup and named observer."
+        },
+        {
+          "term": "Transition readiness",
+          "plain": "Evidence that people, environment, support, training, rollback, and operating arrangements are ready for use.",
+          "example": "Facilities, vendor support, user instructions, and rollback path are confirmed before launch."
+        },
+        {
+          "term": "Independence",
+          "plain": "Separation between the person creating evidence and the person relying on it, where needed for confidence.",
+          "example": "Facilities confirms cleaning access rather than relying only on the supplier's statement."
+        },
+        {
+          "term": "Decision confidence",
+          "plain": "How much trust a decision-maker can place in the evidence and remaining uncertainty.",
+          "example": "Launch is conditional because validation is strong but backup cleaning coverage is still weak."
+        },
+        {
+          "term": "VCRM",
+          "plain": "Verification cross-reference matrix linking requirements to methods, evidence, results, and status.",
+          "example": "Peak wait requirement -> timed pilot -> five-day result -> pass."
+        },
+        {
+          "term": "Operational validation",
+          "plain": "Evidence that the system works for intended users in realistic operating conditions.",
+          "example": "Employees use the service before standup without blocking cleaning access."
+        },
+        {
+          "term": "Representative environment",
+          "plain": "A test or pilot setting close enough to real use to support the claim being made.",
+          "example": "Morning rush in the real kitchen, not an empty afternoon bench test."
+        },
+        {
+          "term": "Operational readiness review",
+          "plain": "A decision check that people, support, procedures, environment, rollback, and operating evidence are ready.",
+          "example": "Confirm training, cleaner backup, support queue, old-machine rollback, and launch conditions."
+        },
+        {
+          "term": "Transition plan",
+          "plain": "The plan for moving from the old arrangement into operational use of the new one.",
+          "example": "Pilot window, communication, training note, rollback owner, and launch condition tracker."
+        },
+        {
+          "term": "Assurance case",
+          "plain": "A structured argument that connects claims, evidence, assumptions, and remaining gaps.",
+          "example": "Claim: ready for permanent rollout; evidence: VCRM, validation, transition checks; gap: backup cleaner coverage."
+        },
+        {
+          "term": "RAMS demonstration",
+          "plain": "Evidence that RAMS-related behavior or controls work under stated conditions.",
+          "example": "Leak control inspection, stockout recovery timing, and support response record."
+        }
+      ],
+      "practice": {
+        "title": "Sort readiness evidence by claim type",
+        "activityType": "audit",
+        "why": "Sorting evidence by claim type keeps the team from confusing test activity with decision confidence. It exposes missing context before gate decisions.",
+        "prompt": "Sort the readiness evidence into verification, validation, transition, and assurance lanes, then decide whether it is strong enough.",
+        "steps": [
+          "Put requirement proof in the verification lane.",
+          "Put stakeholder fit evidence in the validation lane.",
+          "Put people, support, environment, and rollback evidence in the transition lane.",
+          "Mark assurance quality: source, method, configuration, result, criterion, defect disposition, and decision impact."
+        ],
+        "checklist": [
+          "Claim and evidence are linked.",
+          "Evidence includes method, source, configuration, and result.",
+          "Defect or gap disposition is visible.",
+          "Decision impact is clear."
+        ],
+        "artifact": "Proof and readiness dossier"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Verification",
+          "url": "https://sebokwiki.org/wiki/System_Verification",
+          "note": "Public background on verification."
+        },
+        {
+          "label": "SEBoK: System Validation",
+          "url": "https://sebokwiki.org/wiki/System_Validation",
+          "note": "Public background on validation."
+        }
+      ]
+    },
+    {
+      "id": "operate",
+      "order": 7,
+      "cluster": "Operate",
+      "title": "Operate and Maintain the Service",
+      "plainQuestion": "What happens after launch?",
+      "lifecycleFocus": "Operation, maintenance, RAMS signals, and controlled change",
+      "diagram": "operate",
+      "processes": ["Operation", "Maintenance"],
+      "supportingPractices": ["Measurement", "Risk Management", "Configuration Management"],
+      "learningGoal": "Use operating and RAMS signals, FRACAS learning, supportability evidence, and the concept of maintenance to sustain value, handle faults, maintain capability, and decide when controlled change is needed.",
+      "story": "Two weeks after launch, wait time is good, but stockouts rise, cleaning takes longer than expected, and one small leak appears below station B. The concept of maintenance now becomes the operating playbook: preventive tasks, corrective actions, spares, MTTR, and return-to-service checks.",
+      "concept": "Operation delivers value in the real environment. Maintenance sustains or restores capability. RAMS signals, FRACAS learning, supportability, and controlled change keep small fixes from breaking requirements, interfaces, safety, or evidence.",
+      "keyActivities": [
+        "Collect operating measures, incidents, hazards, and support records.",
+        "Track reliability, availability target, maintainability, safety, MTBF, MTTR, and FRACAS signals.",
+        "Plan preventive maintenance and corrective maintenance with owner, interval, access, tools, spares, safe isolation, and return-to-service checks.",
+        "Check supportability: people, supplier response, spares, procedures, data, and access.",
+        "Run change impact checks across needs, requirements, interfaces, RAMS, proof, training, support, and retirement.",
+        "Define degraded operation, safe isolation, and return-to-service checks before faults occur."
+      ],
+      "keyConsiderations": [
+        "Measurement without threshold, owner, and recheck does not improve the system.",
+        "Maintenance can reveal weak requirements, design assumptions, interface assumptions, or operating procedures.",
+        "Controlled change preserves traceability to the original need and evidence.",
+        "Degraded operation should be defined before the service fails in front of users.",
+        "If operating evidence changes a need, requirement, interface, or hazard control, update the earlier artifact and keep the trace."
+      ],
+      "artifacts": ["Operating log", "RAMS signal board", "FRACAS log", "Maintenance strategy", "Maintenance task analysis", "Spares and supportability record", "Change impact record"],
+      "terms": [
+        {
+          "term": "Operation",
+          "plain": "Using the system in its intended environment to deliver value.",
+          "example": "Employees use the coffee service during peak morning demand."
+        },
+        {
+          "term": "Maintainability",
+          "plain": "How easily and quickly capability can be restored or sustained.",
+          "example": "Leak cleanup, filter change, restock, and return-to-service checks can be done without blocking the kitchen."
+        },
+        {
+          "term": "Controlled change",
+          "plain": "A change made with impact awareness, approval, and follow-up evidence.",
+          "example": "Changing stock bins after checking cost, space, cleaning, safety, and validation impact."
+        },
+        {
+          "term": "Concept of maintenance",
+          "plain": "A plain-language description of how capability will be sustained or restored, including owners, intervals, tools, spares, isolation, and return-to-service checks.",
+          "example": "Facilities isolates a leaking station, vendor support repairs it, and the service returns only after dry-counter inspection."
+        },
+        {
+          "term": "Operating signal",
+          "plain": "Live evidence from use that indicates service health, risk, value, or needed action.",
+          "example": "Stockouts per week, cleaning misses, wait time, support tickets, and leak reports."
+        },
+        {
+          "term": "Threshold",
+          "plain": "A limit or trigger that tells the team when an operating signal requires action.",
+          "example": "More than two stockouts in a week triggers restock process review."
+        },
+        {
+          "term": "Maintenance task",
+          "plain": "A planned or corrective action that sustains or restores capability.",
+          "example": "Replace filter, inspect drip tray, restock beans, or repair leaking fitting."
+        },
+        {
+          "term": "Degraded operation",
+          "plain": "A reduced but controlled way to keep service available when the preferred configuration is not fully working.",
+          "example": "Use only station A while station B is isolated for leak repair."
+        },
+        {
+          "term": "Return-to-service",
+          "plain": "The check and approval needed before a repaired or isolated element is used again.",
+          "example": "Dry-counter inspection and successful brew cycle before station B reopens."
+        },
+        {
+          "term": "Safe isolation",
+          "plain": "Putting part of the system into a condition where it cannot create harm or uncontrolled failure.",
+          "example": "Unplug and mark station B out of service until leak repair is complete."
+        },
+        {
+          "term": "Maintenance strategy",
+          "plain": "The planned approach for sustaining or restoring capability over time.",
+          "example": "Weekly filter checks, stockout response, leak isolation, vendor repair, and return-to-service inspection."
+        },
+        {
+          "term": "Preventive maintenance",
+          "plain": "Planned maintenance intended to reduce the chance of failure or degradation.",
+          "example": "Replace filters and inspect drip trays every Friday."
+        },
+        {
+          "term": "Corrective maintenance",
+          "plain": "Maintenance performed after a fault or degradation is found.",
+          "example": "Repair station B after a leak report."
+        },
+        {
+          "term": "MTBF",
+          "plain": "Mean time between failures, used as a reliability signal.",
+          "example": "Average days between machine faults during the pilot."
+        },
+        {
+          "term": "MTTR",
+          "plain": "Mean time to repair, used as a maintainability signal.",
+          "example": "Average time from leak report to service restoration."
+        },
+        {
+          "term": "Availability target",
+          "plain": "The expected level of service availability over a defined period.",
+          "example": "Coffee service available during 95 percent of peak morning periods."
+        },
+        {
+          "term": "Spares",
+          "plain": "Replacement parts, materials, or supplies needed to sustain service.",
+          "example": "Filters, cleaning tablets, drip trays, and spare labels."
+        },
+        {
+          "term": "Supportability",
+          "plain": "How well the system can be supported with people, tools, spares, procedures, suppliers, and information.",
+          "example": "Vendor support and spare filters are reachable before peak hours."
+        },
+        {
+          "term": "FRACAS",
+          "plain": "Failure reporting, analysis, and corrective action system for learning from faults and closing actions.",
+          "example": "Leak report -> cause analysis -> corrective action -> retest -> recurrence monitoring."
+        }
+      ],
+      "practice": {
+        "title": "Triage operating signals",
+        "activityType": "triage",
+        "why": "Triage turns live signals into disciplined action. It teaches that operation is part of engineering, not a handoff into silence.",
+        "prompt": "Turn operating signals into maintenance, RAMS, and change actions.",
+        "steps": [
+          "Select one signal that crosses a threshold.",
+          "Classify it as reliability, availability, maintainability, safety, support, or user-fit issue.",
+          "Assign owner, action, degraded-operation state, safe isolation or return-to-service check, and recheck date.",
+          "State whether a controlled change is required and what artifacts it affects."
+        ],
+        "checklist": [
+          "Signal threshold is visible.",
+          "RAMS or support category is named.",
+          "Owner, action, safe check, and recheck are stated.",
+          "Change impact covers interfaces and proof."
+        ],
+        "artifact": "Operations and maintenance response"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Operation",
+          "url": "https://sebokwiki.org/wiki/System_Operation",
+          "note": "Public background on operation."
+        },
+        {
+          "label": "SEBoK: System Maintenance",
+          "url": "https://sebokwiki.org/wiki/System_Maintenance",
+          "note": "Public background on maintenance."
+        }
+      ]
+    },
+    {
+      "id": "retire",
+      "order": 8,
+      "cluster": "Retire",
+      "title": "Retire the Old Service and Recommend the Decision",
+      "plainQuestion": "What final decision is justified by evidence and closure?",
+      "lifecycleFocus": "Disposal, decommissioning, residual risk, and gate decision",
+      "diagram": "retirement",
+      "processes": ["Disposal"],
+      "supportingPractices": ["Decision Management", "Risk Management", "Information Management"],
+      "learningGoal": "Plan controlled retirement of replaced elements, assemble lifecycle evidence, archive records, and make a pass, conditional pass, or hold recommendation with residual risk acceptance.",
+      "story": "Leadership asks whether to make the new service permanent. The answer must cover evidence, open conditions, residual risks, controlled exit from the old service, data retention or destruction, environmental disposal, and post-removal verification.",
+      "concept": "Disposal is controlled retirement, removal, reuse, closure, or disposal of system elements. It can happen before, during, or after transition depending on lifecycle strategy. A gate decision uses the full evidence thread, including decommissioning, asset disposition, records archive, and residual risk acceptance.",
+      "keyActivities": [
+        "Trace evidence from need through requirement, architecture, interface, RAMS, implementation, integration, proof, operation, and retirement.",
+        "Set retirement criteria for old equipment, supplier orders, records, data, support channels, expired supplies, and waste.",
+        "Plan asset disposition, data retention or destruction, environmental disposal, and records archive.",
+        "Check post-removal verification and rollback or parallel-run exit criteria.",
+        "Recommend pass, conditional pass, or hold with evidence, conditions, owners, dates, and residual risk acceptance.",
+        "Record lessons learned and feed-forward actions for the next lifecycle."
+      ],
+      "keyConsiderations": [
+        "Conditional pass needs owned conditions, not vague optimism.",
+        "Hold is appropriate when missing evidence changes decision confidence.",
+        "Retirement includes physical, data, contract, safety, environmental, support, and asset-record closure.",
+        "Lessons learned should feed the next lifecycle, not disappear after the gate."
+      ],
+      "artifacts": ["Retirement and decommissioning plan", "Retirement criteria", "Asset disposition record", "Data retention/destruction record", "Environmental disposal record", "Post-removal verification", "Lifecycle evidence pack", "Residual risk acceptance", "Records archive", "Lessons learned feed-forward", "Gate recommendation"],
+      "terms": [
+        {
+          "term": "Disposal",
+          "plain": "Controlled retirement, removal, reuse, closure, or disposal of system elements.",
+          "example": "Remove old machine, close old supplier order, recycle parts, and dispose expired supplies."
+        },
+        {
+          "term": "Residual risk",
+          "plain": "Risk that remains after planned controls and evidence.",
+          "example": "Vendor response time may still be uncertain during holiday staffing."
+        },
+        {
+          "term": "Gate decision",
+          "plain": "A decision point where evidence justifies moving forward, adding conditions, or stopping.",
+          "example": "Conditional pass if validation is good but backup cleaner coverage must be confirmed before permanent rollout."
+        },
+        {
+          "term": "Decommissioning",
+          "plain": "The controlled removal, closure, or transition out of service for old elements and support paths.",
+          "example": "Remove the old machine, close supplier orders, update asset records, and verify the old support QR path is disabled."
+        },
+        {
+          "term": "Parallel-run",
+          "plain": "A temporary period where old and new arrangements remain available while evidence is gathered.",
+          "example": "Keep the old machine available until the new stations pass support and cleaning checks."
+        },
+        {
+          "term": "Lessons learned",
+          "plain": "Reusable learning from the lifecycle that should change future decisions or practices.",
+          "example": "Cleaning access must be checked before choosing queue layout."
+        },
+        {
+          "term": "Feed-forward action",
+          "plain": "A lesson or condition carried into the next lifecycle, project, or operating baseline.",
+          "example": "Add cleaning-route inspection to the next office service rollout checklist."
+        },
+        {
+          "term": "Conditional pass",
+          "plain": "A decision to proceed only if named conditions, owners, dates, and monitoring are accepted.",
+          "example": "Proceed if backup cleaner coverage is confirmed by Friday and stockout monitoring continues for two weeks."
+        },
+        {
+          "term": "Hold",
+          "plain": "A decision to stop or delay because missing evidence or unresolved risk changes confidence.",
+          "example": "Hold permanent rollout until the leak control evidence is accepted."
+        },
+        {
+          "term": "Retirement criteria",
+          "plain": "Conditions that must be satisfied before an old element or support path is retired.",
+          "example": "New service passes support and cleaning checks before the old machine is removed."
+        },
+        {
+          "term": "Asset disposition",
+          "plain": "The decision and evidence for reuse, return, recycle, disposal, or record update of an asset.",
+          "example": "Old machine returned to supplier and asset register closed."
+        },
+        {
+          "term": "Data retention",
+          "plain": "Rules for what records are kept, where, for how long, and why.",
+          "example": "Pilot support records retained with the final evidence pack."
+        },
+        {
+          "term": "Data destruction",
+          "plain": "Controlled deletion or removal of data that should not be retained.",
+          "example": "Old QR support logs deleted after approved retention period."
+        },
+        {
+          "term": "Environmental disposal",
+          "plain": "Disposal that accounts for waste, recycling, hazardous material, and environmental responsibilities.",
+          "example": "Recycle old parts and dispose expired cleaning supplies through approved waste handling."
+        },
+        {
+          "term": "Post-removal verification",
+          "plain": "Evidence that the old element or path is actually closed and the new arrangement still works.",
+          "example": "Old support QR no longer routes tickets and the new support route still passes."
+        },
+        {
+          "term": "Residual risk acceptance",
+          "plain": "Named acceptance of remaining risk after controls, evidence, and conditions are considered.",
+          "example": "Facilities accepts monitored holiday response-time risk until the next supplier review."
+        },
+        {
+          "term": "Records archive",
+          "plain": "The controlled location where lifecycle evidence and decision records are kept for future use.",
+          "example": "Final evidence pack, gate decision, retired asset record, and lessons learned stored together."
+        }
+      ],
+      "practice": {
+        "title": "Recommend the lifecycle decision",
+        "activityType": "recommend",
+        "why": "Recommendation forces synthesis. Practitioners must cite evidence, conditions, residual risk, and retirement closure instead of repeating process names.",
+        "prompt": "Use the evidence pack to recommend pass, conditional pass, or hold.",
+        "steps": [
+          "Cite one need, one requirement, one architecture/interface decision, one RAMS control, and one proof result.",
+          "List missing evidence or launch conditions with owner and due date.",
+          "Add old-service retirement actions for asset, supplier, data/support record, waste, and post-removal check.",
+          "Make a pass, conditional pass, or hold recommendation with residual risk."
+        ],
+        "checklist": [
+          "Recommendation cites lifecycle evidence.",
+          "Conditions have owners and due dates.",
+          "Retirement and decommissioning are mandatory, not cleanup.",
+          "Residual risks and next monitoring step are explicit."
+        ],
+        "artifact": "Final evidence pack and gate recommendation"
+      },
+      "references": [
+        {
+          "label": "SEBoK: System Disposal and Retirement",
+          "url": "https://sebokwiki.org/wiki/System_Disposal_and_Retirement",
+          "note": "Public background on disposal and retirement."
+        }
+      ]
+    }
+  ]
+}

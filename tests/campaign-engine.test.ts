@@ -35,6 +35,7 @@ test('metric deltas clamp inside 0..100', () => {
 
 test('completing a strong first chapter unlocks chapter two and stores result', () => {
   const manager = GameManager.getInstance();
+  assert.equal(manager.selectEpisode('ep2-rail-quest'), true);
   manager.resetCampaign();
 
   const mission = manager.startChapter('chapter-1');
@@ -50,13 +51,23 @@ test('completing a strong first chapter unlocks chapter two and stores result', 
   assert.ok(['Excellent', 'Stable'].includes(result?.rating ?? ''));
 
   const state = manager.getState();
+  assert.equal(state.episodeId, 'ep2-rail-quest');
   assert.ok(state.unlockedChapterIds.includes('chapter-2'));
   assert.ok(state.completedChapterIds.includes('chapter-1'));
   assert.ok(state.chapterResults['chapter-1']);
 });
 
-test('level manager exposes five ordered chapters', () => {
-  const chapters = LevelManager.getInstance().getChapters();
-  assert.equal(chapters.length, 5);
-  assert.deepEqual(chapters.map((chapter) => chapter.order), [1, 2, 3, 4, 5]);
+test('level manager exposes ordered chapters for campaign episodes', () => {
+  const levelManager = LevelManager.getInstance();
+  assert.deepEqual(
+    levelManager.getEpisodes().map((episode) => episode.id),
+    ['ep1-coffee-lab', 'ep2-rail-quest'],
+  );
+
+  assert.equal(levelManager.selectEpisode('ep1-coffee-lab'), false);
+
+  assert.equal(levelManager.selectEpisode('ep2-rail-quest'), true);
+  const ep2Chapters = levelManager.getChapters();
+  assert.equal(ep2Chapters.length, 7);
+  assert.deepEqual(ep2Chapters.map((chapter) => chapter.order), [1, 2, 3, 4, 5, 6, 7]);
 });

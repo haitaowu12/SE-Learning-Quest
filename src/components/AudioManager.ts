@@ -14,7 +14,16 @@ export class AudioManager {
     this.settings = settings;
   }
 
+  private canStartAudio(): boolean {
+    const activation = typeof navigator !== 'undefined'
+      ? (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
+      : undefined;
+    return activation ? activation.hasBeenActive : true;
+  }
+
   private getContext(): AudioContext | null {
+    if (!this.canStartAudio()) return null;
+
     if (!this.audioContext) {
       try {
         this.audioContext = new AudioContext();
@@ -23,7 +32,7 @@ export class AudioManager {
       }
     }
     if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume();
+      void this.audioContext.resume().catch(() => undefined);
     }
     return this.audioContext;
   }

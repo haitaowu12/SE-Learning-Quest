@@ -30,10 +30,12 @@ export class GameManager {
   private static instance: GameManager | null = null;
   private readonly levelManager = LevelManager.getInstance();
   private state: CampaignState;
+  private episodeId: string;
 
   private constructor() {
-    const loadResult = SaveManager.load();
-    this.state = loadResult.state ?? SaveManager.createDefaultState(generatePlayerId(), loadResult.resetNotice);
+    this.episodeId = this.levelManager.getSelectedEpisodeId();
+    const loadResult = SaveManager.load(this.episodeId);
+    this.state = loadResult.state ?? SaveManager.createDefaultState(generatePlayerId(), this.episodeId, loadResult.resetNotice);
     if (!loadResult.state) {
       this.save();
     }
@@ -48,6 +50,21 @@ export class GameManager {
 
   getState(): CampaignState {
     return this.state;
+  }
+
+  getSelectedEpisodeId(): string {
+    return this.episodeId;
+  }
+
+  selectEpisode(episodeId: string): boolean {
+    if (!this.levelManager.selectEpisode(episodeId)) return false;
+    this.episodeId = episodeId;
+    const loadResult = SaveManager.load(episodeId);
+    this.state = loadResult.state ?? SaveManager.createDefaultState(generatePlayerId(), episodeId, loadResult.resetNotice);
+    if (!loadResult.state) {
+      this.save();
+    }
+    return true;
   }
 
   getSettings() {
@@ -310,8 +327,8 @@ export class GameManager {
   }
 
   resetCampaign(): void {
-    SaveManager.reset();
-    this.state = SaveManager.createDefaultState(generatePlayerId());
+    SaveManager.reset(this.episodeId);
+    this.state = SaveManager.createDefaultState(generatePlayerId(), this.episodeId);
     this.save();
   }
 
