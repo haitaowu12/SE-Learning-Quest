@@ -361,6 +361,8 @@ export class OperationsMapScene extends Phaser.Scene {
     const state = this.gameManager.getState();
     const chapters = this.gameManager.getAvailableChapters();
     const activeMission = this.gameManager.getActiveMission();
+    const baseUrl = import.meta.env.BASE_URL;
+    const mapImage = `${baseUrl}${manifest.images?.map ?? 'assets/learning-quest/rail-map.webp'}`;
 
     const chapterCards = chapters.map((entry) => {
       const chapter = entry.chapter;
@@ -368,7 +370,7 @@ export class OperationsMapScene extends Phaser.Scene {
       const buttonLabel = entry.completed ? 'Replay Chapter' : entry.active ? 'Resume Mission' : 'Open Chapter';
       const statusText = entry.completed ? resultLabel(entry.result?.rating) : !entry.unlocked ? 'Locked' : 'Unlocked';
       return `
-        <article class="chapter-card ${!entry.unlocked ? 'locked' : ''} ${entry.active ? 'active' : ''}">
+        <article class="chapter-card map-dock-card ${!entry.unlocked ? 'locked' : ''} ${entry.active ? 'active' : ''}">
           <div class="card-topline">
             <div>
               <div class="eyebrow">${chapter.pillar}</div>
@@ -394,26 +396,44 @@ export class OperationsMapScene extends Phaser.Scene {
 
     this.ui.render(`
       <div class="screen-shell map-layout">
-        <section class="map-rail panel">
-          <div class="eyebrow">Operations map</div>
-          <h1 class="section-title">${manifest.programTitle}</h1>
-          <p class="body-copy">${manifest.chapters.length} chapters. ${episode?.scenario ?? 'One learning scenario'}. Each completed chapter changes the episode state you carry into the next decision space.</p>
-          ${metricStrip}
-          ${veeDiagram}
-          ${projectHealth}
-          <div class="signal-card">
-            <h4>Program posture</h4>
-            <p class="signal-copy">${activeMission ? `Mission in progress: ${this.levelManager.getChapterById(activeMission.chapterId)?.brief.title ?? 'Unknown chapter'}.` : 'No mission active. Choose the next chapter to brief, decide, and debrief.'}</p>
+        <section class="map-rail panel rail-map-workspace">
+          <div class="map-heading-row">
+            <div>
+              <div class="eyebrow">Rail corridor evidence map</div>
+              <h1 class="section-title">${manifest.programTitle}</h1>
+              <p class="body-copy">${manifest.chapters.length} chapters. ${episode?.scenario ?? 'One learning scenario'}. Each completed chapter changes the episode state you carry into the next decision space.</p>
+            </div>
+            <div class="map-status-pill">${state.completedChapterIds.length}/${manifest.chapters.length} chapters</div>
           </div>
-          <div class="hero-actions">
-            <button class="button button-secondary js-title">Back to Title</button>
-            <button class="button button-secondary js-episodes">Choose Episode</button>
-            ${activeMission ? '<button class="button button-primary js-resume">Resume Active Mission</button>' : ''}
+          ${metricStrip}
+          <div class="rail-map-stage">
+            <picture class="rail-map-media" aria-hidden="true">
+              <source srcset="${mapImage}" type="image/webp" />
+              <img src="${baseUrl}assets/learning-quest/rail-map.png" alt="" />
+            </picture>
+            <div class="rail-map-overlay">
+              ${veeDiagram}
+            </div>
+            <div class="rail-health-dock">
+              ${projectHealth}
+            </div>
+          </div>
+          <div class="map-command-row">
+            <div class="signal-card map-posture-card">
+              <h4>Program posture</h4>
+              <p class="signal-copy">${activeMission ? `Mission in progress: ${this.levelManager.getChapterById(activeMission.chapterId)?.brief.title ?? 'Unknown chapter'}.` : 'No mission active. Choose the next chapter to brief, decide, and debrief.'}</p>
+            </div>
+            <div class="hero-actions">
+              <button class="button button-secondary js-title">Back to Title</button>
+              <button class="button button-secondary js-episodes">Choose Episode</button>
+              ${activeMission ? '<button class="button button-primary js-resume">Resume Active Mission</button>' : ''}
+            </div>
           </div>
         </section>
-        <aside class="panel mission-drawer">
-          <div class="eyebrow">Chapter queue</div>
-          <div class="chapter-list">${chapterCards}</div>
+        <aside class="panel mission-drawer chapter-dock-panel">
+          <div class="eyebrow">Map-docked chapter queue</div>
+          <p class="small-copy">Open the next lifecycle pressure point from the corridor map.</p>
+          <div class="chapter-list map-dock-list">${chapterCards}</div>
         </aside>
       </div>
     `);

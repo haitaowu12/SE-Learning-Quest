@@ -256,11 +256,19 @@ export interface CampaignChapter {
   debrief: DebriefEntry;
 }
 
+export interface CampaignImages {
+  title: string;
+  map: string;
+  missionAnchor: string;
+  debriefReadiness: string;
+}
+
 export interface CampaignManifest {
   programTitle: string;
   programSubtitle: string;
   playerRole: string;
   programSummary: string;
+  images?: Partial<CampaignImages>;
   baselineMetrics: MetricState;
   chapters: CampaignChapter[];
 }

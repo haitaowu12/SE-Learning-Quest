@@ -83,24 +83,24 @@ const lessonVisuals: Record<string, {
     chips: ['Needs', 'Requirements', 'Trace'],
   },
   architect: {
-    image: 'assets/coffee-lab/choose.webp',
-    fallback: 'assets/coffee-lab/choose.png',
+    image: 'assets/coffee-lab/architect.webp',
+    fallback: 'assets/coffee-lab/architect.png',
     title: 'Choose with criteria before locking design',
     alt: 'Coffee service options compared through decision criteria and risk markers.',
     insight: 'A trade study keeps the choice tied to wait time, maintainability, cost, risk, and user fit instead of feature preference.',
     chips: ['Trade study', 'Architecture', 'RAMS'],
   },
   implement: {
-    image: 'assets/coffee-lab/realize.webp',
-    fallback: 'assets/coffee-lab/realize.png',
+    image: 'assets/coffee-lab/implement.webp',
+    fallback: 'assets/coffee-lab/implement.png',
     title: 'Realize the configured system',
     alt: 'Exploded coffee system with utilities, supply, waste, support app, and ownership connectors.',
     insight: 'Implementation is not just buying hardware. Each delivered element needs configuration, acceptance, ownership, and defect handling.',
     chips: ['Baseline', 'Configuration', 'Nonconformance'],
   },
   integrate: {
-    image: 'assets/coffee-lab/realize.webp',
-    fallback: 'assets/coffee-lab/realize.png',
+    image: 'assets/coffee-lab/integrate.webp',
+    fallback: 'assets/coffee-lab/integrate.png',
     title: 'Interfaces carry the real integration risk',
     alt: 'Coffee service elements connected through water, power, supply, waste, support, and ownership interfaces.',
     insight: 'Integration proves handoffs. A machine can pass alone and still fail when connected to people, utilities, support, and space.',
@@ -115,16 +115,16 @@ const lessonVisuals: Record<string, {
     chips: ['Verification', 'Validation', 'Transition'],
   },
   operate: {
-    image: 'assets/coffee-lab/decide.webp',
-    fallback: 'assets/coffee-lab/decide.png',
+    image: 'assets/coffee-lab/operate.webp',
+    fallback: 'assets/coffee-lab/operate.png',
     title: 'Operations turns evidence into decisions',
     alt: 'Lifecycle evidence board with risks, measures, artifacts, and a gate decision.',
     insight: 'After launch, measures, incidents, maintenance, and user feedback update the evidence thread and trigger controlled changes.',
     chips: ['Measures', 'Maintenance', 'Change'],
   },
   retire: {
-    image: 'assets/coffee-lab/decide.webp',
-    fallback: 'assets/coffee-lab/decide.png',
+    image: 'assets/coffee-lab/retire.webp',
+    fallback: 'assets/coffee-lab/retire.png',
     title: 'Close the lifecycle deliberately',
     alt: 'Review board showing artifact evidence, risks, lifecycle map, and gate decision indicators.',
     insight: 'Disposal and final decisions still need evidence: what closes, who owns conditions, what risk remains, and what future projects should learn.',
@@ -726,6 +726,42 @@ function renderArtifactCapture(unit: CoffeeLabUnit, savedNote: string, completed
   `;
 }
 
+function renderToolkitDrawers(unit: CoffeeLabUnit, progress: CoffeeLabProgressState, savedArtifact: string): string {
+  return `
+    <details class="toolkit-drawer" open>
+      <summary>Evidence thread</summary>
+      ${renderEvidencePreview(unit, progress, savedArtifact)}
+    </details>
+    <details class="toolkit-drawer" open>
+      <summary>Action cues</summary>
+      <div class="coach-block">
+        <strong>Key moves</strong>
+        ${termList(unit.keyActivities, unit.terms)}
+      </div>
+      <div class="coach-block">
+        <strong>Watch for</strong>
+        ${termList(unit.keyConsiderations, unit.terms)}
+      </div>
+      <div class="coach-block">
+        <strong>Supporting practices</strong>
+        ${list(unit.supportingPractices)}
+      </div>
+    </details>
+    <details class="toolkit-drawer">
+      <summary>Worked example</summary>
+      ${renderWorkedExample(unit)}
+    </details>
+    <details class="toolkit-drawer">
+      <summary>Artifact template</summary>
+      ${renderArtifactTemplate(unit)}
+    </details>
+    <details class="toolkit-drawer">
+      <summary>Standards and references</summary>
+      ${renderStandardsMap(unit)}
+    </details>
+  `;
+}
+
 function renderMicroCheck(unit: CoffeeLabUnit): string {
   const check = coffeeLabJourney[unit.id].microCheck;
   return `
@@ -790,70 +826,83 @@ export class CoffeeLabScene extends Phaser.Scene {
           ${renderVeeLifecycle(unit, this.progress, completion, this.lastRenderedUnitOrder)}
         </header>
         ${lifecycleRoute(unit, this.progress)}
-        <main class="coffee-workbench">
+        <main class="coffee-workbench evidence-workspace">
           <section class="lab-canvas lesson-stage">
             <div class="unit-heading">
               <span>Lesson ${unit.order} of ${course.units.length} / ${escapeHtml(unit.cluster)}</span>
               <h2>${escapeHtml(unit.title)}</h2>
               <p>${annotateTerms(journey.learnerOutcome, unit.terms, 2)}</p>
             </div>
-            ${renderLessonVisual(unit)}
-            <section class="case-file-band">
-              <div class="lesson-card-heading">
-                <span>Case file</span>
-                <h3>${annotateTerms(journey.storyBeat, unit.terms, 2)}</h3>
+            <section class="workspace-zone scenario-canvas-zone">
+              <div class="zone-heading">
+                <span>Scenario canvas</span>
+                <strong>${escapeHtml(unit.plainQuestion)}</strong>
               </div>
-              <div class="case-file-grid">
-                ${renderEvidenceItems(unit)}
-              </div>
+              ${renderLessonVisual(unit)}
+              <section class="lesson-focus-grid compact-focus-grid">
+                <div class="concept-brief">
+                  <span class="lab-label">Plain-English concept</span>
+                  <p>${annotateTerms(journey.conceptPlain, unit.terms, 3)}</p>
+                  <strong>Common trap</strong>
+                  <p>${annotateTerms(journey.commonTrap, unit.terms, 3)}</p>
+                </div>
+                <div class="concept-brief">
+                  <span class="lab-label">Process covered</span>
+                  <p>${unit.processes.map((process) => escapeHtml(process)).join(' + ')}</p>
+                  <strong>Evidence added</strong>
+                  <p>${annotateTerms(journey.evidenceDelta, unit.terms, 2)}</p>
+                </div>
+              </section>
+              <details class="workspace-drawer" open>
+                <summary>Case file and model canvas</summary>
+                <section class="case-file-band">
+                  <div class="lesson-card-heading">
+                    <span>Case file</span>
+                    <h3>${annotateTerms(journey.storyBeat, unit.terms, 2)}</h3>
+                  </div>
+                  <div class="case-file-grid">
+                    ${renderEvidenceItems(unit)}
+                  </div>
+                </section>
+                ${renderDiagram(unit)}
+              </details>
             </section>
-            ${renderActivityLens(unit)}
-            <section class="lesson-focus-grid">
-              <div class="concept-brief">
-                <span class="lab-label">Plain-English concept</span>
-                <p>${annotateTerms(journey.conceptPlain, unit.terms, 3)}</p>
-                <strong>Common trap</strong>
-                <p>${annotateTerms(journey.commonTrap, unit.terms, 3)}</p>
+            <section class="workspace-zone current-action-zone">
+              <div class="zone-heading">
+                <span>Current action</span>
+                <strong>${escapeHtml(unit.practice.title)}</strong>
               </div>
-              <div class="concept-brief">
-                <span class="lab-label">Process covered</span>
-                <p>${unit.processes.map((process) => escapeHtml(process)).join(' + ')}</p>
-                <strong>Evidence added</strong>
-                <p>${annotateTerms(journey.evidenceDelta, unit.terms, 2)}</p>
-              </div>
-            </section>
-            ${renderDiagram(unit)}
-            ${renderWorkedExample(unit)}
-            ${renderArtifactTemplate(unit)}
-            ${renderMicroCheck(unit)}
-            ${renderArtifactCapture(unit, savedArtifact, completed)}
-            <section class="practice-panel lesson-card">
-              <div class="lesson-card-heading">
-                <span>Task checklist</span>
-                <h3>${escapeHtml(unit.practice.title)}</h3>
-                <p>${annotateTerms(unit.practice.prompt, unit.terms, 2)}</p>
-              </div>
-              <div class="practice-steps">
-                ${unit.practice.steps.map((step, index) => `
-                  <button class="practice-step js-practice-step" data-step="${index}">
-                    <span>${index + 1}</span>${escapeHtml(step)}
-                  </button>
-                `).join('')}
-              </div>
-              <div class="artifact-check">
-                <strong>Rubric before saving artifact</strong>
-                ${termList(journey.rubric, unit.terms)}
-              </div>
-              <div class="bridge-note">
-                <strong>Next connection</strong>
-                <p>${annotateTerms(journey.nextBridge, unit.terms, 2)}</p>
-              </div>
-              <div class="lab-actions">
-                ${previous ? `<button class="button button-secondary js-unit" data-unit-id="${previous.id}">Previous</button>` : ''}
-                <button class="button button-primary js-complete" data-completed="${completed}" ${completed ? '' : 'disabled'}>${completed ? 'Artifact Saved' : 'Save Artifact To Evidence Thread'}</button>
-                ${next ? `<button class="button button-secondary js-unit" data-unit-id="${next.id}">Next Lesson</button>` : '<button class="button button-secondary js-episodes">Back To Episodes</button>'}
-                ${finalUnit ? '<button class="button button-primary js-ep2">Apply In EP2</button>' : ''}
-              </div>
+              ${renderActivityLens(unit)}
+              <section class="practice-panel">
+                <div class="lesson-card-heading">
+                  <span>Task checklist</span>
+                  <h3>${escapeHtml(unit.practice.title)}</h3>
+                  <p>${annotateTerms(unit.practice.prompt, unit.terms, 2)}</p>
+                </div>
+                <div class="practice-steps">
+                  ${unit.practice.steps.map((step, index) => `
+                    <button class="practice-step js-practice-step" data-step="${index}">
+                      <span>${index + 1}</span>${escapeHtml(step)}
+                    </button>
+                  `).join('')}
+                </div>
+                ${renderMicroCheck(unit)}
+                ${renderArtifactCapture(unit, savedArtifact, completed)}
+                <div class="artifact-check">
+                  <strong>Rubric before saving artifact</strong>
+                  ${termList(journey.rubric, unit.terms)}
+                </div>
+                <div class="bridge-note">
+                  <strong>Next connection</strong>
+                  <p>${annotateTerms(journey.nextBridge, unit.terms, 2)}</p>
+                </div>
+                <div class="lab-actions">
+                  ${previous ? `<button class="button button-secondary js-unit" data-unit-id="${previous.id}">Previous</button>` : ''}
+                  <button class="button button-primary js-complete" data-completed="${completed}" ${completed ? '' : 'disabled'}>${completed ? 'Artifact Saved' : 'Save Artifact To Evidence Thread'}</button>
+                  ${next ? `<button class="button button-secondary js-unit" data-unit-id="${next.id}">Next Lesson</button>` : '<button class="button button-secondary js-episodes">Back To Episodes</button>'}
+                  ${finalUnit ? '<button class="button button-primary js-ep2">Apply In EP2</button>' : ''}
+                </div>
+              </section>
             </section>
           </section>
           <aside class="coach-panel lesson-toolkit">
@@ -863,26 +912,7 @@ export class CoffeeLabScene extends Phaser.Scene {
               <strong>${unit.order}/${course.units.length}</strong>
               <span>${escapeHtml(unit.cluster)} evidence</span>
             </div>
-            <div class="coach-block">
-              <strong>Current evidence</strong>
-              ${renderEvidencePreview(unit, this.progress, savedArtifact)}
-            </div>
-            <div class="coach-block">
-              <strong>Key moves</strong>
-              ${termList(unit.keyActivities, unit.terms)}
-            </div>
-            <div class="coach-block">
-              <strong>Watch for</strong>
-              ${termList(unit.keyConsiderations, unit.terms)}
-            </div>
-            <div class="coach-block">
-              <strong>Supporting practices</strong>
-              ${list(unit.supportingPractices)}
-            </div>
-            <div class="coach-block">
-              <strong>Standards map</strong>
-              ${renderStandardsMap(unit)}
-            </div>
+            ${renderToolkitDrawers(unit, this.progress, savedArtifact)}
           </aside>
         </main>
         ${renderTermPopover()}

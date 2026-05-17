@@ -64,14 +64,14 @@ export class EpisodeSelectScene extends Phaser.Scene {
     const catalog = this.levelManager.getCatalog();
     const episodes = this.levelManager.getEpisodes();
     const baseUrl = import.meta.env.BASE_URL;
+    const platformHero = `${baseUrl}assets/learning-quest/platform-hero.webp`;
 
     const episodeCards = episodes.map((episode) => {
       const progress = episodeProgress(episode);
       const buttonLabel = progress.hasProgress ? `Continue ${episode.code}` : episode.routeLabel;
-      const outcomes = episode.outcomes.slice(0, 3).map((outcome) => `<li>${outcome}</li>`).join('');
-      const standards = episode.standards.map((standard) => `<span class="reference-pill">${standard.framework}</span>`).join('');
+      const progressPct = Math.round((progress.completed / progress.total) * 100);
       return `
-        <article class="episode-card" style="--episode-accent:${episode.accentColor}">
+        <article class="episode-card compact-decision-card" style="--episode-accent:${episode.accentColor}">
           <div class="episode-media">
             <img src="${baseUrl}${episode.heroImage}" alt="" />
           </div>
@@ -83,24 +83,18 @@ export class EpisodeSelectScene extends Phaser.Scene {
             <h2>${episode.title}</h2>
             <p class="episode-subtitle">${episode.subtitle}</p>
             <div class="episode-progress" aria-label="${episode.title} progress">
-              <span style="width:${Math.round((progress.completed / progress.total) * 100)}%"></span>
+              <span style="width:${progressPct}%"></span>
             </div>
             <button class="button button-primary js-open-episode" data-episode-id="${episode.id}">${buttonLabel}</button>
-            <p class="body-copy">${episode.overview}</p>
             <div class="episode-meta">
               <span>${episode.learningMode}</span>
-              <span>${episode.scenario}</span>
               <span>${episode.duration}</span>
               <span>${progress.label}</span>
             </div>
-            <div class="episode-fit">
-              <strong>Best for</strong>
+            <div class="episode-decision-copy">
+              <strong>${episode.scenario}</strong>
               <p>${episode.bestFor}</p>
-              <strong>Prerequisite</strong>
-              <p>${episode.prerequisite}</p>
             </div>
-            <ul class="episode-outcomes">${outcomes}</ul>
-            <div class="reference-row">${standards}</div>
           </div>
         </article>
       `;
@@ -108,31 +102,24 @@ export class EpisodeSelectScene extends Phaser.Scene {
 
     this.ui.render(`
       <div class="screen-shell episode-select-layout">
-        <section class="platform-hero">
+        <section class="platform-hero cinematic-path-hero">
+          <picture class="platform-hero-media" aria-hidden="true">
+            <source srcset="${platformHero}" type="image/webp" />
+            <img src="${baseUrl}assets/learning-quest/platform-hero.png" alt="" />
+          </picture>
           <div class="platform-copy">
             <h1 class="display-title">${catalog.platformTitle}</h1>
             <p class="platform-subtitle">${catalog.platformSubtitle}</p>
             <p class="platform-path">EP1 shows how small hidden handoffs become rework. EP2 tests the same habits under rail-program pressure.</p>
             <div class="hero-actions">
-              <button class="button button-primary js-open-episode" data-episode-id="ep1-coffee-lab">Start EP1</button>
-              <button class="button button-secondary js-open-episode" data-episode-id="ep2-rail-quest">Enter EP2</button>
+              <button class="button button-primary js-open-episode" data-episode-id="ep1-coffee-lab">Start Coffee Lab</button>
+              <button class="button button-secondary js-open-episode" data-episode-id="ep2-rail-quest">Enter Rail Quest</button>
             </div>
             <div class="reference-bar">
               <a href="https://sebokwiki.org/" target="_blank" rel="noreferrer">SEBoK</a>
               <a href="https://www.incose.org/resources-publications/technical-publications/se-handbook/" target="_blank" rel="noreferrer">INCOSE SE Handbook</a>
               <a href="https://www.iso.org/standard/81702.html" target="_blank" rel="noreferrer">ISO 15288</a>
             </div>
-          </div>
-          <div class="platform-signal" aria-hidden="true">
-            <div class="signal-node signal-node-a">Need</div>
-            <div class="signal-node signal-node-b">Requirement</div>
-            <div class="signal-node signal-node-c">Architecture</div>
-            <div class="signal-node signal-node-d">Evidence</div>
-            <svg viewBox="0 0 420 220" class="signal-lines">
-              <path d="M58 62 C130 18 178 112 248 70 S350 78 375 36" />
-              <path d="M66 162 C145 110 205 180 282 142 S355 122 390 165" />
-              <path d="M96 88 L292 142" />
-            </svg>
           </div>
         </section>
         <section class="episode-grid" aria-label="Available learning episodes">

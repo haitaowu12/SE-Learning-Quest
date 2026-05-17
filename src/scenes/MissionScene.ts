@@ -18,21 +18,76 @@ function impactLensMarkup(metrics: MetricDelta): string {
   const labels: Array<[keyof MetricDelta, string]> = [
     ['system_quality', 'system quality'],
     ['stakeholder_trust', 'stakeholder trust'],
-    ['risk_exposure', 'risk exposure'],
+    ['risk_exposure', 'risk reduced'],
     ['delivery_confidence', 'delivery confidence'],
     ['team_capacity', 'team capacity'],
   ];
   const protectedSignals = labels
-    .filter(([key]) => (metrics[key] ?? 0) > 0)
+    .filter(([key]) => metricDeltaClass(key, metrics[key]) === 'positive')
     .map(([, label]) => label);
   const pressuredSignals = labels
-    .filter(([key]) => (metrics[key] ?? 0) < 0)
-    .map(([, label]) => label);
+    .filter(([key]) => metricDeltaClass(key, metrics[key]) === 'negative')
+    .map(([key, label]) => key === 'risk_exposure' ? 'risk increased' : label);
   const protectedText = protectedSignals.length > 0 ? protectedSignals.slice(0, 2).join(', ') : 'decision clarity';
   const pressureText = pressuredSignals.length > 0 ? pressuredSignals.slice(0, 2).join(', ') : 'no immediate metric pressure';
   return `
-    <span class="chip">Protects ${protectedText}</span>
+    <span class="chip">Improves ${protectedText}</span>
     <span class="chip">Watch ${pressureText}</span>
+  `;
+}
+
+const METRIC_COPY: Array<[keyof MetricDelta, string]> = [
+  ['system_quality', 'System quality'],
+  ['stakeholder_trust', 'Stakeholder trust'],
+  ['risk_exposure', 'Risk exposure'],
+  ['delivery_confidence', 'Delivery confidence'],
+  ['team_capacity', 'Team capacity'],
+];
+
+function metricDeltaClass(key: keyof MetricDelta, value: number | undefined): 'positive' | 'negative' | 'neutral' {
+  if (!value) return 'neutral';
+  if (key === 'risk_exposure') return value < 0 ? 'positive' : 'negative';
+  return value > 0 ? 'positive' : 'negative';
+}
+
+function metricDeltaMeaning(key: keyof MetricDelta, value: number | undefined): string {
+  if (!value) return 'No change';
+  if (key === 'risk_exposure') return value < 0 ? 'Risk reduced' : 'Risk increased';
+  return value > 0 ? 'Improves' : 'Weakens';
+}
+
+function metricDeltaValue(value: number | undefined): string {
+  if (!value) return '0';
+  return `${value > 0 ? '+' : ''}${value}`;
+}
+
+function optionScoreClass(metrics: MetricDelta): string {
+  const score = METRIC_COPY.reduce((sum, [key]) => {
+    const value = metrics[key] ?? 0;
+    if (!value) return sum;
+    const direction = metricDeltaClass(key, value);
+    return sum + (direction === 'positive' ? Math.abs(value) : -Math.abs(value));
+  }, 0);
+  if (score >= 6) return 'option-positive';
+  if (score <= -6) return 'option-risky';
+  return 'option-mixed';
+}
+
+function renderMetricConsequences(metrics: MetricDelta): string {
+  return `
+    <div class="consequence-grid">
+      ${METRIC_COPY.map(([key, label]) => {
+        const value = metrics[key];
+        const deltaClass = metricDeltaClass(key, value);
+        return `
+          <div class="consequence-cell ${deltaClass}">
+            <span>${label}</span>
+            <strong>${metricDeltaValue(value)}</strong>
+            <small>${metricDeltaMeaning(key, value)}</small>
+          </div>
+        `;
+      }).join('')}
+    </div>
   `;
 }
 
@@ -113,6 +168,9 @@ export class MissionScene extends Phaser.Scene {
     const stage = mission.awaitingSubgame
       ? this.renderSubgame(mission)
       : this.renderDecisionStage(mission, currentDecision);
+    const manifest = this.levelManager.getManifest();
+    const baseUrl = import.meta.env.BASE_URL;
+    const missionImage = `${baseUrl}${manifest.images?.missionAnchor ?? 'assets/learning-quest/rail-mission-anchor.webp'}`;
 
     this.ui.render(`
       <div class="screen-shell mission-layout">
@@ -123,6 +181,16 @@ export class MissionScene extends Phaser.Scene {
             <div class="chip-row">
               <span class="objective-chip">${this.chapter.brief.location}</span>
               <span class="objective-chip">${this.chapter.brief.objective}</span>
+            </div>
+          </div>
+          <div class="mission-context-shell">
+            <picture class="mission-anchor-media" aria-hidden="true">
+              <source srcset="${missionImage}" type="image/webp" />
+              <img src="${baseUrl}assets/learning-quest/rail-mission-anchor.png" alt="" />
+            </picture>
+            <div class="mission-context-copy">
+              <span class="eyebrow">Evidence workspace</span>
+              <p>${this.chapter.brief.situation}</p>
             </div>
           </div>
           <div class="metric-strip">
@@ -200,19 +268,17 @@ export class MissionScene extends Phaser.Scene {
     ` : '';
 
     const options = currentDecision.options.map((option) => `
-      <article class="option-card">
-        <div class="card-topline">
-          <div class="option-label">${option.title}</div>
-          <span class="chip">${option.id.replace(/-/g, ' ')}</span>
+      <article class="consequence-option ${optionScoreClass(option.consequence.metrics)}">
+        <div class="consequence-choice">
+          <span class="option-label">${option.title}</span>
+          <p class="option-summary">${option.summary}</p>
+          <p class="small-copy">${option.rationale}</p>
+          <div class="chip-row">
+            ${impactLensMarkup(option.consequence.metrics)}
+          </div>
         </div>
-        <div class="option-summary">${option.summary}</div>
-        <div class="small-copy">${option.rationale}</div>
-        <div class="chip-row">
-          ${impactLensMarkup(option.consequence.metrics)}
-        </div>
-        <div class="card-actions">
-          <button class="button button-primary js-pick-option" data-option-id="${option.id}">Commit this action</button>
-        </div>
+        ${renderMetricConsequences(option.consequence.metrics)}
+        <button class="button button-primary js-pick-option" data-option-id="${option.id}">Commit this action</button>
       </article>
     `).join('');
 
@@ -224,7 +290,7 @@ export class MissionScene extends Phaser.Scene {
           <h4>${currentDecision.prompt}</h4>
           <p class="signal-copy">${currentDecision.context}</p>
         </div>
-        <div class="decision-options">${options}</div>
+        <div class="consequence-comparison">${options}</div>
       </div>
     `;
   }
