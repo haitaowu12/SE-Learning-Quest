@@ -3,6 +3,12 @@
   "programSubtitle": "Interactive rail systems engineering campaign",
   "playerRole": "Assistant Systems Engineer",
   "programSummary": "Steer a live rail signaling modernization program through ambiguity, stakeholder pressure, interface risk, verification demands, and integration turbulence.",
+  "images": {
+    "title": "assets/learning-quest/rail-title.webp",
+    "map": "assets/learning-quest/rail-map.webp",
+    "missionAnchor": "assets/learning-quest/rail-mission-anchor.webp",
+    "debriefReadiness": "assets/learning-quest/rail-debrief-readiness.webp"
+  },
   "baselineMetrics": {
     "system_quality": 56,
     "stakeholder_trust": 54,

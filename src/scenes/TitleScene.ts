@@ -40,10 +40,16 @@ export class TitleScene extends Phaser.Scene {
     const scenarioLabel = episode?.scenario ?? 'Systems engineering scenario';
     const bestFor = episode?.bestFor ?? 'Applied systems engineering practice.';
     const prerequisite = episode?.prerequisite ?? 'Basic lifecycle vocabulary.';
+    const baseUrl = import.meta.env.BASE_URL;
+    const titleImage = `${baseUrl}${manifest.images?.title ?? episode?.heroImage ?? 'assets/learning-quest/rail-title.webp'}`;
 
     this.ui.render(`
       <div class="screen-shell title-screen episode-title-screen">
-        <section class="title-copy panel-tight">
+        <section class="title-copy panel-tight episode-title-hero">
+          <picture class="title-hero-media" aria-hidden="true">
+            <source srcset="${titleImage}" type="image/webp" />
+            <img src="${baseUrl}assets/learning-quest/rail-title.png" alt="" />
+          </picture>
           <button class="text-link js-episodes">SE Learning Quest</button>
           <h1 class="display-title">${manifest.programTitle}</h1>
           <p class="body-copy">${manifest.programSummary}</p>

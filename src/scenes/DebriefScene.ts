@@ -15,14 +15,21 @@ const METRIC_LABELS: Record<MetricKey, string> = {
   team_capacity: 'Team Capacity',
 };
 
-function deltaClass(change: number | undefined): string {
+function deltaClass(key: MetricKey, change: number | undefined): string {
   if (!change) return 'metric-delta-neutral';
+  if (key === 'risk_exposure') return change < 0 ? 'metric-delta-positive' : 'metric-delta-negative';
   return change > 0 ? 'metric-delta-positive' : 'metric-delta-negative';
 }
 
 function deltaText(change: number | undefined): string {
   if (!change) return '0';
   return `${change > 0 ? '+' : ''}${change}`;
+}
+
+function deltaMeaning(key: MetricKey, change: number | undefined): string {
+  if (!change) return 'No change';
+  if (key === 'risk_exposure') return change < 0 ? 'Risk reduced' : 'Risk increased';
+  return change > 0 ? 'Improved' : 'Weakened';
 }
 
 function standardCitation(citation: string): string {
@@ -69,6 +76,16 @@ function generateRecommendations(metrics: Record<string, number>, criticalFlags:
   return recs;
 }
 
+function renderEvidenceThread(result: ChapterResult): string {
+  const notes = result.unlockedNotes.length > 0
+    ? result.unlockedNotes
+    : result.outcomeTags.map((tag) => tag.replace(/_/g, ' '));
+  const thread = notes.length > 0
+    ? notes.slice(0, 4).map((note) => `<li>${note}</li>`).join('')
+    : '<li>No extra notes unlocked. Revisit decision rationale before the next chapter.</li>';
+  return `<ul class="drawer-list evidence-thread-list">${thread}</ul>`;
+}
+
 export class DebriefScene extends Phaser.Scene {
   private gameManager!: GameManager;
   private levelManager!: LevelManager;
@@ -110,11 +127,21 @@ export class DebriefScene extends Phaser.Scene {
   private render(): void {
     const chapter = this.levelManager.getChapterById(this.result.chapterId);
     if (!chapter) return;
+    const manifest = this.levelManager.getManifest();
+    const baseUrl = import.meta.env.BASE_URL;
+    const debriefImage = `${baseUrl}${manifest.images?.debriefReadiness ?? 'assets/learning-quest/rail-debrief-readiness.webp'}`;
+    const recommendations = generateRecommendations(
+      Object.fromEntries(Object.entries(this.result.finalMetrics)) as Record<string, number>,
+      this.result.criticalFlags,
+      this.result.rating
+    );
+    const nextRisk = recommendations.find((rec) => rec.priority === 'high') ?? recommendations[0];
 
     const deltas = Object.entries(this.result.metricDelta).map(([key, value]) => `
       <div class="delta-card">
         <span class="metric-label">${METRIC_LABELS[key as MetricKey]}</span>
-        <span class="metric-value ${deltaClass(value)}">${deltaText(value)}</span>
+        <span class="metric-value ${deltaClass(key as MetricKey, value)}">${deltaText(value)}</span>
+        <small>${deltaMeaning(key as MetricKey, value)}</small>
       </div>
     `).join('');
 
@@ -140,8 +167,26 @@ export class DebriefScene extends Phaser.Scene {
           <div>
             <h1 class="chapter-title">${chapter.brief.title}</h1>
             <p class="result-rating">${this.result.rating}</p>
-            <p class="body-copy">${this.result.headline}</p>
-            <p class="body-copy">${this.result.summary}</p>
+          </div>
+          <div class="debrief-what-changed">
+            <picture class="debrief-anchor-media" aria-hidden="true">
+              <source srcset="${debriefImage}" type="image/webp" />
+              <img src="${baseUrl}assets/learning-quest/rail-debrief-readiness.png" alt="" />
+            </picture>
+            <div>
+              <span class="eyebrow">What changed</span>
+              <h4>${this.result.headline}</h4>
+              <p class="signal-copy">${this.result.summary}</p>
+            </div>
+          </div>
+          <div class="delta-grid">${deltas || '<div class="delta-card"><span class="metric-label">Metric change</span><span class="metric-value">0</span><small>No change</small></div>'}</div>
+          <div class="signal-card recommendations-card">
+            <h4>Next risk to control</h4>
+            <p class="signal-copy">${nextRisk?.text ?? 'Maintain discipline and watch metric drift before the next chapter.'}</p>
+          </div>
+          <div class="signal-card">
+            <h4>Evidence thread</h4>
+            ${renderEvidenceThread(this.result)}
           </div>
           <div class="signal-card">
             <h4>SE principle reinforced</h4>
@@ -149,18 +194,13 @@ export class DebriefScene extends Phaser.Scene {
           </div>
           <div class="signal-card recommendations-card">
             <h4>Recommendations for next chapter</h4>
-            <ul class="recommendation-list">${generateRecommendations(
-              Object.fromEntries(Object.entries(this.result.finalMetrics)) as Record<string, number>,
-              this.result.criticalFlags,
-              this.result.rating
-            ).map(rec => `
+            <ul class="recommendation-list">${recommendations.map(rec => `
               <li class="recommendation-item priority-${rec.priority}">
                 <span class="rec-icon">${rec.icon}</span>
                 <span class="rec-text">${rec.text}</span>
               </li>
             `).join('')}</ul>
           </div>
-          <div class="delta-grid">${deltas || '<div class="delta-card"><span class="metric-label">Metric change</span><span class="metric-value">0</span></div>'}</div>
           <div class="result-actions">
             <button class="button button-secondary js-map">Back to Map</button>
             <button class="button button-primary js-replay">Replay Chapter</button>
