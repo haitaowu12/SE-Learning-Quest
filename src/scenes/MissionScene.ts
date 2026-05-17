@@ -9,19 +9,50 @@ import type {
   MissionState,
   SequenceSubgameSpec,
   TriageSubgameSpec,
+  MetricDelta,
 } from '../types/index.ts';
 import { UiLayer } from '../ui/UiLayer.ts';
 import { ProceduralBG } from '../utils/proceduralBG.ts';
 
-function deltaMarkup(change: number | undefined): string {
-  if (change === undefined || change === 0) return '<span class="metric-delta-neutral">0</span>';
-  const className = change > 0 ? 'metric-delta-positive' : 'metric-delta-negative';
-  const prefix = change > 0 ? '+' : '';
-  return `<span class="${className}">${prefix}${change}</span>`;
+function impactLensMarkup(metrics: MetricDelta): string {
+  const labels: Array<[keyof MetricDelta, string]> = [
+    ['system_quality', 'system quality'],
+    ['stakeholder_trust', 'stakeholder trust'],
+    ['risk_exposure', 'risk exposure'],
+    ['delivery_confidence', 'delivery confidence'],
+    ['team_capacity', 'team capacity'],
+  ];
+  const protectedSignals = labels
+    .filter(([key]) => (metrics[key] ?? 0) > 0)
+    .map(([, label]) => label);
+  const pressuredSignals = labels
+    .filter(([key]) => (metrics[key] ?? 0) < 0)
+    .map(([, label]) => label);
+  const protectedText = protectedSignals.length > 0 ? protectedSignals.slice(0, 2).join(', ') : 'decision clarity';
+  const pressureText = pressuredSignals.length > 0 ? pressuredSignals.slice(0, 2).join(', ') : 'no immediate metric pressure';
+  return `
+    <span class="chip">Protects ${protectedText}</span>
+    <span class="chip">Watch ${pressureText}</span>
+  `;
 }
 
 function chapterAccent(chapter: CampaignChapter): number {
   return parseInt(chapter.themeColor.replace('#', ''), 16);
+}
+
+function referenceList(entry: CampaignChapter['brief']['journal'][number]): string {
+  if (!entry.standards?.length) return '';
+  return `
+    <ul class="drawer-list">
+      ${entry.standards.map((standard) => {
+        const isLink = standard.citation.startsWith('https://');
+        const citation = isLink
+          ? `<a href="${standard.citation}" target="_blank" rel="noreferrer">${standard.citation}</a>`
+          : standard.citation;
+        return `<li>${standard.framework}<br /><span class="small-copy">${citation}</span></li>`;
+      }).join('')}
+    </ul>
+  `;
 }
 
 export class MissionScene extends Phaser.Scene {
@@ -103,7 +134,7 @@ export class MissionScene extends Phaser.Scene {
           </div>
           <div class="card-actions">
             <button class="button button-secondary js-map">Back to Map</button>
-            <button class="button button-secondary js-toggle-drawer">${this.drawerOpen ? 'Hide Drawer' : 'Open Mission Drawer'}</button>
+            <button class="button button-secondary js-toggle-drawer">${this.drawerOpen ? 'Hide Drawer' : 'Open Lesson Drawer'}</button>
           </div>
           ${stage}
         </section>
@@ -111,7 +142,7 @@ export class MissionScene extends Phaser.Scene {
           ${drawerSection || `
             <div class="signal-card">
               <h4>Secondary drawer collapsed</h4>
-              <p class="signal-copy">Open it for stakeholders, prep notes, unlocked notes, and standards journal entries.</p>
+              <p class="signal-copy">Open it for stakeholders, prep notes, unlocked notes, and optional reference depth.</p>
             </div>
           `}
         </aside>
@@ -177,11 +208,7 @@ export class MissionScene extends Phaser.Scene {
         <div class="option-summary">${option.summary}</div>
         <div class="small-copy">${option.rationale}</div>
         <div class="chip-row">
-          <span class="chip">Quality ${deltaMarkup(option.consequence.metrics.system_quality)}</span>
-          <span class="chip">Trust ${deltaMarkup(option.consequence.metrics.stakeholder_trust)}</span>
-          <span class="chip">Risk ${deltaMarkup(option.consequence.metrics.risk_exposure)}</span>
-          <span class="chip">Delivery ${deltaMarkup(option.consequence.metrics.delivery_confidence)}</span>
-          <span class="chip">Capacity ${deltaMarkup(option.consequence.metrics.team_capacity)}</span>
+          ${impactLensMarkup(option.consequence.metrics)}
         </div>
         <div class="card-actions">
           <button class="button button-primary js-pick-option" data-option-id="${option.id}">Commit this action</button>
@@ -220,6 +247,7 @@ export class MissionScene extends Phaser.Scene {
       <div class="journal-card">
         <h4>${entry.title}</h4>
         <p class="small-copy">${entry.summary}</p>
+        ${referenceList(entry)}
       </div>
     `).join('');
 
@@ -230,7 +258,7 @@ export class MissionScene extends Phaser.Scene {
           <ul class="drawer-list">${this.chapter.brief.stakeholders.map((stakeholder) => `<li>${stakeholder}</li>`).join('')}</ul>
         </div>
         <div class="signal-card">
-          <h4>Mission prep</h4>
+          <h4>Lesson prep</h4>
           <ul class="drawer-list">${this.chapter.brief.prepNotes.map((note) => `<li>${note}</li>`).join('')}</ul>
         </div>
         <div class="signal-card">

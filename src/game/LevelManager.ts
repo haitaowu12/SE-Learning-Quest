@@ -1,12 +1,25 @@
-import campaignData from '../data/campaign.json' with { type: 'json' };
-import type { CampaignChapter, CampaignManifest, CampaignState, ChapterProgress } from '../types/index.ts';
+import episodeCatalog from '../data/episodes.json' with { type: 'json' };
+import railCampaignData from '../data/campaign.json' with { type: 'json' };
+import type {
+  CampaignChapter,
+  CampaignManifest,
+  CampaignState,
+  ChapterProgress,
+  EpisodeCatalog,
+  EpisodeSummary,
+} from '../types/index.ts';
 
 export class LevelManager {
   private static instance: LevelManager | null = null;
-  private manifest: CampaignManifest;
+  private readonly catalog: EpisodeCatalog;
+  private readonly manifests: Record<string, CampaignManifest>;
+  private selectedEpisodeId = 'ep2-rail-quest';
 
   private constructor() {
-    this.manifest = campaignData as CampaignManifest;
+    this.catalog = episodeCatalog as EpisodeCatalog;
+    this.manifests = {
+      'ep2-rail-quest': railCampaignData as CampaignManifest,
+    };
   }
 
   static getInstance(): LevelManager {
@@ -16,12 +29,34 @@ export class LevelManager {
     return LevelManager.instance;
   }
 
-  getManifest(): CampaignManifest {
-    return this.manifest;
+  getCatalog(): EpisodeCatalog {
+    return this.catalog;
+  }
+
+  getEpisodes(): EpisodeSummary[] {
+    return this.catalog.episodes.slice();
+  }
+
+  getEpisode(episodeId: string = this.selectedEpisodeId): EpisodeSummary | undefined {
+    return this.catalog.episodes.find((episode) => episode.id === episodeId);
+  }
+
+  getSelectedEpisodeId(): string {
+    return this.selectedEpisodeId;
+  }
+
+  selectEpisode(episodeId: string): boolean {
+    if (!this.manifests[episodeId]) return false;
+    this.selectedEpisodeId = episodeId;
+    return true;
+  }
+
+  getManifest(episodeId: string = this.selectedEpisodeId): CampaignManifest {
+    return this.manifests[episodeId] ?? this.manifests['ep2-rail-quest'];
   }
 
   getChapters(): CampaignChapter[] {
-    return this.manifest.chapters.slice().sort((left, right) => left.order - right.order);
+    return this.getManifest().chapters.slice().sort((left, right) => left.order - right.order);
   }
 
   getChapterById(chapterId: string): CampaignChapter | undefined {

@@ -1,0 +1,92 @@
+{
+  "platformTitle": "SE Learning Quest",
+  "platformSubtitle": "Learn systems engineering by turning ambiguity into evidence-backed decisions before defects become rework, delay, safety exposure, or lost trust.",
+  "publicUrl": "https://haitaowu12.github.io/SE-Learning-Quest/",
+  "episodes": [
+    {
+      "id": "ep1-coffee-lab",
+      "format": "lab",
+      "code": "EP1",
+      "title": "Coffee Service Systems Lab",
+      "subtitle": "A guided lab notebook for learning systems engineering through one familiar office service.",
+      "scenario": "Office coffee service upgrade",
+      "audience": "New learners",
+      "difficulty": "Beginner",
+      "duration": "3-5 hours self-paced",
+      "status": "available",
+      "routeLabel": "Open Coffee Lab",
+      "accentColor": "#b8642a",
+      "heroImage": "assets/coffee-lab/frame.webp",
+      "overview": "Build one coffee-service artifact thread at a time: boundary, needs, requirements, architecture, interface control, RAMS, implementation, integration, proof, operations feedback, retirement, and final evidence pack.",
+      "learningMode": "Guided artifact lab",
+      "bestFor": "Start here if SE terms, lifecycle processes, or V&V are new.",
+      "prerequisite": "No prior systems engineering experience.",
+      "nextEpisodeId": "ep2-rail-quest",
+      "outcomes": [
+        "Explain the ISO/IEC/IEEE 15288 technical processes as one connected lifecycle evidence thread.",
+        "Trace one stakeholder need through requirements, architecture, interface control, RAMS, design, proof, operation, retirement, and gate evidence.",
+        "Separate verification, validation, transition, and assurance evidence using the same coffee-service case.",
+        "Make a pass, conditional pass, or hold recommendation using evidence, decommissioning closure, and residual risk."
+      ],
+      "standards": [
+        {
+          "framework": "SEBoK",
+          "citation": "https://sebokwiki.org/wiki/Systems_Engineering_Overview",
+          "rationale": "Public reading for learners who want more depth after the lesson."
+        },
+        {
+          "framework": "INCOSE Systems Engineering Handbook",
+          "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
+          "rationale": "Practitioner grounding used to validate terminology and process coverage."
+        },
+        {
+          "framework": "ISO/IEC/IEEE 15288",
+          "citation": "https://www.iso.org/standard/81702.html",
+          "rationale": "Primary process spine for the episode."
+        }
+      ]
+    },
+    {
+      "id": "ep2-rail-quest",
+      "format": "campaign",
+      "code": "EP2",
+      "title": "Harbour Line Modernization",
+      "subtitle": "Rail systems engineering campaign for learners ready for a richer project setting.",
+      "scenario": "Rail signaling modernization",
+      "audience": "Applied learners",
+      "difficulty": "Intermediate",
+      "duration": "5-7 hours self-paced",
+      "status": "available",
+      "routeLabel": "Enter Rail Quest",
+      "accentColor": "#2f6f56",
+      "heroImage": "motion/rail-quest.svg",
+      "overview": "Run a corridor modernization campaign where early boundary, stakeholder, requirements, architecture, integration, verification, and transition decisions compound into commissioning readiness.",
+      "learningMode": "Applied decision campaign",
+      "bestFor": "Use after EP1 or when you want higher-context project judgment practice.",
+      "prerequisite": "Comfort with needs, requirements, interfaces, evidence, and lifecycle gates.",
+      "outcomes": [
+        "Apply systems engineering judgment in a multi-stakeholder rail modernization program.",
+        "Manage consequences across seven connected decision chapters.",
+        "Use metrics, risk, configuration, and evidence signals to protect commissioning readiness.",
+        "Practice Vee-model thinking under integration and assurance pressure."
+      ],
+      "standards": [
+        {
+          "framework": "INCOSE Systems Engineering Handbook",
+          "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
+          "rationale": "Practitioner reference for campaign decisions."
+        },
+        {
+          "framework": "ISO/IEC/IEEE 15288",
+          "citation": "https://www.iso.org/standard/81702.html",
+          "rationale": "Lifecycle process alignment."
+        },
+        {
+          "framework": "SEBoK",
+          "citation": "https://sebokwiki.org/",
+          "rationale": "Public topic index for deeper systems engineering reading."
+        }
+      ]
+    }
+  ]
+}

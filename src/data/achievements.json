@@ -1,14 +1,14 @@
 [
-  { "id": "first_level", "title": "First Steps", "description": "Complete your first level", "icon": "🎯" },
-  { "id": "module_1_complete", "title": "Requirements Explorer", "description": "Complete Module 1: Requirements Engineering", "icon": "📋" },
-  { "id": "module_2_complete", "title": "System Architect", "description": "Complete Module 2: System Architecture", "icon": "🏗️" },
-  { "id": "module_3_complete", "title": "Design Master", "description": "Complete Module 3: Design & Analysis", "icon": "🔧" },
-  { "id": "module_4_complete", "title": "V&V Specialist", "description": "Complete Module 4: Verification & Validation", "icon": "✅" },
-  { "id": "module_5_complete", "title": "Integration Leader", "description": "Complete Module 5: Integration & Management", "icon": "🔗" },
+  { "id": "first_level", "title": "First Steps", "description": "Complete your first lesson", "icon": "🎯" },
+  { "id": "frame_complete", "title": "Problem Framer", "description": "Complete the Frame cluster", "icon": "📋" },
+  { "id": "define_complete", "title": "Need Translator", "description": "Complete the Define cluster", "icon": "🏗️" },
+  { "id": "choose_complete", "title": "Architecture Thinker", "description": "Complete the Choose cluster", "icon": "🔧" },
+  { "id": "realize_complete", "title": "Integration Builder", "description": "Complete the Realize cluster", "icon": "🔗" },
+  { "id": "prove_complete", "title": "Evidence Reviewer", "description": "Complete the Prove cluster", "icon": "✅" },
   { "id": "perfect_score", "title": "Perfect Score", "description": "Score maximum points on any level", "icon": "⭐" },
   { "id": "speed_demon", "title": "Speed Demon", "description": "Complete a level in under 30 seconds", "icon": "⚡" },
   { "id": "no_hints", "title": "Self-Reliant", "description": "Complete a level without using any hints", "icon": "🧠" },
-  { "id": "capstone_complete", "title": "SE Master", "description": "Complete the Capstone Challenge", "icon": "🏆" },
-  { "id": "all_modules", "title": "Full Journey", "description": "Complete all 5 modules", "icon": "🗺️" },
-  { "id": "se_master", "title": "Grandmaster", "description": "Achieve perfect scores on all 20 levels", "icon": "👑" }
+  { "id": "capstone_complete", "title": "Gate Decision Ready", "description": "Complete an episode capstone", "icon": "🏆" },
+  { "id": "all_clusters", "title": "Full Lifecycle", "description": "Complete every cluster in an episode", "icon": "🗺️" },
+  { "id": "se_master", "title": "Grandmaster", "description": "Achieve strong ratings across a complete episode", "icon": "👑" }
 ]

@@ -58,11 +58,11 @@ const METRIC_DESCRIPTIONS: Record<MetricKey, string> = {
 };
 
 const METRIC_COLORS: Record<MetricKey, string> = {
-  system_quality: '#FF6B35',
-  stakeholder_trust: '#22c55e',
-  risk_exposure: '#ef4444',
-  delivery_confidence: '#3b82f6',
-  team_capacity: '#a855f7',
+  system_quality: '#b8642a',
+  stakeholder_trust: '#58b77b',
+  risk_exposure: '#d45d5d',
+  delivery_confidence: '#34699a',
+  team_capacity: '#d79a2b',
 };
 
 function getVeePhaseState(phaseIndex: number, completedChapterIds: string[], currentChapterId: string | null): string {
@@ -103,16 +103,16 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
   const implY = 250;
 
   const stateColors: Record<string, string> = {
-    'vee-completed': '#FF6B35',
-    'vee-current': '#fbbf24',
-    'vee-past': '#40916C',
-    'vee-future': '#2D6A4F',
+    'vee-completed': '#b8642a',
+    'vee-current': '#d79a2b',
+    'vee-past': '#2f6f56',
+    'vee-future': '#183d31',
   };
   const stateTextColors: Record<string, string> = {
-    'vee-completed': '#121212',
-    'vee-current': '#121212',
+    'vee-completed': '#ffffff',
+    'vee-current': '#17211c',
     'vee-past': '#FFFFFF',
-    'vee-future': '#A7C4B5',
+    'vee-future': '#c9d8cf',
   };
 
   const labelTextColor = '#FFFFFF';
@@ -121,8 +121,8 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
 
   const nodeSvgs = phases.map(p => {
     const stateClass = getVeePhaseState(p.phaseIndex, completedChapterIds, currentChapterId);
-    const fill = stateColors[stateClass] || '#2D6A4F';
-    const textFill = stateTextColors[stateClass] || '#A7C4B5';
+    const fill = stateColors[stateClass] || '#183d31';
+    const textFill = stateTextColors[stateClass] || '#c9d8cf';
     const isCurrent = stateClass === 'vee-current';
     const result = chapterResults[completedChapterIds.find(id => (CHAPTER_VEE_MAP[id] ?? -1) === p.phaseIndex) ?? '']?.rating;
     return `
@@ -137,7 +137,7 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
               fill="${labelTextColor}" font-size="8" font-weight="600"
               font-family="Space Grotesk, sans-serif" opacity="0.9">${p.label}</text>
         ${result ? `<text x="${p.x}" y="${p.y - nodeH / 2 - 5}" text-anchor="middle"
-              fill="#FF6B35" font-size="8" font-weight="700"
+              fill="#b8642a" font-size="8" font-weight="700"
               font-family="Space Grotesk, sans-serif">${result}</text>` : ''}
       </g>
     `;
@@ -152,16 +152,16 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
     const midX = (x1 + x2) / 2;
     return `
       <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}"
-            stroke="#A7C4B5" stroke-width="1" stroke-dasharray="4,4" opacity="0.5" />
+            stroke="#c9d8cf" stroke-width="1" stroke-dasharray="4,4" opacity="0.5" />
       <text x="${midX}" y="${y - 5}" text-anchor="middle"
-            fill="#A7C4B5" font-size="7" font-weight="500"
+            fill="#c9d8cf" font-size="7" font-weight="500"
             font-family="Space Grotesk, sans-serif" opacity="0.6">${pair.trace}</text>
     `;
   }).join('');
 
   const implStateClass = getImplState(completedChapterIds);
-  const implFill = stateColors[implStateClass] || '#2D6A4F';
-  const implTextFill = stateTextColors[implStateClass] || '#A7C4B5';
+  const implFill = stateColors[implStateClass] || '#183d31';
+  const implTextFill = stateTextColors[implStateClass] || '#c9d8cf';
 
   return `
     <div class="vee-container">
@@ -173,12 +173,12 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         </defs>
-        <text x="80" y="32" text-anchor="start" fill="#A7C4B5" font-size="8.5"
+        <text x="80" y="32" text-anchor="start" fill="#c9d8cf" font-size="8.5"
               font-weight="700" font-family="Syne, sans-serif" letter-spacing="1.2">DECOMPOSITION ▼</text>
-        <text x="460" y="32" text-anchor="end" fill="#A7C4B5" font-size="8.5"
+        <text x="460" y="32" text-anchor="end" fill="#c9d8cf" font-size="8.5"
               font-weight="700" font-family="Syne, sans-serif" letter-spacing="1.2">▲ INTEGRATION</text>
         <path d="${vPath}" fill="none" stroke="#121212" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="${vPath}" fill="none" stroke="#40916C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
+        <path d="${vPath}" fill="none" stroke="#2f6f56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" />
         ${traceLines}
         <rect x="${implX - nodeW / 2 - 4}" y="${implY - nodeH / 2 - 4}" width="${nodeW + 8}" height="${nodeH + 8}"
               fill="${implFill}" stroke="#121212" stroke-width="2.5" rx="2" />
@@ -194,9 +194,8 @@ function buildVeeDiagram(completedChapterIds: string[], currentChapterId: string
   `;
 }
 
-function buildProjectHealth(state: { metrics: MetricState; completedChapterIds: string[]; chapterResults: Record<string, ChapterResult> }): string {
+function buildProjectHealth(state: { metrics: MetricState; completedChapterIds: string[]; chapterResults: Record<string, ChapterResult> }, totalChapters: number): string {
   const completedCount = state.completedChapterIds.length;
-  const totalChapters = 7;
 
   const ratings = state.completedChapterIds.map(id => state.chapterResults[id]?.rating).filter(Boolean) as string[];
   const excellentCount = ratings.filter(r => r === 'Excellent').length;
@@ -301,6 +300,7 @@ function buildMetricStripWithTooltips(baselineMetrics: MetricState, currentMetri
 
     const delta = currentMetrics[key] - baselineMetrics[key];
     const deltaSign = delta > 0 ? '+' : '';
+    const deltaText = delta === 0 ? '' : `${deltaSign}${delta}`;
     const deltaClass = key === 'risk_exposure'
       ? (delta < 0 ? 'metric-delta-positive' : delta > 0 ? 'metric-delta-negative' : 'metric-delta-neutral')
       : (delta > 0 ? 'metric-delta-positive' : delta < 0 ? 'metric-delta-negative' : 'metric-delta-neutral');
@@ -315,7 +315,7 @@ function buildMetricStripWithTooltips(baselineMetrics: MetricState, currentMetri
       <div class="metric-chip metric-tooltip-trigger" data-metric="${key}">
         <span class="metric-label">${METRIC_LABELS[key]}</span>
         <span class="metric-value">${currentMetrics[key]}</span>
-        <span class="metric-delta ${deltaClass}">${deltaSign}${delta}</span>
+        ${deltaText ? `<span class="metric-delta ${deltaClass}">${deltaText}</span>` : ''}
         <div class="metric-tooltip">
           <div class="tooltip-header">
             <span class="tooltip-title" style="color:${METRIC_COLORS[key]}">${METRIC_LABELS[key]}</span>
@@ -357,6 +357,7 @@ export class OperationsMapScene extends Phaser.Scene {
 
   private render(): void {
     const manifest = this.levelManager.getManifest();
+    const episode = this.levelManager.getEpisode(this.gameManager.getSelectedEpisodeId());
     const state = this.gameManager.getState();
     const chapters = this.gameManager.getAvailableChapters();
     const activeMission = this.gameManager.getActiveMission();
@@ -388,7 +389,7 @@ export class OperationsMapScene extends Phaser.Scene {
     }).join('');
 
     const veeDiagram = buildVeeDiagram(state.completedChapterIds, state.currentChapterId, state.chapterResults);
-    const projectHealth = buildProjectHealth(state);
+    const projectHealth = buildProjectHealth(state, manifest.chapters.length);
     const metricStrip = buildMetricStripWithTooltips(manifest.baselineMetrics, state.metrics, state.chapterResults, state.completedChapterIds);
 
     this.ui.render(`
@@ -396,7 +397,7 @@ export class OperationsMapScene extends Phaser.Scene {
         <section class="map-rail panel">
           <div class="eyebrow">Operations map</div>
           <h1 class="section-title">${manifest.programTitle}</h1>
-          <p class="body-copy">Seven chapters. One rail modernization program. Each completed chapter changes the campaign state you carry into the next decision space.</p>
+          <p class="body-copy">${manifest.chapters.length} chapters. ${episode?.scenario ?? 'One learning scenario'}. Each completed chapter changes the episode state you carry into the next decision space.</p>
           ${metricStrip}
           ${veeDiagram}
           ${projectHealth}
@@ -406,6 +407,7 @@ export class OperationsMapScene extends Phaser.Scene {
           </div>
           <div class="hero-actions">
             <button class="button button-secondary js-title">Back to Title</button>
+            <button class="button button-secondary js-episodes">Choose Episode</button>
             ${activeMission ? '<button class="button button-primary js-resume">Resume Active Mission</button>' : ''}
           </div>
         </section>
@@ -419,8 +421,11 @@ export class OperationsMapScene extends Phaser.Scene {
     requestAnimationFrame(() => {
       const chapterList = document.querySelector('.chapter-list');
       const nextChapter = chapterList?.querySelector('.chapter-card:not(.locked):not(.active)');
-      if (nextChapter && chapterList) {
-        nextChapter.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (nextChapter instanceof HTMLElement && chapterList instanceof HTMLElement && window.innerWidth > 1100) {
+        chapterList.scrollTo({
+          top: Math.max(0, nextChapter.offsetTop - chapterList.offsetTop - 12),
+          behavior: 'smooth',
+        });
       }
     });
 
@@ -445,6 +450,13 @@ export class OperationsMapScene extends Phaser.Scene {
       this.audioManager?.playSFX('sfx-click');
       TransitionManager.fadeOut(this, 250, () => {
         this.scene.start('TitleScene');
+      });
+    });
+
+    this.ui.on('click', '.js-episodes', () => {
+      this.audioManager?.playSFX('sfx-click');
+      TransitionManager.fadeOut(this, 250, () => {
+        this.scene.start('EpisodeSelectScene');
       });
     });
   }

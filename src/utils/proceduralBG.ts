@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 
-function drawGrid(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x121212, alpha: number = 0.06, step: number = 60): void {
+function drawGrid(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x17211c, alpha: number = 0.045, step: number = 60): void {
   gfx.lineStyle(1, color, alpha);
   for (let x = 0; x <= width; x += step) gfx.lineBetween(x, 0, x, height);
   for (let y = 0; y <= height; y += step) gfx.lineBetween(0, y, width, y);
@@ -29,7 +29,7 @@ function drawCorridorLine(gfx: Phaser.GameObjects.Graphics, width: number, heigh
   });
 }
 
-function drawAccentRects(gfx: Phaser.GameObjects.Graphics, width: number, height: number, accent: number = 0xFF6B35): void {
+function drawAccentRects(gfx: Phaser.GameObjects.Graphics, width: number, height: number, accent: number = 0xb8642a): void {
   gfx.lineStyle(3, accent, 0.2);
   gfx.strokeRect(width * 0.08, height * 0.12, width * 0.34, height * 0.24);
   gfx.strokeRect(width * 0.55, height * 0.18, width * 0.24, height * 0.18);
@@ -37,7 +37,7 @@ function drawAccentRects(gfx: Phaser.GameObjects.Graphics, width: number, height
   gfx.fillRect(width * 0.08, height * 0.12, width * 0.34, height * 0.24);
 }
 
-function drawDiagonal(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x121212): void {
+function drawDiagonal(gfx: Phaser.GameObjects.Graphics, width: number, height: number, color: number = 0x17211c): void {
   gfx.lineStyle(2, color, 0.08);
   gfx.lineBetween(0, 0, width, height);
   gfx.lineBetween(width, 0, 0, height);
@@ -46,29 +46,29 @@ function drawDiagonal(gfx: Phaser.GameObjects.Graphics, width: number, height: n
 export class ProceduralBG {
   static drawTitleBG(scene: Phaser.Scene, width: number, height: number): void {
     const gfx = scene.add.graphics();
-    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillStyle(0xf7f8f4, 1);
     gfx.fillRect(0, 0, width, height);
     drawGrid(gfx, width, height);
     drawDiagonal(gfx, width, height);
-    drawCorridorLine(gfx, width, height, 0x121212);
+    drawCorridorLine(gfx, width, height, 0x183d31);
     drawAccentRects(gfx, width, height);
   }
 
   static drawOperationsMap(scene: Phaser.Scene, width: number, height: number): void {
     const gfx = scene.add.graphics();
-    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillStyle(0xf7f8f4, 1);
     gfx.fillRect(0, 0, width, height);
     drawGrid(gfx, width, height);
-    drawCorridorLine(gfx, width, height, 0x121212);
+    drawCorridorLine(gfx, width, height, 0x183d31);
 
-    gfx.lineStyle(3, 0xFF6B35, 0.15);
+    gfx.lineStyle(3, 0xb8642a, 0.15);
     gfx.strokeRect(width * 0.1, height * 0.14, width * 0.22, height * 0.12);
     gfx.strokeRect(width * 0.68, height * 0.54, width * 0.18, height * 0.15);
   }
 
   static drawMissionBG(scene: Phaser.Scene, width: number, height: number, accent: number): void {
     const gfx = scene.add.graphics();
-    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillStyle(0xf7f8f4, 1);
     gfx.fillRect(0, 0, width, height);
     drawGrid(gfx, width, height);
 
@@ -92,7 +92,7 @@ export class ProceduralBG {
 
   static drawDebriefBG(scene: Phaser.Scene, width: number, height: number, accent: number): void {
     const gfx = scene.add.graphics();
-    gfx.fillStyle(0xFFD23F, 1);
+    gfx.fillStyle(0xf7f8f4, 1);
     gfx.fillRect(0, 0, width, height);
     drawGrid(gfx, width, height);
 

@@ -10,24 +10,32 @@ export class TransitionManager {
   static fadeOut(scene: Phaser.Scene, duration = 300, callback?: () => void): void {
     if (TransitionManager.transitioning) return;
     TransitionManager.transitioning = true;
+    document.getElementById('ui-root')?.classList.add('ui-fading-out');
     scene.input.enabled = false;
     const cam = scene.cameras.main;
     cam.fadeOut(duration, 0, 0, 0);
     if (callback) {
       cam.once('camerafadeoutcomplete', () => {
         TransitionManager.transitioning = false;
+        document.getElementById('ui-root')?.classList.remove('ui-fading-out');
         callback();
       });
     } else {
       cam.once('camerafadeoutcomplete', () => {
         TransitionManager.transitioning = false;
+        document.getElementById('ui-root')?.classList.remove('ui-fading-out');
       });
     }
   }
 
   static fadeIn(scene: Phaser.Scene, duration = 300): void {
     const cam = scene.cameras.main;
+    const root = document.getElementById('ui-root');
+    root?.classList.add('ui-fading-in');
     cam.fadeIn(duration, 0, 0, 0);
+    cam.once('camerafadeincomplete', () => {
+      root?.classList.remove('ui-fading-in');
+    });
     scene.input.enabled = true;
   }
 

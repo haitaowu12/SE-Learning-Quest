@@ -1,38 +1,38 @@
 export const COLORS = {
-  bg: 0xFFD23F,
-  bgAlt: 0xF5C733,
-  panelBg: 0x2D6A4F,
-  panelBgAlt: 0x1a4330,
-  cardBg: 0x2D6A4F,
-  cardBgHover: 0x40916C,
+  bg: 0xf7f8f4,
+  bgAlt: 0xeef3ec,
+  panelBg: 0x183d31,
+  panelBgAlt: 0x102920,
+  cardBg: 0x214d3f,
+  cardBgHover: 0x2f6f56,
 
-  primary: 0xFF6B35,
-  primaryDim: 0xe55620,
-  primaryHover: 0xFF8555,
-  primarySoft: 0xFF6B35,
+  primary: 0xb8642a,
+  primaryDim: 0x96501f,
+  primaryHover: 0xc7793d,
+  primarySoft: 0xe8b55a,
 
-  success: 0x22c55e,
-  successSoft: 0x16a34a,
-  error: 0xef4444,
-  errorSoft: 0xdc2626,
-  warning: 0xf59e0b,
-  warningHover: 0xfbbf24,
-  gold: 0xFFD23F,
-  goldDim: 0xb45309,
-  accent: 0xFF6B35,
+  success: 0x58b77b,
+  successSoft: 0x2f6f56,
+  error: 0xd45d5d,
+  errorSoft: 0xaa3f3f,
+  warning: 0xd79a2b,
+  warningHover: 0xe8b55a,
+  gold: 0xe8b55a,
+  goldDim: 0xb8642a,
+  accent: 0xb8642a,
 
-  text: 0x121212,
-  textBright: 0x000000,
+  text: 0x17211c,
+  textBright: 0x17211c,
   textOnPanel: 0xFFFFFF,
-  textOnPanelMuted: 0xA7C4B5,
-  textSecondary: 0x333333,
-  textMuted: 0x555555,
-  textDim: 0x666666,
+  textOnPanelMuted: 0xc9d8cf,
+  textSecondary: 0x33443b,
+  textMuted: 0x627069,
+  textDim: 0x4d5c54,
 
-  border: 0x121212,
-  borderLight: 0x333333,
-  borderHover: 0x000000,
-  shadow: 0x121212,
+  border: 0x17211c,
+  borderLight: 0x627069,
+  borderHover: 0x96501f,
+  shadow: 0x17211c,
 };
 
 export const SPACING = {
@@ -45,11 +45,11 @@ export const SPACING = {
 };
 
 export const RADIUS = {
-  xs: 0,
-  sm: 0,
-  md: 0,
-  lg: 0,
-  xl: 0,
+  xs: 4,
+  sm: 6,
+  md: 8,
+  lg: 10,
+  xl: 12,
 };
 
 export const FONT = {
@@ -73,7 +73,7 @@ export const FONT = {
 };
 
 export const SHADOWS = {
-  sm: { blur: 0, y: 4, x: 4, alpha: 1 },
-  md: { blur: 0, y: 6, x: 6, alpha: 1 },
-  lg: { blur: 0, y: 8, x: 8, alpha: 1 },
+  sm: { blur: 18, y: 8, x: 0, alpha: 0.12 },
+  md: { blur: 32, y: 14, x: 0, alpha: 0.14 },
+  lg: { blur: 52, y: 20, x: 0, alpha: 0.16 },
 };
