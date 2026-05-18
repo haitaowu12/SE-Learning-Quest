@@ -46,7 +46,7 @@
         },
         {
           "term": "Boundary",
-          "plain": "The line that separates what the project controls from what it must interface with.",
+          "plain": "The line separating the system-of-interest from external systems, actors, and environment; project control is a related but separate scope decision.",
           "example": "Supplies and cleaning may sit inside the service boundary; finance and vendor support remain external actors."
         },
         {
@@ -98,7 +98,7 @@
       "practice": {
         "title": "Sort the mission frame",
         "activityType": "sort",
-        "why": "Sorting prevents the first request from becoming the final answer. It shows what the project controls, what it must coordinate, and what evidence will matter later.",
+        "why": "Sorting prevents the first request from becoming the final answer. It shows what belongs inside the system-of-interest, what the project must coordinate, and what evidence will matter later.",
         "prompt": "Sort the coffee-service facts into system elements, external actors, success measures, and assumptions.",
         "steps": [
           "Place machine, supplies, cleaning routine, instructions, support log, and queue area inside the system-of-interest.",
@@ -374,7 +374,7 @@
         {
           "term": "RAMS acceptance",
           "plain": "The decision that RAMS evidence and residual risk are good enough for the next lifecycle step.",
-          "example": "Facilities accepts leak control after dry-counter inspection and monitoring are in place."
+          "example": "The authorized risk owner accepts the leak control after dry-counter inspection and monitoring are in place."
         }
       ],
       "practice": {
