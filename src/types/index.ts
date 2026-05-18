@@ -70,6 +70,8 @@ export interface EpisodeSummary {
   standards: StandardReference[];
 }
 
+export type EpisodeManifest = EpisodeSummary;
+
 export interface EpisodeCatalog {
   platformTitle: string;
   platformSubtitle: string;
@@ -98,6 +100,8 @@ export interface CoffeeLabPractice {
   checklist: string[];
   artifact: string;
 }
+
+export type PracticeActivity = CoffeeLabPractice;
 
 export interface CoffeeLabUnit {
   id: string;
@@ -271,6 +275,75 @@ export interface CampaignManifest {
   images?: Partial<CampaignImages>;
   baselineMetrics: MetricState;
   chapters: CampaignChapter[];
+}
+
+export interface LearnerProgress {
+  version: number;
+  activeEpisodeId: string;
+  coffeeLab: CoffeeLabProgressState;
+  campaign: CampaignState;
+  examResults: Record<string, ExamResult>;
+  updatedAt: string;
+}
+
+export interface AssetManifestEntry {
+  key: string;
+  path: string;
+  fallbackPath: string;
+  width: number;
+  height: number;
+  priority: 'critical' | 'standard';
+}
+
+export interface AssetManifest {
+  version: number;
+  assets: AssetManifestEntry[];
+}
+
+export type VeePhase =
+  | 'frame'
+  | 'requirements'
+  | 'architecture'
+  | 'realize'
+  | 'integrate'
+  | 'verify'
+  | 'validate';
+
+export interface VeeModelNode {
+  chapterId: string;
+  phase: VeePhase;
+  label: string;
+  concept: string;
+  learnerQuestion: string;
+  x: number;
+  y: number;
+  evidenceLinkIds: string[];
+}
+
+export interface ExamTask {
+  id: string;
+  type: 'trace' | 'classify' | 'triage' | 'recommend';
+  prompt: string;
+  options: string[];
+  correct: string[];
+  feedback: string;
+}
+
+export interface ExamManifest {
+  id: string;
+  episodeId: string;
+  title: string;
+  scenario: string;
+  passingScore: number;
+  tasks: ExamTask[];
+}
+
+export interface ExamResult {
+  examId: string;
+  score: number;
+  passed: boolean;
+  completedAt: string;
+  responses: Record<string, string>;
 }
 
 export interface DecisionHistoryEntry {

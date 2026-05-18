@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import railCampaignData from '../src/data/campaign.json' with { type: 'json' };
 import coffeeLabCourse from '../src/data/coffee-lab-course.json' with { type: 'json' };
 import episodeCatalog from '../src/data/episodes.json' with { type: 'json' };
@@ -73,10 +74,35 @@ test('rail campaign manifest keeps seven guided chapters with decisions and subg
   }
 });
 
+test('rail campaign standards references use public URLs', () => {
+  for (const chapter of railCampaignData.chapters) {
+    for (const entry of [...chapter.brief.journal, ...chapter.debrief.journal]) {
+      assert.ok(entry.standards.length > 0);
+      for (const standard of entry.standards) {
+        assert.match(standard.citation, /^https:\/\//);
+        assert.doesNotMatch(standard.citation, /§/);
+      }
+    }
+  }
+});
+
 test('coffee lab covers the full technical-process lifecycle in beginner clusters', () => {
   assert.deepEqual(
     coffeeLabCourse.units.map((unit) => unit.cluster),
     ['Frame', 'Define', 'Architect', 'Implement', 'Integrate', 'Prove', 'Operate', 'Retire'],
+  );
+  assert.deepEqual(
+    coffeeLabCourse.units.map((unit) => unit.processes),
+    [
+      ['Business or Mission Analysis'],
+      ['Stakeholder Needs and Requirements Definition', 'System Requirements Definition'],
+      ['Architecture Definition', 'Design Definition', 'System Analysis'],
+      ['Implementation'],
+      ['Integration'],
+      ['Verification', 'Transition', 'Validation'],
+      ['Operation', 'Maintenance'],
+      ['Disposal'],
+    ],
   );
 
   const text = JSON.stringify(coffeeLabCourse).toLowerCase();
@@ -120,6 +146,15 @@ test('coffee lab units have concept, artifact, practice, terms, and references',
     assert.ok(unit.practice.checklist.length >= 4);
     assert.ok(unit.references.every((reference) => reference.url.startsWith('https://')));
   }
+});
+
+test('coffee lab cheat sheet exposes visible reference links', () => {
+  const overlaySource = readFileSync(new URL('../src/app/GameOverlay.tsx', import.meta.url), 'utf8');
+
+  assert.match(overlaySource, /Open reference/);
+  assert.match(overlaySource, /https:\/\/haitaowu12\.github\.io\/SE_Tailoring_Framework\/#dashboard/);
+  assert.match(overlaySource, /ISO\/IEC\/IEEE 15288/);
+  assert.match(overlaySource, /INCOSE SE Handbook/);
 });
 
 test('coffee lab journey supplies worked examples and guidance for every unit', () => {

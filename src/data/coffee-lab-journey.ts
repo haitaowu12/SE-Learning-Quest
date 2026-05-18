@@ -95,7 +95,7 @@ export const coffeeLabJourney: Record<string, CoffeeLabJourneyUnit> = {
       { label: 'Finance quote', detail: 'We can approve this if monthly cost is predictable.' },
       { label: 'Draft requirement', detail: 'The machine shall be fast.' },
     ],
-    conceptPlain: 'Needs explain why the system matters. Requirements translate selected needs and ConOps-to-needs trace into precise conditions the system can be designed, accepted, verified, and validated against.',
+    conceptPlain: 'Needs explain why the system matters. Requirements translate selected needs into precise conditions the system can be designed and verified against; validation criteria trace the result back to stakeholder needs and the ConOps.',
     workedExample: {
       title: 'Requirement rewrite',
       weak: 'The machine shall be fast.',

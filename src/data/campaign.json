@@ -51,13 +51,13 @@
             "summary": "Systems thinking starts with a credible boundary, interface picture, and stakeholder framing.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.2 Stakeholder Requirements Definition",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Early framing must reconcile stakeholder concerns before requirements harden."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.2 Stakeholder Requirements Definition",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Stakeholder viewpoints drive system-of-interest boundaries and need statements."
               }
             ]
@@ -291,13 +291,13 @@
             "summary": "Scope clarity is not paperwork. It is the control mechanism that prevents downstream architecture and verification churn.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.10 System Analysis",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Boundary and interface analysis anchor credible trade studies."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.6 System Analysis",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "System analysis converts concerns into controlled boundary decisions."
               }
             ]
@@ -339,13 +339,13 @@
             "summary": "Strong requirements are specific, testable, and traceable back to real stakeholder concerns.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.3 System Requirements Definition",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Requirements transform stakeholder needs into actionable engineering constraints."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.3 System Requirements Definition",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Traceable, analyzable requirements support downstream verification and change control."
               }
             ]
@@ -576,13 +576,13 @@
             "summary": "Traceability is not a reporting artifact. It is how teams preserve engineering intent when schedules compress.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.7 Verification",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Verification planning pressure improves requirement quality early."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.9 Verification",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Verification considerations should influence requirement wording before implementation."
               }
             ]
@@ -624,13 +624,13 @@
             "summary": "Architecture work is about allocating behavior and controlling interfaces, not just drawing blocks.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.4 Architecture Design",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Architectures must partition responsibilities and expose critical interfaces."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.4 Architecture Definition",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Architecture decisions create the structure later integration must live with."
               }
             ]
@@ -862,13 +862,13 @@
             "summary": "Subsystem decomposition is only useful when teams can explain who owns cross-boundary behavior and recovery.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.6 Integration",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Integration pain is usually decided during architecture allocation, not during test execution."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.8 Integration",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Integration readiness depends on interface control and ownership."
               }
             ]
@@ -900,7 +900,7 @@
           "Configuration baselines stay controlled during build"
         ],
         "prepNotes": [
-          "You are now at the Vee apex where design becomes real.",
+          "You are now at the Vee turning point where design becomes realized system elements.",
           "Supplier choices here determine integration and verification difficulty later.",
           "Configuration discipline during build prevents costly rework during commissioning."
         ],
@@ -910,13 +910,13 @@
             "summary": "Implementation is where design intent meets physical and organizational reality. Supplier management and configuration control are not overhead—they are the mechanisms that preserve system integrity through the build phase.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.7 Implementation",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Implementation realizes system elements from architecture and design, requiring verification of each element before integration."
               },
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.5 Implementation",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Build decisions and supplier management determine downstream integration and verification outcomes."
               }
             ]
@@ -1080,9 +1080,9 @@
               "summary": "Maximize control by stopping all informal field changes.",
               "rationale": "Protects the baseline, but can stall critical installation progress.",
               "consequence": {
-                "summary": "The baseline stays clean, but field teams lose the agility to resolve real installation issues and morale drops.",
+                "summary": "Baseline clarity improves, but field teams lose the agility to resolve real installation issues and morale drops.",
                 "metrics": {
-                  "system_quality": 4,
+                  "system_quality": 1,
                   "team_capacity": -5,
                   "stakeholder_trust": -2
                 },
@@ -1102,13 +1102,13 @@
         "steps": [
           "Verify each system element meets its specification",
           "Confirm interface contracts between realized elements",
-          "Validate supplier evidence against program requirements",
+          "Assess supplier evidence for adequacy",
           "Establish configuration baseline for integration entry"
         ],
         "correctOrder": [
           "Verify each system element meets its specification",
           "Confirm interface contracts between realized elements",
-          "Validate supplier evidence against program requirements",
+          "Verify supplier evidence against program requirements",
           "Establish configuration baseline for integration entry"
         ],
         "successSummary": "You built verification confidence progressively from element through interface to integration readiness.",
@@ -1129,16 +1129,16 @@
         "journal": [
           {
             "title": "Chapter takeaway",
-            "summary": "The Vee apex is where design intent meets reality. Every shortcut in implementation verification and configuration control creates compound interest in integration risk.",
+            "summary": "The Vee turning point is where design intent becomes realized elements. Every shortcut in implementation verification and configuration control creates compound interest in integration risk.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.7 Implementation",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Implementation outcomes must be verified and traceable before integration begins."
               },
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.2.4 Configuration Management",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Configuration baselines established during implementation anchor all downstream verification and change control."
               }
             ]
@@ -1180,13 +1180,13 @@
             "summary": "Integration is where architecture, requirements, verification, and management discipline finally collide.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.2.4 Configuration Management / §4.3.6 Integration",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Integration pace depends on controlled baselines and deliberate build sequence."
               },
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.8 Integration",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Integration should combine elements in a sequence that reveals risk and preserves control."
               }
             ]
@@ -1402,13 +1402,13 @@
             "summary": "Integration sequence determines whether the program discovers interface defects in time to fix them. Risk-first integration is uncomfortable but honest.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.8 Integration",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Integration should combine elements progressively to reveal interface risk and preserve configuration control."
               },
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.6 Integration",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Integration planning should prioritize the interfaces and behaviors most likely to fail."
               }
             ]
@@ -1450,13 +1450,13 @@
             "summary": "Verification should mature evidence step by step, with each layer building confidence before the next.",
             "standards": [
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.7 Verification",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Progressive verification reduces late-stage risk and builds stakeholder confidence incrementally."
               },
               {
-                "framework": "EN 50126-1:2017",
-                "citation": "§11 RAMS Verification and Validation",
+                "framework": "EN 50126-1",
+                "citation": "https://www.nen.nl/en/nen-en-50126-1-2017-en-239823",
                 "rationale": "Rail evidence must connect technical checks with structured verification progression."
               }
             ]
@@ -1673,13 +1673,13 @@
             "summary": "Verification answers 'did we build the system right?' — each requirement needs objective evidence, and the evidence chain must be coherent and traceable.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.9 Verification",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Verification confirms that each requirement has been met through appropriate methods and objective evidence."
               },
               {
-                "framework": "INCOSE SEHBv5",
-                "citation": "§4.3.7 Verification",
+                "framework": "INCOSE Systems Engineering Handbook",
+                "citation": "https://www.incose.org/resources-publications/technical-publications/se-handbook/",
                 "rationale": "Progressive verification reduces late-stage risk and builds stakeholder confidence incrementally."
               }
             ]
@@ -1713,7 +1713,7 @@
         "prepNotes": [
           "Validation answers 'did we build the right system?' — it traces back to ConOps and stakeholder needs, not just requirements.",
           "Transition is about installing the system in its operational environment and making it sustainably operational.",
-          "The go/no-go decision is the final systems engineering judgment of the program."
+          "The go/no-go decision is the final commissioning-readiness judgment for this campaign segment; operation, maintenance, and retirement still remain in the lifecycle."
         ],
         "journal": [
           {
@@ -1721,13 +1721,13 @@
             "summary": "Validation confirms the right system was built by testing in the real operational environment. Transition ensures the system can be operated, maintained, and supported sustainably. Both trace back to the ConOps that started the Vee.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.10 Transition / §6.4.11 Validation",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Transition installs the verified system into its operational environment. Validation confirms the system fulfills stakeholder needs in that environment."
               },
               {
-                "framework": "EN 50126-1:2017",
-                "citation": "§11 RAMS Verification and Validation",
+                "framework": "EN 50126-1",
+                "citation": "https://www.nen.nl/en/nen-en-50126-1-2017-en-239823",
                 "rationale": "Rail validation must demonstrate system performance under real operational conditions including degraded scenarios."
               }
             ]
@@ -1798,11 +1798,11 @@
           "options": [
             {
               "id": "readiness-pillars",
-              "title": "Structure transition around operational readiness pillars: complete, correct, mitigated, proven, reliable",
-              "summary": "Define explicit readiness criteria across all dimensions of sustainable operations.",
-              "rationale": "Structured readiness gives operations and safety a shared framework for judging transition maturity.",
+              "title": "Structure transition around explicit operational readiness criteria",
+              "summary": "Check required capabilities, current configuration, hazard and defect disposition, accepted evidence, operations/support readiness, and rehearsed rollback.",
+              "rationale": "Explicit criteria give operations and safety a shared way to judge transition maturity without implying a proprietary framework.",
               "consequence": {
-                "summary": "The transition framework gives both project and operations a common language for readiness, and gaps become visible early enough to address.",
+                "summary": "The readiness criteria give both project and operations a common language, and gaps become visible early enough to address.",
                 "metrics": {
                   "system_quality": 6,
                   "stakeholder_trust": 5,
@@ -1832,11 +1832,11 @@
               "id": "delay-until-perfect",
               "title": "Delay transition until every open issue is closed, regardless of severity",
               "summary": "Wait for complete closure before any handover.",
-              "rationale": "Maximizes system maturity, but delays operational benefit and demoralizes the team.",
+              "rationale": "Improves baseline closure discipline, but delays operational benefit and demoralizes the team.",
               "consequence": {
-                "summary": "The system is mature, but the program burns schedule and team energy chasing closure on minor issues that operations could manage.",
+                "summary": "Baseline closure improves, but the program burns schedule and team energy chasing minor issues that operations could manage with controls.",
                 "metrics": {
-                  "system_quality": 4,
+                  "system_quality": 1,
                   "team_capacity": -6,
                   "delivery_confidence": -3
                 },
@@ -1849,7 +1849,7 @@
           "id": "chapter-7-d3",
           "label": "Decision 3",
           "prompt": "The sponsor asks for your go/no-go recommendation for passenger service. What factors drive your answer?",
-          "context": "This is the final systems engineering judgment of the program.",
+          "context": "This is the commissioning-readiness judgment for passenger service, not the end of lifecycle systems engineering.",
           "options": [
             {
               "id": "integrated-go-nogo",
@@ -1888,11 +1888,11 @@
               "id": "risk-averse-nogo",
               "title": "Recommend no-go until every minor issue is resolved",
               "summary": "Wait for complete resolution before recommending passenger service.",
-              "rationale": "Maximizes safety margin, but may be impractical and erode stakeholder confidence.",
+              "rationale": "Increases caution, but can be impractical if minor issues have accepted controls and monitoring.",
               "consequence": {
-                "summary": "The recommendation is conservative, but the sponsor and operations lose confidence in the program's ability to make pragmatic risk decisions.",
+                "summary": "The recommendation is conservative, but the sponsor and operations lose confidence because accepted minor issues are treated like launch blockers.",
                 "metrics": {
-                  "system_quality": 3,
+                  "system_quality": 1,
                   "team_capacity": -5,
                   "stakeholder_trust": -3
                 },
@@ -1957,7 +1957,7 @@
         }
       },
       "debrief": {
-        "principle": "Validation closes the Vee by confirming the system fulfills its ConOps in the operational environment. Transition ensures sustainable operations. The go/no-go decision is the final systems engineering judgment.",
+        "principle": "Validation closes this Vee thread by confirming the system fulfills its ConOps in the operational environment. Transition supports sustainable operations. The go/no-go decision is a commissioning-readiness judgment for this campaign segment.",
         "strongSummary": "You closed the Vee with operational realism, structured transition, and an integrated readiness decision.",
         "weakSummary": "You treated validation as a formality, transition as a handover checklist, or the go/no-go as a simple pass/fail.",
         "journal": [
@@ -1966,13 +1966,13 @@
             "summary": "The Vee closes when validation confirms the right system was built and transition makes it sustainably operational. Every shortcut in earlier chapters compounds here.",
             "standards": [
               {
-                "framework": "ISO/IEC/IEEE 15288:2023",
-                "citation": "§6.4.10 Transition / §6.4.11 Validation",
+                "framework": "ISO/IEC/IEEE 15288",
+                "citation": "https://www.iso.org/standard/81702.html",
                 "rationale": "Transition and validation together close the Vee by confirming the system works in its intended operational environment."
               },
               {
-                "framework": "EN 50126-1:2017",
-                "citation": "§11 Verification and Validation",
+                "framework": "EN 50126-1",
+                "citation": "https://www.nen.nl/en/nen-en-50126-1-2017-en-239823",
                 "rationale": "Rail validation must demonstrate that the system meets its ConOps under real operational conditions."
               }
             ]

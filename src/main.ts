@@ -1,12 +1,10 @@
 import * as Phaser from 'phaser';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import { GameOverlay } from './app/GameOverlay.tsx';
 import './styles/ui.css';
+import './app/gameOverlay.css';
 import { BootScene } from './scenes/BootScene.ts';
-import { CoffeeLabScene } from './scenes/CoffeeLabScene.ts';
-import { EpisodeSelectScene } from './scenes/EpisodeSelectScene.ts';
-import { TitleScene } from './scenes/TitleScene.ts';
-import { OperationsMapScene } from './scenes/OperationsMapScene.ts';
-import { MissionScene } from './scenes/MissionScene.ts';
-import { DebriefScene } from './scenes/DebriefScene.ts';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -18,10 +16,17 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, EpisodeSelectScene, CoffeeLabScene, TitleScene, OperationsMapScene, MissionScene, DebriefScene],
+  scene: [BootScene],
   audio: {
     disableWebAudio: false,
   },
 };
 
 new Phaser.Game(config);
+
+const uiRoot = document.getElementById('ui-root');
+if (!uiRoot) {
+  throw new Error('Missing #ui-root mount point');
+}
+
+createRoot(uiRoot).render(createElement(GameOverlay));
