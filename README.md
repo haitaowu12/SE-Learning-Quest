@@ -2,6 +2,8 @@
 
 SE Learning Quest is a public systems engineering learning platform. It teaches practical SE thinking through interactive, scenario-based episodes instead of abstract process lectures.
 
+Built by [Tony Wu](https://haitaowu12.github.io/tony-wu-home/) - systems engineering tools, assurance workflows, and learning simulations.
+
 Play the current GitHub Pages build: [SE Learning Quest](https://haitaowu12.github.io/SE-Learning-Quest/)
 
 ## Learning Journey

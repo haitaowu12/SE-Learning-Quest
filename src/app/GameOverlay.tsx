@@ -47,6 +47,7 @@ const catalog = episodeCatalogData as EpisodeCatalog;
 const course = coffeeLabCourseData as CoffeeLabCourse;
 const levelManager = LevelManager.getInstance();
 const gameManager = GameManager.getInstance();
+const AUTHOR_URL = 'https://haitaowu12.github.io/tony-wu-home/';
 type ChapterEntry = ReturnType<typeof gameManager.getAvailableChapters>[number];
 
 const metricLabels: Record<MetricKey, string> = {
@@ -230,6 +231,18 @@ function ResponsiveImage({ path, fallback, alt }: { path: string; fallback?: str
   );
 }
 
+function AuthorLink({ variant = 'compact' }: { variant?: 'compact' | 'footer' }) {
+  return (
+    <a
+      className={cx('author-link', variant === 'footer' && 'author-link--footer')}
+      href={AUTHOR_URL}
+      aria-label="Know the author: Tony Wu, systems engineer and builder of this project"
+    >
+      {variant === 'footer' ? 'Built by Tony Wu' : 'TW · About'}
+    </a>
+  );
+}
+
 export function GameOverlay() {
   const [view, setView] = useState<View>({ name: 'episodes' });
   const [, refresh] = useRefresh();
@@ -297,6 +310,7 @@ function EpisodeSelectScreen({ navigate }: { navigate: (view: View) => void }) {
           <p>{catalog.platformSubtitle}</p>
           <div className="quest-actions">
             <button className="quest-button primary" onClick={() => navigate({ name: 'coffee' })}>Start Coffee Lab</button>
+            <AuthorLink />
             <button className="quest-button secondary" onClick={() => navigate({ name: 'rail-title' })}>Enter Rail Quest</button>
           </div>
         </div>
@@ -1296,12 +1310,13 @@ function DebriefScreen({ chapterId, navigate }: { chapterId: string; navigate: (
         <div className="evidence-card"><h2>Evidence thread</h2><ul>{(result.unlockedNotes.length ? result.unlockedNotes : result.outcomeTags).map((note) => <li key={note}>{note.replace(/_/g, ' ')}</li>)}</ul></div>
         <div className="evidence-card"><h2>Principle reinforced</h2><p>{result.principle}</p></div>
       </section>
-      <div className="quest-actions">
+      <div className="quest-actions debrief-actions">
         <button className="quest-button primary" onClick={() => navigate({ name: 'rail-map' })}>Back to Map</button>
         <button className="quest-button secondary" onClick={() => {
           const mission = gameManager.startChapter(chapterId);
           if (mission) navigate({ name: 'mission', chapterId });
         }}>Replay Chapter</button>
+        <AuthorLink variant="footer" />
       </div>
     </main>
   );
