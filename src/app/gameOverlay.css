@@ -173,6 +173,33 @@
   color: var(--quest-red);
 }
 
+.author-link {
+  align-items: center;
+  border: 1px solid rgba(23, 33, 28, 0.18);
+  border-radius: 8px;
+  color: var(--quest-muted);
+  display: inline-flex;
+  font-weight: 800;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.72rem 1rem;
+  text-decoration: none;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+
+.author-link:hover,
+.author-link:focus-visible {
+  background: var(--quest-steel-soft);
+  border-color: rgba(43, 83, 108, 0.34);
+  box-shadow: var(--quest-shadow-soft);
+  color: var(--quest-steel);
+  transform: translateY(-1px);
+}
+
+.author-link--footer {
+  color: var(--quest-steel);
+}
+
 .text-command {
   background: transparent;
   border: 0;
