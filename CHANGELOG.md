@@ -1,0 +1,15 @@
+# Changelog
+
+## 1.1.0 — Asterfall: The Last Relay
+
+Introduces an original, complete 24-quest roleplaying campaign as the default experience. The story spans six regions and the engineering lifecycle, with 55 authored dialogue decisions, 165 choices, 19 workbench puzzles, 24 artifacts and keepsakes, eight badges, five trainable skills and three ending families with governance/support variants.
+
+Adds conditional consequences, active feedback, guided recovery, a decision/evidence journal, character progression, export/import/reset, versioned save validation, stale-tab conflict detection and recovery when browser storage is unavailable. Responsive DOM controls, keyboard operation, 100–200% text scaling, contrast and reduced-motion settings replace canvas dependency for the new campaign.
+
+Preserves the earlier Coffee Lab and Harbour Line episodes under `#episodes` and defers their Phaser chunk. Removes external font requests from the entry page. Relative production assets support the repository path, renamed projects and domain roots.
+
+Adds process/concept traceability, original-source boundaries, content/architecture/contribution/deployment documentation, pure engine/persistence/content tests, and production browser acceptance across three engines. GitHub Pages publication is gated on those checks; local completion is distinct from a remote deployment.
+
+Dependency audit remediation updates the lockfile’s Vite, PostCSS and Nano ID resolutions. The supported toolchain baseline is Node 22.18 and `npm ci`.
+
+The campaign covers all 30 lifecycle process areas at an introductory gameplay level plus 18 supporting concepts. It does not reproduce or claim exhaustive coverage of licensed standards/handbook content, validated learning effectiveness or certification readiness.

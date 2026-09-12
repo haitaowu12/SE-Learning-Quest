@@ -309,6 +309,7 @@ function EpisodeSelectScreen({ navigate }: { navigate: (view: View) => void }) {
           <h1>{catalog.platformTitle}</h1>
           <p>{catalog.platformSubtitle}</p>
           <div className="quest-actions">
+            <a className="quest-button primary" href="#asterfall">Play Asterfall RPG</a>
             <button className="quest-button primary" onClick={() => navigate({ name: 'coffee' })}>Start Coffee Lab</button>
             <AuthorLink />
             <button className="quest-button secondary" onClick={() => navigate({ name: 'rail-title' })}>Enter Rail Quest</button>
