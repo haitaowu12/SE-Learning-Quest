@@ -4,17 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SE Learning Quest - interactive systems engineering learning episodes for beginners and applied learners." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <title>SE Learning Quest</title>
+    <meta name="description" content="Play Asterfall: The Last Relay, an original roleplaying adventure in systems thinking. Rebuild a world through 24 quests, decisions, puzzles and a connected engineering lifecycle." />
+    <meta name="theme-color" content="#10272b" />
+    <title>Asterfall: The Last Relay · SE Learning Quest</title>
     <style>
-      html, body { margin: 0; padding: 0; overflow: hidden; background: #f7f8f4; }
+      html, body { margin: 0; padding: 0; overflow: hidden; background: #10272b; }
       #game-container, #ui-root { width: 100vw; height: 100vh; }
     </style>
   </head>
-  <body>
+  <body data-app="rpg">
     <div id="game-container"></div>
     <div id="ui-root"></div>
     <noscript>
@@ -25,6 +23,6 @@
         </div>
       </div>
     </noscript>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
