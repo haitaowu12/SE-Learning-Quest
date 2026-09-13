@@ -82,6 +82,7 @@ test('illustrated RPG: investigate, meet Mara, repair and hand over through the 
   await page.locator('[data-meaning="hold"]').click();
   await page.locator('[data-rehearse]').click();
   expect(replay(await stored(page)).trial?.acted).toBe(true);
+  await page.getByRole('region', { name: 'Rehearsal observations' }).scrollIntoViewIfNeeded();
   await a11y(page);
   await page.locator('[data-evidence="lamp"]').click();
   await page.locator('[data-claim-slot="acted"]').click();
@@ -131,6 +132,7 @@ test('illustrated RPG: alternative lookout, changed evidence, narrow layouts and
   await page.locator('[data-device="messenger"]').click();
   await page.locator('[data-rehearse]').click();
   await fits(page);
+  await page.getByRole('region', { name: 'Rehearsal observations' }).scrollIntoViewIfNeeded();
   await a11y(page);
   await page.setViewportSize({ width: 320, height: 800 });
   await fits(page);
