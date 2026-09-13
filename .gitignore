@@ -21,9 +21,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Generated verification output (the acceptance report is kept in docs).
+test-results/
+playwright-report/
+.release-check/
+output/asterfall/
 node_modules/
 .codex/
 .openai/
 output/playwright/
-test-results/
-playwright-report/
