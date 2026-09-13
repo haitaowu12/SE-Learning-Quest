@@ -115,7 +115,7 @@ export default function CouncilApp() {
   function importFile(file?: File): void {
     if (!file) return;
     if (file.size > MAX_COUNCIL_BYTES) { setNotice('This file exceeds the 400 KB limit.'); return; }
-    file.text().then(text => setPending(parseCrossingImport(text))).catch(error => setNotice(error instanceof Error ? error.message : 'The save could not be read.'));
+    file.text().then(text => { const imported = parseCrossingImport(text); setPending(imported); setNotice(''); }).catch(error => setNotice(error instanceof Error ? error.message : 'The save could not be read.'));
   }
   function replacePending(): void {
     if (!pending) return;
@@ -173,6 +173,7 @@ export default function CouncilApp() {
     </main>
 
     {modal && <CouncilDialog title={modal === 'journal' ? 'Your crossing journal' : 'Save & settings'} onClose={() => { setModal(null); setPending(null); setResetting(false); }}>
+      {notice && <p className="cq-dialog-notice" role="alert">{notice}</p>}
       {modal === 'journal' && save && state ? <CouncilJournal save={save} state={state}/> : <>
         <p>{blocked.current ? 'Saving is paused. Export this tab before closing it.' : 'This crossing has its own save and includes a copy of your recorded opening. Your opening and Classic saves stay separate.'}</p>
         {save && <><label className="av-setting"><input type="checkbox" checked={save.settings.lessMotion} onChange={e => update({ ...save, settings: { ...save.settings, lessMotion: e.target.checked } })}/> Reduce motion</label><label className="av-setting"><input type="checkbox" checked={save.settings.largeText} onChange={e => update({ ...save, settings: { ...save.settings, largeText: e.target.checked } })}/> Larger text</label></>}
