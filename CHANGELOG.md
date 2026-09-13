@@ -1,5 +1,11 @@
 # Changelog
 
+## Illustrated RPG — Brass Quarter continuation
+
+Adds **The Missing Address**, a second complete illustrated chapter reached through **Take Mara’s ferry** after the opening. Three new scenes introduce a disputed register, a graphical hearing table with movable guests and two valid participation routes, and a promise-tile workbench that distinguishes agreed targets from unperformed field tests. New local SVG environments and portraits respond to seats, duty cover and the recorded setup.
+
+Old completed opening saves can continue or be imported; chapter-two exports contain the original opening history and the new crossing. Separate path-scoped saves preserve Classic and chapter one. In-memory snapshots now survive illustrated-chapter and Classic navigation when storage is denied, with reload/export limits kept visible. Regression coverage includes both routes, incurred costs after changing plans, evidence invalidation, rejected proof claims, save compatibility and browser interaction.
+
 ## Illustrated RPG preview
 
 Adds a separate `#adventure` opening chapter with three illustrated scenes, object inspection, a source-labelled evidence satchel, short character exchanges, tool selection, visible crew responses, claim/evidence placement and a contextual handover. The chapter retains Asterfall's characters and story; the Signal Lab network-builder direction is set aside. Classic remains the default and is preserved at `v1.1.0`.

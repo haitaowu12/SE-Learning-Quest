@@ -5,6 +5,8 @@ import type { Action, Chapter, ChapterSave, Claim, Clue, Device, Meaning, Place 
 import { equipment, evidence, people, places } from './story.ts';
 import type { Person } from './story.ts';
 import { Icon, Portrait, SceneArt } from './Art.tsx';
+import { prepareCrossing } from './crossing.ts';
+import { recallInTab, rememberInTab } from './tab-memory.ts';
 import './adventure.css';
 
 type Speech = { person: Person; title: string; text: string };
@@ -21,8 +23,13 @@ function download(raw: string, name: string): void {
 }
 function load(): { save: ChapterSave; raw: string | null; notice: string; blocked: boolean } {
   let raw: string | null = null;
-  try { raw = localStorage.getItem(saveKey(location.pathname)); return { save: raw !== null ? parseChapterSave(raw) : freshSave(), raw, notice: '', blocked: false }; }
-  catch (error) { return { save: freshSave(), raw, notice: raw === null ? 'Storage is unavailable. You can play here and export your journey before closing this tab.' : `Your saved chapter is preserved but could not be read. ${error instanceof Error ? error.message : ''} Open Save & settings to recover it.`, blocked: true }; }
+  const remembered = recallInTab<ChapterSave>(saveKey(location.pathname));
+  try {
+    raw = localStorage.getItem(saveKey(location.pathname));
+    if (remembered) return remembered.raw === raw ? remembered : { ...remembered, blocked: true, notice: 'Another tab changed this chapter while you were away. Export this tab or load the stored chapter before saving again.' };
+    return { save: raw !== null ? parseChapterSave(raw) : freshSave(), raw, notice: '', blocked: false };
+  }
+  catch (error) { return { save: remembered?.save ?? freshSave(), raw: remembered?.raw ?? raw, notice: raw === null ? 'Storage is unavailable. You can play here and export your journey before reloading or closing this tab.' : `Your saved chapter is preserved but could not be read. ${error instanceof Error ? error.message : ''} Open Save & settings to recover it.`, blocked: true }; }
 }
 
 export default function AdventureApp() {
@@ -48,6 +55,8 @@ export default function AdventureApp() {
   const chapter = places[state.place];
   const progress = state.complete ? 3 : canRepair(state) ? 2 : canLeaveWorkshop(state) ? 1 : 0;
   const isReduced = () => save.settings.lessMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  useEffect(() => { rememberInTab(key.current, { save, raw: raw.current, blocked: blocked.current, notice }); }, [save, notice]);
 
   useEffect(() => {
     const listener = (event: StorageEvent) => {
@@ -140,7 +149,7 @@ export default function AdventureApp() {
         {state.place === 'bench' && !state.complete && <SceneTools state={state} running={running} onEquip={equip} onBrief={brief} onTest={test}/>}
         <section className="av-conversation" aria-label="Companion dialogue"><div className="av-speaker"><Portrait person={speech.person}/><div><strong>{people[speech.person].name}</strong><span>{people[speech.person].role}</span></div></div><h2 tabIndex={-1} ref={speechRef}>{speech.title}</h2><p>{speech.text}</p>{speech.person === 'sera' && <small className="av-source-note">A preserved recording. Sera is still missing.</small>}</section>
         <section className="av-story-action" aria-label="Continue the story">
-          {state.complete ? <><Icon name="flag"/><p className="av-kicker">MARA JOINS YOUR CREW</p><h2>A token for the next crossing</h2><p>“Sera took the early ferry to the Brass Quarter. I’ll take you there. This time, we know who is watching.”</p><p className="av-ended">You have completed this illustrated chapter.</p><a className="av-button av-primary" href="#classic">Explore the full Classic story <Icon name="arrow"/></a><button className="av-text-button" onClick={() => setModal('journal')}>Open your chapter journal</button></>
+          {state.complete ? <><Icon name="flag"/><p className="av-kicker">MARA JOINS YOUR CREW</p><h2>A token for the next crossing</h2><p>“Sera took the early ferry to the Brass Quarter. I’ll take you there. This time, we know who is watching.”</p><p className="av-ended">You have completed the opening chapter. Your record travels with you.</p><a className="av-button av-primary" data-continue-council href="#adventure/council" onClick={() => prepareCrossing(save)}>Take Mara’s ferry <Icon name="arrow"/></a><button className="av-text-button" onClick={() => setModal('journal')}>Open your chapter journal</button><a className="av-text-button" href="#classic">Explore the full Classic story ↗</a></>
             : state.place === 'workshop' ? <><p className="av-kicker">FOLLOW SERA’S TRAIL</p><h2>Mara is at Lower Quay</h2><p>{canLeaveWorkshop(state) ? 'The lamp records a warning. Sera’s message points to the people at its far end.' : 'Inspect the lamp and voice crystal. The ledger is an optional discovery.'}</p><button className="av-button av-primary" disabled={!canLeaveWorkshop(state)} onClick={() => travel('quay')}>Go to Lower Quay <Icon name="arrow"/></button></>
               : state.place === 'quay' ? <><p className="av-kicker">A FERRY STILL WAITING</p><h2>Help Mara’s crew</h2><ul className="av-checklist"><li>{state.clues.includes('mara') ? '✓' : '○'} Talk to Mara</li><li>{state.observed ? '✓' : '○'} Try the old bell</li><li>{state.clues.includes('crew') ? '✓' : '○'} Observe the crew</li></ul><button className="av-button av-primary" disabled={!canRepair(state)} onClick={() => travel('bench')}>Visit the warning station <Icon name="arrow"/></button></>
                 : <><p className="av-kicker">ONE QUAY. A REAL WATCH.</p><h2>Leave a usable plan</h2><p>{state.trial?.acted ? 'Keep the tower result and crew result separate. Mara will accept the watch after you finish the ledger.' : 'Choose a tool. Agree an action. See what the crew actually do.'}</p><button data-finish className="av-button av-primary" disabled={!canFinish(state) || running} onClick={() => { if (act({ type: 'finish' })) { say({ person: 'mara', title: 'I’ll keep the next watch', text: state.device === 'beacon' ? '“I accept this watch log. The crew will use the lantern signal we rehearsed and check its condition and sightline before work. Sera headed for the Brass Quarter.”' : '“I accept this watch log. I’ll keep the local lookout on the duty we rehearsed, with relief at shift change. Sera headed for the Brass Quarter.”' }); } }}>Hand over to Mara <Icon name="arrow"/></button></>}
