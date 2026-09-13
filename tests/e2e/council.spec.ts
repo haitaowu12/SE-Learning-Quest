@@ -66,6 +66,9 @@ async function enterHearing(page: Page) {
   await page.locator('[data-discovery="roll"]').click();
   await page.locator('[data-discovery="orren"]').click();
   await page.getByRole('button', { name: 'Enter the hearing' }).click();
+  // Let scene navigation finish its focus handoff before sending new keyboard
+  // input. This asserts the UI's actual focus behavior rather than adding a delay.
+  await expect(page.getByRole('heading', { name: 'A chair for the night watch', exact: true })).toBeFocused();
 }
 async function seat(page: Page, guest: string, chair: string) {
   await page.locator(`[data-guest="${guest}"]`).click();
@@ -284,6 +287,7 @@ test('Brass Quarter: invalid imports, stored originals, stale tabs and reset pre
   await other.close();
   await page.getByRole('button', { name: 'Save & settings', exact: true }).click();
   await page.getByLabel('Import journey', { exact: true }).setInputFiles({ name: 'future.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ ...freshCouncilSave(recordedOpening()), version: 2 })) });
+  await expect(page.getByRole('dialog').getByRole('alert')).toContainText('not a supported Brass Quarter save');
   expect(await stored(page)).toEqual(newer);
   await page.getByLabel('Import journey', { exact: true }).setInputFiles({ name: 'crossing.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(backup)) });
   await page.getByRole('button', { name: 'Replace crossing', exact: true }).click();

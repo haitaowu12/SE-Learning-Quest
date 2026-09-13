@@ -70,3 +70,9 @@ Browser reports are generated at `test-results/acceptance.json`; scene screensho
 Local release acceptance on 13 September 2026 passed **109/109 unit/content tests** and **45/45 production-browser scenarios**, with zero unexpected, skipped or flaky results. The browser matrix comprises four new Brass Quarter scenarios, five existing opening scenarios and six Classic scenarios on each of Chromium, Firefox and WebKit. TypeScript, the Classic curriculum-map consistency check and production build passed. The retained lazy-loaded legacy bundle still emits its documented size warning.
 
 The bounded reviewer rechecked attendance, incurred costs, case-fact order and memory preservation. The final wording correction changes “need cards below” to “need cards above” to match their revised position before the workbench. Classic runtime, content and its existing acceptance tests remain unchanged from the tagged baseline.
+
+A subsequent recovery check reproduced an invalid-import message being hidden behind the modal dialog. The message now appears inside the active dialog, and a valid import clears the earlier error. The browser regression asserts the visible rejection as well as preservation of the current save.
+
+The follow-up browser run also exposed a keyboard-test race in WebKit: new keyboard input was issued before the scene-navigation focus handoff. The test now waits for the actual scene heading to receive focus before exercising portrait-to-chair keyboard selection; no timed delay or retry was added.
+
+After the import-message and test-synchronization corrections, the targeted continuation suite passed **12/12 scenarios across all three engines**, with no retries. The earlier complete 45-scenario run and the later targeted run are separate observations; the repository workflow reruns the entire suite for the final pushed commit.

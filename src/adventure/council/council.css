@@ -58,6 +58,7 @@
 .cq-finished-record > .av-icon { width: 42px; height: 42px; }
 .cq-finished-record p { font-size: 14px; }
 .cq-import-help { font-size: 12px; }
+.cq-dialog-notice { padding: 12px 15px; background: #fff0d9; color: #694528; border: 1px solid #bb935d; border-radius: 7px; }
 .cq-journal-summary { margin-top: 20px; padding: 15px; background: #ecefdf; border: 1px solid #c4cbb5; border-radius: 8px; }
 .cq-journal-summary p { font-size: 13px; }
 .council.av-large-text .cq-guest-grid strong, .council.av-large-text .cq-promise-slots strong { font-size: 16px; }
