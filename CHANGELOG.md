@@ -1,5 +1,11 @@
 # Changelog
 
+## Illustrated RPG — The Green Tally
+
+Continues the Brass Quarter into a third illustrated chapter at `#adventure/archive`. Neri opens the dispatch records, the player compares four inhabited quays with three listed recipients, and a visual evidence table separates population, recipient and receipt records. Two routes produce a proposed correction: amend the issued list or rebuild from the current survey. Reinstating an obsolete address and treating receiver acknowledgements as proof of local warning both require correction. Orren's reading seal cannot approve a change in service.
+
+Adds three original SVG environments, labelled native controls, a three-chapter journal, separate validated saves, import/export and explicit recovery choices. Changed evidence invalidates dependent reviews and stamps. A completed Brass Quarter save continues without rewriting either earlier chapter. The Stormglass crossing remains a future story lead. Classic's runtime, content, original tests and `v1.1.0` baseline remain unchanged.
+
 ## Illustrated RPG — Brass Quarter continuation
 
 Adds **The Missing Address**, a second complete illustrated chapter reached through **Take Mara’s ferry** after the opening. Three new scenes introduce a disputed register, a graphical hearing table with movable guests and two valid participation routes, and a promise-tile workbench that distinguishes agreed targets from unperformed field tests. New local SVG environments and portraits respond to seats, duty cover and the recorded setup.

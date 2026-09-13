@@ -8,7 +8,7 @@ Start at `#adventure`. After handing the watch to Mara, choose **Take Mara’s f
 
 An exported, completed chapter-one version-1 save can be imported into the Brass Quarter. It starts a new crossing with that exact validated action history. A Brass Quarter export contains both the opening record and the new chapter’s actions. Importing or resetting the crossing does not overwrite the opening’s own save or Classic.
 
-The illustrated experience now contains **two complete chapters and six scenes**. The dispatch archive named at the end is the next story lead, not an implemented third chapter. Classic remains the complete 24-quest campaign, available by default or at `#classic`, with its `v1.1.0` baseline preserved.
+This chapter's original release completed the first **two illustrated chapters and six scenes**. Its ending now offers **Enter the dispatch archive**, continuing into [The Green Tally](DISPATCH_ARCHIVE.md) at `#adventure/archive`. The third chapter carries the exact completed crossing into a separate save. Classic remains the complete 24-quest campaign, available by default or at `#classic`, with its `v1.1.0` baseline preserved. The acceptance results below describe the original Brass Quarter release; additional continuation evidence belongs in the archive chapter's documentation.
 
 ## The three new scenes
 
