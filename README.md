@@ -4,6 +4,8 @@ A browser RPG about rebuilding a world by understanding its connections. Play as
 
 Part of **SE Learning Quest**. The existing Coffee Lab and Harbour Line episodes remain under **Other episodes**.
 
+An alternative [illustrated opening chapter](docs/ILLUSTRATED_RPG.md) is available at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and equip and rehearse a warning with her crew. Classic remains the default full campaign and keeps its existing saves.
+
 ## The game
 
 The complete first campaign has **24 connected quests**, **55 authored dialogue decisions** (48 regular and 7 conditional), **165 choices**, **19 workbench puzzles**, 24 evidence artifacts, 24 keepsakes, eight badges, five trainable skills, and three ending families. Earlier choices change later conversations and recovery challenges. The final support and governance decisions also change the epilogue.
