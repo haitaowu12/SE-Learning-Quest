@@ -1,0 +1,40 @@
+name: Isolated quest development bundle
+
+on:
+  push:
+    branches: [feat/dispatch-archive-chapter]
+    paths: [.github/workflows/archive-development-bundle.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.18.0
+          cache: npm
+      - run: npm ci
+      - name: Package tracked source and installed public dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle_dir="$RUNNER_TEMP/quest-development-bundle"
+          mkdir -p "$bundle_dir/repo" "$bundle_dir/runtime"
+          git archive --format=tar HEAD | tar -xf - -C "$bundle_dir/repo"
+          cp -a node_modules "$bundle_dir/repo/node_modules"
+          cp "$(node -p 'process.execPath')" "$bundle_dir/runtime/node"
+          git rev-parse HEAD > "$bundle_dir/REVISION"
+          tar -czf "$RUNNER_TEMP/quest-development-bundle.tgz" -C "$bundle_dir" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quest-development-bundle
+          path: ${{ runner.temp }}/quest-development-bundle.tgz
+          retention-days: 1
+          if-no-files-found: error
