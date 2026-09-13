@@ -23,7 +23,7 @@ The completion paragraph must remain true across every reachable alternative. Do
 
 Every puzzle has a hint, failure feedback and a successful worked explanation. `trade` scores are higher-is-better benefits; convert costs to an explained benefit scale instead of multiplying raw costs as if high cost were desirable. The calculator is available to the player; arithmetic is not the learning goal.
 
-Keep puzzles untimed and keyboard-operable. The walkthrough after two attempts is an intended learning route. Guided work earns less bench XP but unlocks the same journey.
+Keep puzzles untimed and keyboard-operable. The walkthrough after two unsuccessful workbench submissions is an intended learning route. Reconsidering dialogue does not count as a failed submission. Guided work earns less bench XP but unlocks the same journey.
 
 ## Field guide and process mapping
 

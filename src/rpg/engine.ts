@@ -151,6 +151,7 @@ export function puzzleAnswerProblem(puzzle: Puzzle, answer: unknown): string | n
 export function submitPuzzle(save: Save, answer: string[] | Record<string, string>, assisted = false): Save {
   const { quest, record } = active(save);
   if (!quest.puzzle || record.completed || nextDecision(save, quest)) throw new Error('Finish the conversation before working at the bench.');
+  if (puzzlePassed(quest.puzzle, record.puzzleAnswer)) throw new Error('This bench evidence is already accepted. Reconsider the quest to try again.');
   if (assisted && record.attempts < 2) throw new Error('Try the challenge twice to unlock Pip’s walkthrough.');
   const response = assisted ? quest.puzzle.solution : answer;
   const problem = puzzleAnswerProblem(quest.puzzle, response);
@@ -181,7 +182,9 @@ export function retryQuest(save: Save): Save {
   const { quest, record } = active(save);
   if (record.completed) throw new Error('Completed history is fixed for this expedition.');
   const next = structuredClone(save);
-  next.records[quest.id] = { ...freshRecord(), attempts: Math.min(999, record.attempts + 1) };
+  // Reconsidering dialogue is not a failed bench submission. Keep actual
+  // failures so a learner does not lose access to help by revising a choice.
+  next.records[quest.id] = { ...freshRecord(), attempts: record.attempts };
   return next;
 }
 

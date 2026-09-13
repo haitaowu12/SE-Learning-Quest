@@ -64,7 +64,7 @@ This is a playable introduction to lifecycle thinking, **not the complete ISO st
 | `tests/`, `tests/e2e/` | Engine, persistence, content and production browser acceptance |
 | `scripts/` | Production preview and generated curriculum documentation |
 
-See [architecture](docs/ARCHITECTURE.md), [content authoring](docs/CONTENT_MODEL.md), [contributing](CONTRIBUTING.md), [earlier episodes](docs/LEGACY_EPISODES.md), and the .
+See [architecture](docs/ARCHITECTURE.md), [content authoring](docs/CONTENT_MODEL.md), [contributing](CONTRIBUTING.md), [earlier episodes](docs/LEGACY_EPISODES.md), the , and the .
 
 ## License
 

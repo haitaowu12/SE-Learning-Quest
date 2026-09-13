@@ -607,7 +607,7 @@ export const questsTwo: Quest[] = [
     },
     artifact: { id: 'a23-retirement-manifest', title: 'Old Core Duty, Material, and Custody Manifest', body: 'Link the q06 supplier terms, new return offer, q10 installed record, and subsequent changes. Record remaining duty transfers, observed isolation, cold-state evidence, credentials, resident-data treatment, item identity and condition, retained non-personal records, named receivers, and their acceptance. Retained reserves and unidentified items need custodians, inspections, funding, and expiry or closure conditions; they are not completed disposal entries.' },
     reward: { name: 'Silent Core Medallion', description: 'Pip stamps a small disc from an inspected spare shell; no charged stormglass or resident ledger accompanies it.' },
-    conclusion: 'The old core\'s service duties now have an explicit transfer and retirement record. Any retained reserve or unresolved material remains visible with a custodian. Mara turns her ferry toward Lantern Reach to bring Sera home for the final assembly.',
+    conclusion: 'The retirement ledger preserves the route you selected, including any unconfirmed service transfer, custody gap, or retained reserve. The workbench case does not close those exceptions. A fresh call from Lantern Reach confirms that a relief keeper has practised the manual bell routine with Sera and accepted the watch and escalation log. The relief takes over before Mara sails to bring Sera home for the final assembly.',
   },
   {
     id: 'q24', act: 6, title: 'Who Keeps the Next Watch?', location: 'Lower Quay Assembly', speaker: 'sera',

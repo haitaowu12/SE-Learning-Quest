@@ -107,6 +107,21 @@ test('failed and partial answers, retries, guided solutions and earned training 
   roundTrip(trained);
 });
 
+test('failed-submission counts survive reconsideration and reload without counting dialogue resets', () => {
+  let save = beginQuest({ ...newSave(), onboarded: true }, 'q01');
+  save = roundTrip(retryQuest(retryQuest(save)));
+  assert.equal(save.records.q01.attempts, 0);
+  save = conversations(save, currentQuest('q01'));
+  assert.throws(() => submitPuzzle(save, [], true));
+  save = roundTrip(submitPuzzle(save, []));
+  save = roundTrip(retryQuest(save));
+  assert.equal(save.records.q01.attempts, 1);
+  save = conversations(save, currentQuest('q01'));
+  assert.throws(() => submitPuzzle(save, [], true));
+  save = roundTrip(submitPuzzle(save, []));
+  roundTrip(completeQuest(submitPuzzle(save, [], true)));
+});
+
 test('record and decision property order is canonicalized by replay rather than trusted as chronology', () => {
   const save = expedition();
   const shuffled = structuredClone(save);
@@ -185,6 +200,16 @@ test('attempts and quest booleans reject missing, fractional, negative and exces
   rejected(base, (input) => { input.records.q01.assisted = 0 as never; });
   rejected(base, (input) => { input.records.q01.completed = 'true' as never; });
   rejected(base, (input) => { Reflect.deleteProperty(input.records.q01, 'puzzleAnswer'); });
+});
+
+test('quests without a workbench cannot import failed attempts or fabricate a repair badge', () => {
+  const base = expedition(3);
+  assert.equal(currentQuest('q03').puzzle, undefined);
+  assert.ok(!derive(base).badges.includes('Learned Through Repair'));
+  const altered = structuredClone(base);
+  altered.records.q03.attempts = 1;
+  assert.throws(() => parseSave(JSON.stringify(altered)), /require a quest with a workbench/);
+  roundTrip(base);
 });
 
 test('out-of-order, unknown and invalid decision IDs or choices are rejected', () => {

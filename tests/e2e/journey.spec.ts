@@ -57,7 +57,9 @@ async function chooseAll(page: Page, quest: Quest, quality: Quality) {
       ?? [...decision.options].sort((a, b) => Math.abs(rank.indexOf(a.quality) - rank.indexOf(quality)) - Math.abs(rank.indexOf(b.quality) - rank.indexOf(quality)))[0];
     await page.locator(`[data-choice="${choice.id}"]`).click();
     await expect(page.getByRole('region', { name: 'Choice feedback' })).toContainText(choice.feedback);
+    await expect(page.getByRole('region', { name: 'Choice feedback' }).getByRole('heading', { level: 2 })).toBeFocused();
     await page.getByRole('button', { name: /Continue the conversation|Open the workbench|Review the outcome/ }).click();
+    await expect(page.locator('[data-quest-focus]').first()).toBeFocused();
   }
 }
 async function solve(page: Page, puzzle: Puzzle) {
@@ -189,11 +191,22 @@ test('responsive keyboard journey, 200% reflow, dialogs, save export/import/rese
   const first = quests[0].decisions[0].options.find((choice) => choice.quality === 'weak')!;
   await page.locator(`[data-choice="${first.id}"]`).focus();
   await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { name: 'A gap to learn from' })).toBeFocused();
   const beforeRetry = derive(await stored(page));
   expect(beforeRetry.xp).toBe(0);
   await page.getByRole('button', { name: 'Reconsider this quest' }).click();
+  await expect(page.locator('[data-decision] h2')).toBeFocused();
   expect(derive(await stored(page)).metrics).toEqual({ trust: 50, resilience: 40, supplies: 65 });
+  await page.locator(`[data-choice="${first.id}"]`).click();
+  await page.getByRole('button', { name: 'Reconsider this quest' }).click();
+  expect((await stored(page)).records.q01.attempts).toBe(0);
+  await page.reload();
+  await expect(page.locator('[data-decision]')).toBeVisible();
   await chooseAll(page, quests[0], 'strong');
+  await expect(page.getByText('Work through it with Pip', { exact: true })).toHaveCount(0);
+  await page.locator('[data-submit-puzzle]').click();
+  expect((await stored(page)).records.q01.attempts).toBe(1);
+  await expect(page.getByText('Work through it with Pip', { exact: true })).toHaveCount(0);
   await accessibility(page);
   await solve(page, quests[0].puzzle!);
   await page.locator('[data-claim="q01"]').click();

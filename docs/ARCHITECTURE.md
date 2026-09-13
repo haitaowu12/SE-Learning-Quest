@@ -12,11 +12,11 @@ The public reference links open only when a player follows them. Downloading an 
 
 `storyDecisions()` resolves each conditional beat from choices that occurred earlier in canonical story order. Flags produced later cannot rewrite a past conversation. `choose()` accepts only the currently visible unanswered decision. Completing a quest requires its visible conversation and, where present, its successful bench evidence.
 
-The UI displays the reply, pedagogical explanation, context-dependent trade-off and metric effects before continuing. Failed puzzle responses retain their feedback; after two recorded failed/reconsidered attempts, Pip’s walkthrough offers a guided solution. A quest can be reconsidered before it is sealed. Sealed outcomes remain fixed for that expedition; a new expedition explores alternative histories.
+The UI displays the reply, pedagogical explanation, context-dependent trade-off and metric effects before continuing. Failed puzzle responses retain their feedback; after two unsuccessful workbench submissions, Pip’s walkthrough offers a guided solution. Reconsidering a quest clears its provisional choices and bench answer, preserves the number of actual failed submissions, and does not add a failure or earn a repair badge by itself. A quest can be reconsidered before it is sealed. Sealed outcomes remain fixed for that expedition; a new expedition explores alternative histories.
 
 ## Deterministic progression
 
-The save stores choices and evidence, not trusted XP, level, inventory, flags or unlocks. `derive()` replays records to calculate those values. Applying completion again returns the same state, and retry removes the active unsealed quest’s prior effects. There is no clock or random number in gameplay state.
+The save stores choices and evidence, not trusted XP, level, inventory, flags or unlocks. `derive()` replays records to calculate those values. Applying completion again returns the same state, and retry removes the active unsealed quest’s prior effects. Accepted bench evidence rejects further submissions until reconsideration, matching the UI and preserving a reloadable result after guided work. There is no clock or random number in gameplay state.
 
 Each sealed quest earns 100 XP plus 25/15/5 XP for each strong/context-dependent/weak decision, respectively. A bench earns 40 XP for an independent solution or 20 for a guided solution. Failed attempts do not deduct XP. Every 400 XP increases level; every second level grants a training point. One point adds two to a chosen competency; a competency of three unlocks additional quest insight. Hints and recovery remain available without those insights.
 
@@ -32,7 +32,7 @@ Automatic writes compare the stored raw value with the last observed value. Anot
 
 ## Presentation and accessibility
 
-All controls are native DOM elements. The artwork is decorative SVG/CSS and never the only way to locate a quest. Mobile replaces island overlay buttons with a labelled region grid. Native dialogs provide focus containment and Escape cancellation. Scene navigation focuses the main heading, skip navigation targets the adventure, feedback is readable alongside its consequence, and the UI has no countdowns or reflex-dependent interactions.
+All controls are native DOM elements. The artwork is decorative SVG/CSS and never the only way to locate a quest. Mobile replaces island overlay buttons with a labelled region grid. Native dialogs provide focus containment and Escape cancellation. Scene navigation focuses the main heading; choosing focuses the new feedback heading, and Continue or Reconsider focuses the next decision, workbench or reward heading. Skip navigation targets the adventure. The UI has no countdowns or reflex-dependent interactions.
 
 Text scaling uses relative units and collapses layouts as text grows. System and user reduced-motion preferences disable the decorative cloud movement. Browser tests inspect keyboard operation, axe findings and layout at narrow widths and 200% application text size. These are not a substitute for human screen-reader, actual device or browser-zoom observations.
 
