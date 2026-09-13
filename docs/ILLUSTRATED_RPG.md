@@ -1,4 +1,4 @@
-# The Missing Keeper — illustrated RPG chapter
+# The Missing Keeper — illustrated RPG opening
 
 This is the replacement direction after the owner found Signal Lab confusing and asked to retain Asterfall's RPG story, with more graphical inputs and interaction. The network-builder experiment is set aside. Classic remains the complete 24-quest campaign and is preserved at the `v1.1.0` tag and release.
 
@@ -6,7 +6,7 @@ This is the replacement direction after the owner found Signal Lab confusing and
 
 Open the site's `#adventure` route. Locally, run `npm run build` and `npm run preview:pages`, then open `http://127.0.0.1:4173/SE-Learning-Quest/#adventure`. The default route and `#classic` still open Classic; `#episodes` opens Coffee Lab and Harbour Line.
 
-This is **one complete illustrated opening chapter**, not a conversion of all 24 quests. Its ending says so and provides a route to the full Classic story. Classic and the illustrated chapter do not share progression or reinterpret each other's saves.
+This document describes the completed opening chapter. Its **Take Mara’s ferry** action now continues into [The Missing Address](BRASS_QUARTER.md), a second complete illustrated chapter at `#adventure/council`. The two chapters are not a conversion of all 24 Classic quests. Classic keeps its separate progression and saves.
 
 ## The playable chapter
 
@@ -40,6 +40,8 @@ An image-generation call produced a concept image during development. The connec
 
 The storage key begins `se_learning_quest_illustrated_v1:` and is scoped to the deployment path. Classic's `se_learning_quest_asterfall_v1:` key is untouched. Malformed stored bytes are preserved, storage failure allows in-memory play and export, and observed cross-tab changes pause writes until the player explicitly reconciles. Import and restart require confirmation. As in Classic, this is stale-snapshot detection, not atomic multi-tab synchronization.
 
+Completed opening saves continue into the Brass Quarter without a schema change. Chapter two retains a validated copy of the original history in its own save and export. Both illustrated chapters retain unsaved progress across hash-route navigation using tab memory; a full page reload or browser closure still needs storage or an export. See [continuation compatibility](BRASS_QUARTER.md).
+
 ## Review and verification
 
 A separate read-only review checked the q01/q02 source scenario and then the illustrated implementation. Corrections keep the old-bell observation separate from the diagnosis until the crew is inspected, make the beacon/lookout handover match its tested arrangement, and prevent imported actions after completion. The review did not test engagement with human learners.
@@ -60,6 +62,6 @@ Earlier development checks found a low-contrast caption, missing accessible name
 
 The first Linux CI run additionally exposed a result-scope caption with contrast 4.41:1 against its background. Its text color was darkened, and the browser check now scrolls the result region into view before scanning it so offscreen clipping cannot hide the caption from that check.
 
-## Scope for the next chapter
+## Continuing the story
 
-Keep the RPG scene, characters, satchel and short objectives. Vary the next activity around what happens in the story—for example, seating affected people at a hearing or examining a physical component with incompatible markings. Do not resume the network-builder direction or mechanically reskin every Classic text choice. The next content decision should use the owner's feedback on this playable chapter.
+The Brass Quarter keeps the characters and short objectives while varying the activity: moving people into hearing seats, arranging relief or confirming a written account, and assembling a promise from graphical tiles. The next archive lead is narrative only; no third illustrated chapter is claimed. The rejected network-builder direction remains separate.

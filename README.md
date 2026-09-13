@@ -4,7 +4,7 @@ A browser RPG about rebuilding a world by understanding its connections. Play as
 
 Part of **SE Learning Quest**. The existing Coffee Lab and Harbour Line episodes remain under **Other episodes**.
 
-An alternative [illustrated opening chapter](docs/ILLUSTRATED_RPG.md) is available at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and equip and rehearse a warning with her crew. Classic remains the default full campaign and keeps its existing saves.
+An alternative [illustrated RPG](docs/ILLUSTRATED_RPG.md) starts at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and rehearse a warning with her crew. **Take Mara’s ferry** continues to [The Missing Address](docs/BRASS_QUARTER.md) at **`#adventure/council`**: seat people at the hearing, carry their accounts, and assemble a warning promise on Tavi’s workbench. Two illustrated chapters are playable; completed opening saves can continue or be imported. Classic remains the default full campaign and keeps its existing saves.
 
 ## The game
 
