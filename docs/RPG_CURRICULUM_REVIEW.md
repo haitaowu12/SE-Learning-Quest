@@ -2,6 +2,8 @@
 
 Review date: 12 September 2026. Branch: `feat/asterfall-rpg`. Working-tree review; the base commit `865efe94cab5462925e799fd5bd4aadf909186cd` alone does not identify the uncommitted RPG content.
 
+Follow-up review: a separate read-only pass found two additional q23 continuity issues after the original review below. The final conclusion now preserves unresolved weak-path transfer/custody gaps and establishes the refuge relief handover before Sera returns. The implementing agent checked the changed text against each affected choice and the q20/q24 sequence. See [RPG_COMPLETION.md](RPG_COMPLETION.md) for the correction, updated source identity and final acceptance; the original findings and snapshots below remain historical.
+
 ## Finding and review scope
 
 The combined campaign contains all **30 declared process areas and 18 supporting concepts**. Each process occurs in at least one quest's primary `processes` field; no declared concept is left without a gameplay mapping. The reviewed scenarios generally require a decision about supplied evidence, resources, interfaces or affected people. Four semantic findings were sent to the implementing agent for correction, recorded below. Topic presence is established; exhaustive coverage of a standard, instructional effectiveness and learner competence are not established by these checks.

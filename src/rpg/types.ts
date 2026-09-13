@@ -63,6 +63,7 @@ export interface Concept { id: string; title: string; explanation: string; examp
 export interface QuestRecord {
   decisions: Record<string, string>;
   puzzleAnswer: string[] | Record<string, string> | null;
+  /** Failed bench submissions, retained across dialogue reconsideration. */
   attempts: number;
   assisted: boolean;
   completed: boolean;

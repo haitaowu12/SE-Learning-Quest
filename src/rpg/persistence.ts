@@ -66,6 +66,7 @@ export function parseSave(text: string): Save {
       attempts: boundedInt(input.attempts, 999, 'Attempts'),
       assisted: bool(input.assisted, 'Guided assistance'), completed: false,
     };
+    if (!quest.puzzle && record.attempts !== 0) throw new Error('Failed bench attempts require a quest with a workbench.');
     save.records[quest.id] = record;
     let gap = false;
     for (const decision of quest.decisions) {

@@ -13,3 +13,5 @@ Adds process/concept traceability, original-source boundaries, content/architect
 Dependency audit remediation updates the lockfile’s Vite, PostCSS and Nano ID resolutions. The supported toolchain baseline is Node 22.18 and `npm ci`.
 
 The campaign covers all 30 lifecycle process areas at an introductory gameplay level plus 18 supporting concepts. It does not reproduce or claim exhaustive coverage of licensed standards/handbook content, validated learning effectiveness or certification readiness.
+
+Final review fixes separate dialogue reconsideration from failed bench submissions, reject impossible no-puzzle attempt imports, and protect accepted bench evidence from inconsistent resubmission. Keyboard focus follows feedback and the next challenge. The retirement conclusion retains unresolved choices and confirms refuge cover before Sera returns. Source documentation now records the current SEBoK licensing scopes. Acceptance passes 81 unit/content tests and 18 production-browser scenarios across three engines.

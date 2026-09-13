@@ -2,6 +2,8 @@
 
 Review date: 2026-09-12. Working branch: `feat/asterfall-rpg`.
 
+The original review and its 76-test reconciliation are retained below. A subsequent read-only review identified the reconsideration counter, accepted-evidence resubmission, no-puzzle import and keyboard-focus issues. Their corrections and the final **81/81 unit/content and 18/18 browser results** are recorded in [RPG_COMPLETION.md](RPG_COMPLETION.md).
+
 ## Scope and status
 
 Worker 1 authored `src/rpg/quests-one.ts`, checked its contract against the

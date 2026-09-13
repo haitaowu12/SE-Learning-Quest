@@ -7,6 +7,7 @@ import {
   tradeTotals, train,
 } from '../src/rpg/engine.ts';
 import type { Choice, Decision, Quality, Quest, Save } from '../src/rpg/types.ts';
+import { parseSave } from '../src/rpg/persistence.ts';
 
 type Selector = (decision: Decision, quest: Quest) => Choice;
 
@@ -240,6 +241,60 @@ test('failed attempts award no XP, assistance needs two attempts and earns its s
   assert.ok(derive(complete).badges.includes('Learned Through Repair'));
 });
 
+test('reconsideration does not count as a failed workbench submission', () => {
+  const current = quest('q01');
+  let save = beginQuest({ ...newSave(), onboarded: true }, current.id);
+  for (let i = 0; i < 2; i++) {
+    const decision = nextDecision(save, current)!;
+    save = choose(save, decision.id, decision.options[0].id);
+    save = retryQuest(save);
+  }
+  assert.equal(save.records.q01.attempts, 0);
+  save = converse(save, current);
+  assert.throws(() => submitPuzzle(save, [], true), /twice/);
+  assert.ok(!derive(completeQuest(submitPuzzle(save, current.puzzle!.solution))).badges.includes('Learned Through Repair'));
+
+  save = submitPuzzle(save, []);
+  save = converse(retryQuest(save), current);
+  assert.equal(save.records.q01.attempts, 1, 'a real failed submission survives reconsideration');
+  assert.throws(() => submitPuzzle(save, [], true), /twice/);
+  save = submitPuzzle(save, []);
+  save = submitPuzzle(save, [], true);
+  assert.equal(save.records.q01.attempts, 2);
+  assert.equal(save.records.q01.assisted, true);
+  assert.ok(canComplete(save, current));
+});
+
+test('reconsidering a quest without a workbench cannot award a repair badge', () => {
+  const current = quest('q03');
+  assert.equal(current.puzzle, undefined);
+  let save = converse(journey(prefer('strong'), 2), current);
+  save = retryQuest(retryQuest(save));
+  save = finish(save, current);
+  assert.equal(save.records.q03.attempts, 0);
+  assert.ok(!derive(save).badges.includes('Learned Through Repair'));
+});
+
+test('accepted bench evidence requires reconsideration before resubmission and remains reloadable', () => {
+  const current = quest('q01');
+  for (const assisted of [false, true]) {
+    let save = bench(current.id);
+    if (assisted) save = submitPuzzle(submitPuzzle(save, []), []);
+    save = submitPuzzle(save, current.puzzle!.solution, assisted);
+    const accepted = structuredClone(save);
+    assert.throws(() => submitPuzzle(save, []), /already accepted/);
+    assert.throws(() => submitPuzzle(save, current.puzzle!.solution), /already accepted/);
+    assert.deepEqual(save, accepted);
+    assert.deepEqual(parseSave(JSON.stringify(save)), save);
+
+    const retried = converse(retryQuest(save), current);
+    const failed = submitPuzzle(retried, []);
+    assert.equal(failed.records.q01.assisted, false);
+    assert.deepEqual(parseSave(JSON.stringify(failed)), failed);
+    assert.ok(completeQuest(save).records.q01.completed);
+  }
+});
+
 test('retry removes this quest’s provisional flags and effects without farming or undoing earlier rewards', () => {
   const previous = journey(prefer('strong'), 1);
   let save = beginQuest(previous, 'q02');
@@ -254,7 +309,7 @@ test('retry removes this quest’s provisional flags and effects without farming
   assert.equal(derive(retried).xp, derive(previous).xp);
   assert.deepEqual(retried.records.q01, previous.records.q01);
   assert.deepEqual(retried.records.q02.decisions, {});
-  assert.equal(retried.records.q02.attempts, 1);
+  assert.equal(retried.records.q02.attempts, 0);
   assert.equal(derive(save).flags.voices, 'none');
 });
 
