@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 
 const RpgApp = lazy(() => import('./rpg/App.tsx'));
 const LegacyApp = lazy(() => import('./app/LegacyApp.tsx'));
+const AdventureApp = lazy(() => import('./adventure/App.tsx'));
+const currentRoute = () => window.location.hash === '#episodes' ? 'legacy' : window.location.hash === '#adventure' ? 'adventure' : 'classic';
 
 class AppBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
@@ -13,15 +15,15 @@ class AppBoundary extends Component<{ children: ReactNode }, { failed: boolean }
 }
 
 export function AppRouter() {
-  const [legacy, setLegacy] = useState(window.location.hash === '#episodes');
+  const [route, setRoute] = useState(currentRoute);
   useEffect(() => {
-    const change = () => setLegacy(window.location.hash === '#episodes');
+    const change = () => setRoute(currentRoute());
     window.addEventListener('hashchange', change);
     return () => window.removeEventListener('hashchange', change);
   }, []);
   useEffect(() => {
-    document.body.dataset.app = legacy ? 'legacy' : 'rpg';
-    document.title = legacy ? 'SE Learning Quest · Learning episodes' : 'Asterfall: The Last Relay · SE Learning Quest';
-  }, [legacy]);
-  return <AppBoundary><Suspense fallback={<main style={{ padding: '3rem', color: '#e6d9b4', fontFamily: 'system-ui' }} role="status">Lighting the relay…</main>}>{legacy ? <LegacyApp /> : <RpgApp />}</Suspense></AppBoundary>;
+    document.body.dataset.app = route === 'classic' ? 'rpg' : route;
+    document.title = route === 'legacy' ? 'SE Learning Quest · Learning episodes' : route === 'adventure' ? 'Asterfall · The Missing Keeper · Illustrated RPG' : 'Asterfall: The Last Relay · SE Learning Quest';
+  }, [route]);
+  return <AppBoundary><Suspense fallback={<main style={{ padding: '3rem', color: '#e6d9b4', fontFamily: 'system-ui' }} role="status">Lighting the relay…</main>}>{route === 'legacy' ? <LegacyApp /> : route === 'adventure' ? <AdventureApp /> : <RpgApp />}</Suspense></AppBoundary>;
 }

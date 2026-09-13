@@ -1,5 +1,11 @@
 # Changelog
 
+## Illustrated RPG preview
+
+Adds a separate `#adventure` opening chapter with three illustrated scenes, object inspection, a source-labelled evidence satchel, short character exchanges, tool selection, visible crew responses, claim/evidence placement and a contextual handover. The chapter retains Asterfall's characters and story; the Signal Lab network-builder direction is set aside. Classic remains the default and is preserved at `v1.1.0`.
+
+Adds event-replayed chapter saves with a separate namespace, confirmation-based import/reset, corruption preservation, stale-tab detection, in-memory play when storage fails, and reduced-motion/reading settings. Original SVG scenes and native controls require no new dependencies or external runtime assets. This preview covers one complete chapter, not all 24 Classic quests.
+
 ## 1.1.0 — Asterfall: The Last Relay
 
 Introduces an original, complete 24-quest roleplaying campaign as the default experience. The story spans six regions and the engineering lifecycle, with 55 authored dialogue decisions, 165 choices, 19 workbench puzzles, 24 artifacts and keepsakes, eight badges, five trainable skills and three ending families with governance/support variants.
