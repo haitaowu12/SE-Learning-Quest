@@ -60,6 +60,8 @@ Local acceptance on 13 September 2026: **92/92 unit/content tests and 33/33 prod
 
 Earlier development checks found a low-contrast caption, missing accessible names when mobile navigation labels were hidden, and accidental card deselection after a failed placement. Those were corrected before the passing run. The archived Classic runtime, content and existing tests were not edited.
 
+The first Linux CI run additionally exposed a result-scope caption with contrast 4.41:1 against its background. Its text color was darkened, and the browser check now scrolls the result region into view before scanning it so offscreen clipping cannot hide the caption from that check.
+
 ## Scope for the next chapter
 
 Keep the RPG scene, characters, satchel and short objectives. Vary the next activity around what happens in the story—for example, seating affected people at a hearing or examining a physical component with incompatible markings. Do not resume the network-builder direction or mechanically reskin every Classic text choice. The next content decision should use the owner's feedback on this playable chapter.
