@@ -1,0 +1,105 @@
+.council .av-header nav { gap: 10px; }
+.council .av-header nav a { white-space: nowrap; }
+.cq-arrival-gate { max-width: 650px; margin: 8vh auto; padding: 32px; background: #fffdf6; border: 1px solid #c8d2bf; border-radius: 14px; }
+.cq-arrival-gate h1 { font-size: 38px; }
+.cq-arrival-gate .av-portrait { float: right; margin: 0 0 12px 20px; }
+.cq-arrival-gate .av-button { margin: 6px 12px 0 0; }
+.cq-orren-label { position: absolute; top: 39%; left: 50%; transform: translateX(-50%); padding: 5px 9px; border-radius: 5px; color: #fff3d4; background: #253e42ed; font-size: 11px; white-space: nowrap; }
+.cq-seats { position: absolute; inset: 0 0 50px; pointer-events: none; }
+.cq-seat { position: absolute; top: 75%; left: var(--seat-x); transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 80px; min-height: 66px; padding: 8px 12px; background: #faf0d8ee; border: 2px dashed #87663b; border-radius: 10px; color: #284d51; pointer-events: auto; box-shadow: 0 3px 9px #102a3733; }
+.cq-seat.occupied { border-style: solid; background: #e6eddfed; }
+.cq-seat span { font-size: 12px; font-weight: 650; }
+.cq-seat small { display: block; font-size: 10px; font-weight: 500; }
+.cq-hearing-costs { font-size: 13px; color: #405d54; }
+.cq-guests, .cq-hearing-controls, .cq-open-questions, .cq-needs, .cq-parchment, .cq-finished-record { padding: 20px; border: 1px solid #cdd5c3; border-radius: 12px; background: #fffdf6; }
+.cq-guests h2, .cq-hearing-controls h2, .cq-open-questions h2, .cq-needs h2, .cq-parchment h2, .cq-finished-record h2 { margin: 0 0 12px; font-size: 24px; }
+.cq-selection, .cq-guests > p, .cq-hearing-controls > p, .cq-parchment > p { font-size: 13px; color: #496563; }
+.cq-guest-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.cq-guest-grid button { display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid #bac9b6; border-radius: 10px; padding: 14px 8px; background: #edf1e5; color: #2d5257; min-width: 0; }
+.cq-guest-grid button[aria-pressed=true] { outline: 3px solid #ac7227; outline-offset: 2px; background: #fff0cb; }
+.cq-guest-grid .av-portrait { width: 57px; height: 57px; margin-bottom: 4px; }
+.cq-guest-grid strong { font-size: 14px; }
+.cq-guest-grid span { font-size: 11px; }
+.cq-guest-grid small { font-size: 10px; color: #465f5e; }
+.cq-remove-row { display: flex; flex-wrap: wrap; gap: 7px 16px; margin-top: 7px; }
+.cq-remove-row .av-text-button { font-size: 11px; min-height: 40px; }
+.cq-duty-actions { display: flex; flex-direction: column; gap: 9px; margin: 14px 0; }
+.cq-hearing-controls .av-button { width: 100%; font-size: 12px; padding: 10px; }
+.cq-readback { margin-top: 14px; }
+.cq-open-questions { background: #fff3df; border-color: #ceba8e; }
+.cq-open-questions p, .cq-review p { font-size: 13px; }
+.cq-open-questions p:last-child { margin-bottom: 0; }
+.cq-needs > div { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; }
+.cq-needs article { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; padding: 13px 11px; border: 1px solid #c1ccb6; background: #eef1e2; border-radius: 8px; }
+.cq-needs strong { font-size: 12px; }
+.cq-needs span, .cq-needs > p { font-size: 11px; color: #49605d; }
+.cq-needs > p { margin: 12px 0 0; }
+.cq-promise-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 17px 0; }
+.cq-promise-slots fieldset { min-width: 0; margin: 0; padding: 13px; border: 1px solid #bca67c; border-radius: 8px; background: #f9f2df; }
+.cq-promise-slots legend { padding: 0 6px; font-weight: 700; font-size: 14px; }
+.cq-promise-slots fieldset > p { font-size: 12px; margin-bottom: 9px; color: #576258; }
+.cq-promise-slots fieldset > div { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.cq-promise-slots button { display: flex; flex-direction: column; align-items: center; gap: 9px; min-width: 0; padding: 13px 9px; color: #294d50; background: #fffdf5; border: 1px solid #bfbea6; border-radius: 7px; }
+.cq-promise-slots button[aria-pressed=true] { border-color: #2d6562; box-shadow: inset 0 0 0 2px #2d6562; background: #e9efe2; }
+.cq-promise-slots strong { font-size: 12px; line-height: 1.4; }
+.cq-promise-slots span { font-size: 10px; line-height: 1.5; color: #4d6260; }
+.cq-parchment > .av-button { width: 100%; }
+.cq-review { margin-top: 18px; padding: 16px; background: #eef0e1; border-radius: 8px; border: 1px solid #b9c5aa; }
+.cq-review h3 { margin: 0 0 12px; font-size: 17px; }
+.cq-review p:last-child { margin-bottom: 0; }
+.cq-evidence-stamps { border-top: 1px solid #ccb989; padding-top: 14px; margin-top: 18px; }
+.cq-evidence-stamps h3 { font-size: 17px; }
+.cq-evidence-stamps > div { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cq-evidence-stamps button { white-space: normal; }
+.cq-evidence-stamps button[aria-pressed=true] { border: 2px solid #55715c; background: #e9efe1; }
+.cq-stamp { display: inline-block; margin-top: 14px !important; padding: 8px 12px; border: 2px dashed #81633b; color: #705026; background: #f7ecd5; font-size: 11px; font-weight: 750; letter-spacing: .06em; }
+.cq-carry-forward { display: block; margin-top: 14px; padding-top: 12px; border-top: 1px solid #bcc6ad; font-size: 11px; color: #3d5b50; }
+.cq-finished-record { display: flex; align-items: flex-start; gap: 18px; background: #f6efda; }
+.cq-finished-record > .av-icon { width: 42px; height: 42px; }
+.cq-finished-record p { font-size: 14px; }
+.cq-import-help { font-size: 12px; }
+.cq-dialog-notice { padding: 12px 15px; background: #fff0d9; color: #694528; border: 1px solid #bb935d; border-radius: 7px; }
+.cq-journal-summary { margin-top: 20px; padding: 15px; background: #ecefdf; border: 1px solid #c4cbb5; border-radius: 8px; }
+.cq-journal-summary p { font-size: 13px; }
+.council.av-large-text .cq-guest-grid strong, .council.av-large-text .cq-promise-slots strong { font-size: 16px; }
+.council.av-large-text .cq-promise-slots span, .council.av-large-text .cq-guest-grid span, .council.av-large-text .cq-needs span { font-size: 13px; }
+.council.av-large-text .cq-needs strong { font-size: 15px; }
+@media(max-width:1100px) { .cq-promise-slots { grid-template-columns: 1fr; } .cq-needs > div { grid-template-columns: 1fr 1fr; } .cq-seat { min-width: 65px; padding: 7px; } }
+@media(max-width:860px) {
+  .cq-guests { order: 1; }
+  .council .av-conversation { order: 2; }
+  .cq-hearing-controls { order: 3; }
+  .cq-open-questions { order: 4; }
+  .cq-needs { order: 5; }
+  .cq-parchment { order: 6; }
+  .cq-finished-record { order: 6; }
+  .council .av-story-action { order: 7; }
+  .cq-promise-slots { grid-template-columns: 1fr 1fr; }
+  .cq-hearing-controls > .av-button { width: auto; min-width: 180px; }
+  .cq-duty-actions { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:540px) {
+  .council .av-header { flex-wrap: wrap; gap: 7px; }
+  .council .av-header nav { gap: 6px; }
+  .council .av-header nav a { font-size: 10px; padding: 5px; }
+  .council .av-brand > span { font-size: 14px; }
+  .council .av-brand > .av-icon { width: 25px; }
+  .cq-landing-hotspots { grid-template-columns: 1fr 1fr; }
+  .cq-seats { position: static; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; padding: 12px; border-top: 1px solid #b7c6b4; background: #e7ecdd; }
+  .cq-seat { position: static; transform: none; width: 100%; min-width: 0; min-height: 70px; padding: 8px 4px; box-shadow: none; }
+  .cq-seat span { font-size: 11px; }
+  .cq-orren-label { font-size: 8px; padding: 4px 6px; }
+  .cq-guests, .cq-hearing-controls, .cq-open-questions, .cq-needs, .cq-parchment, .cq-finished-record { padding: 15px; }
+  .cq-guest-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .cq-guest-grid button { padding: 12px 7px; }
+  .cq-guest-grid .av-portrait { width: 49px; height: 49px; }
+  .cq-promise-slots { grid-template-columns: 1fr; gap: 12px; }
+  .cq-duty-actions { grid-template-columns: 1fr; }
+  .cq-evidence-stamps > div { grid-template-columns: 1fr; }
+  .cq-finished-record { display: block; }
+  .cq-finished-record > .av-icon { margin-bottom: 10px; }
+  .cq-arrival-gate { margin-top: 20px; padding: 20px; }
+  .cq-arrival-gate h1 { font-size: 29px; }
+  .cq-arrival-gate .av-portrait { float: none; margin: 0 0 15px; }
+  .council.av-large-text .cq-promise-slots fieldset > div, .council.av-large-text .cq-needs > div { grid-template-columns: 1fr; }
+}
