@@ -1,4 +1,6 @@
 .archive .av-preview { background: #e9dfc8; color: #655033; }
+.archive .av-header { flex-wrap: wrap; }
+.archive .av-header nav { flex-wrap: wrap; gap: 10px; max-width: 100%; }
 .archive .av-play-layout { grid-template-columns: minmax(0, 1fr) 320px; }
 .archive .av-play-column, .ar-sidebar { display: flex; min-width: 0; flex-direction: column; gap: 18px; }
 .archive button:focus-visible, .archive a:focus-visible, .archive input:focus-visible { outline: 3px solid #9b4c22; outline-offset: 4px; }
@@ -86,6 +88,8 @@
   .ar-source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 480px) {
+  .archive .av-header nav { flex-basis: 100%; margin-left: 0; justify-content: space-between; gap: 6px; }
+  .archive .av-header nav a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
   .ar-sources, .ar-comparison, .ar-evidence, .ar-proposal { padding: 15px; }
   .ar-source-grid { grid-template-columns: 1fr; }
   .ar-quays { gap: 9px; }
