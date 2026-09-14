@@ -6,7 +6,7 @@ This is the replacement direction after the owner found Signal Lab confusing and
 
 Open the site's `#adventure` route. Locally, run `npm run build` and `npm run preview:pages`, then open `http://127.0.0.1:4173/SE-Learning-Quest/#adventure`. The default route and `#classic` still open Classic; `#episodes` opens Coffee Lab and Harbour Line.
 
-This document describes the completed opening chapter. Its **Take Mara’s ferry** action now continues into [The Missing Address](BRASS_QUARTER.md), a second complete illustrated chapter at `#adventure/council`. The two chapters are not a conversion of all 24 Classic quests. Classic keeps its separate progression and saves.
+This document describes the completed opening chapter. Its **Take Mara’s ferry** action continues into [The Missing Address](BRASS_QUARTER.md) at `#adventure/council`, followed by [The Green Tally](DISPATCH_ARCHIVE.md) at `#adventure/archive`. These three illustrated chapters are not a conversion of all 24 Classic quests. Classic keeps its separate progression and saves.
 
 ## The playable chapter
 
@@ -66,4 +66,4 @@ The first Linux CI run additionally exposed a result-scope caption with contrast
 
 ## Continuing the story
 
-The Brass Quarter keeps the characters and short objectives while varying the activity: moving people into hearing seats, arranging relief or confirming a written account, and assembling a promise from graphical tiles. The next archive lead is narrative only; no third illustrated chapter is claimed. The rejected network-builder direction remains separate.
+The Brass Quarter keeps the characters and short objectives while varying the activity: moving people into hearing seats, arranging relief or confirming a written account, and assembling a promise from graphical tiles. The dispatch archive continues with folio inspection, two views of the same district, source placement and a proposed address list. The rejected network-builder direction remains separate. The archive's Stormglass destination is a later story lead, not a playable fourth chapter.

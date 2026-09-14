@@ -4,7 +4,7 @@ A browser RPG about rebuilding a world by understanding its connections. Play as
 
 Part of **SE Learning Quest**. The existing Coffee Lab and Harbour Line episodes remain under **Other episodes**.
 
-An alternative [illustrated RPG](docs/ILLUSTRATED_RPG.md) starts at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and rehearse a warning with her crew. **Take Mara’s ferry** continues to [The Missing Address](docs/BRASS_QUARTER.md) at **`#adventure/council`**: seat people at the hearing, carry their accounts, and assemble a warning promise on Tavi’s workbench. Two illustrated chapters are playable; completed opening saves can continue or be imported. Classic remains the default full campaign and keeps its existing saves.
+An alternative [illustrated RPG](docs/ILLUSTRATED_RPG.md) starts at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and rehearse a warning with her crew. **Take Mara’s ferry** continues to [The Missing Address](docs/BRASS_QUARTER.md) at **`#adventure/council`**: seat people at the hearing, carry their accounts, and assemble a warning promise on Tavi’s workbench. **Enter the dispatch archive** then opens [The Green Tally](docs/DISPATCH_ARCHIVE.md) at **`#adventure/archive`**: compare inhabited quays with a recipient list, place source records beside their claims, and prepare a correction for Stormglass. Three illustrated chapters are playable. Completed predecessor saves can continue or be imported; Classic remains the default full campaign and keeps its existing saves.
 
 ## The game
 
