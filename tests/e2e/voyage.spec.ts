@@ -42,7 +42,11 @@ async function playScene(page: Page, save: VoyageSave): Promise<VoyageSave> {
     } else if (action.type === 'move') {
       await page.locator(`[data-voyage-card="${action.tile}"] [data-direction="${action.direction}"]`).click();
     } else if (action.type === 'allocate') {
-      for (let i = 0; i < action.amount; i++) await page.locator(`[data-voyage-allocate="${action.role}:up"]`).click();
+      for (let amount = 1; amount <= action.amount; amount++) {
+        await page.locator(`[data-voyage-allocate="${action.role}:up"]`).click();
+        save = dispatchVoyage(save, { ...action, amount });
+      }
+      continue;
     } else if (action.type === 'run') {
       await page.locator(`[data-voyage-run="${action.caseId}"]`).click();
       await expect(page.getByRole('region', { name: 'Exercise observations' })).toBeVisible();
