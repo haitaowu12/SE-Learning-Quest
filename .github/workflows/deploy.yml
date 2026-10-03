@@ -5,6 +5,17 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish the explicitly accepted commit after all validation passes'
+        type: boolean
+        required: false
+        default: false
+      approved_sha:
+        description: 'Full 40-character main commit accepted for publication; required when publish is true'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -45,7 +56,7 @@ jobs:
           retention-days: 14
 
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.publish == true
     needs: validate
     runs-on: ubuntu-latest
     permissions:
@@ -57,10 +68,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v7
         with:
           node-version: '22.18.0'
           cache: npm
+      - name: Verify explicit publication request
+        env:
+          PUBLISH_REQUESTED: ${{ inputs.publish }}
+          APPROVED_SHA: ${{ inputs.approved_sha }}
+        run: node scripts/verify-publication-request.mjs
       - run: npm ci
       - run: npm run build
       - uses: actions/configure-pages@v5

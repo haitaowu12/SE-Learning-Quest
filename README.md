@@ -58,9 +58,9 @@ Browser acceptance plays complete strong and weak campaigns through the UI, incl
 
 ## GitHub Pages
 
-The repository workflow validates unit/content tests and browser acceptance across Chromium, Firefox and WebKit. Successful runs on `main` build and deploy `dist/` to Pages. Pull requests validate without deploying.
+The repository workflow validates unit/content tests and browser acceptance across Chromium, Firefox and WebKit. Pull requests, pushes to `main`, and ordinary manual runs validate without deploying. Code integration does not establish human usability acceptance or authorize publication.
 
-In **Settings → Pages → Build and deployment**, choose **GitHub Actions**. Push or merge the reviewed change to `main`, or run the workflow manually on `main`. Vite uses `base: './'`; no repository name is embedded in runtime asset URLs. A renamed fork or custom-domain root uses the same build. See [deployment](docs/DEPLOYMENT.md) for the full publishing path and evidence boundaries.
+After an explicit publication decision, run the workflow manually on `main`, select `publish`, and provide the accepted full commit SHA as `approved_sha`. The workflow refuses a missing or mismatched identity and still requires all validation jobs. The existing **Settings → Pages → GitHub Actions** setup and environment protections remain unchanged. Vite uses `base: './'`; no repository name is embedded in runtime asset URLs. See [deployment](docs/DEPLOYMENT.md) for the publishing path and evidence boundaries.
 
 ## Educational scope
 
