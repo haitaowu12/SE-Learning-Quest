@@ -1,0 +1,23 @@
+name: Export quest source for development
+on:
+  push:
+    branches: [feat/illustrated-campaign-complete]
+    paths: [.github/workflows/quest-source-export.yml]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Export only tracked project files
+        run: git archive --format=tar.gz --output=quest-source.tar.gz HEAD
+      - uses: actions/upload-artifact@v7
+        with:
+          name: quest-source
+          path: quest-source.tar.gz
+          retention-days: 1
+          if-no-files-found: error

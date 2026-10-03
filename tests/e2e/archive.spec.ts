@@ -44,6 +44,9 @@ async function inspectStacks(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Take the records to the table' }).click();
   await expect(page.getByRole('heading', { name: scenes.table, exact: true }).first()).toBeFocused();
   await page.locator('[data-archive-record="tally"]').click();
+  // Inspection moves focus on the next animation frame. Wait for that user-
+  // visible transition before a caller starts its own keyboard interaction.
+  await expect(page.getByRole('region', { name: 'Companion dialogue' }).getByRole('heading')).toBeFocused();
 }
 async function pin(page: Page, record: string, slot: string): Promise<void> {
   await page.locator(`[data-archive-source="${record}"]`).click();

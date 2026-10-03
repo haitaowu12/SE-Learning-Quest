@@ -6,12 +6,19 @@ The deployable artifact is `dist/`. It contains static HTML, JavaScript, CSS and
 
 The tested toolchain baseline is Node 22.18 and the committed npm lockfile. `npm ci` is the supported reproducible installation command. A browser must support JavaScript modules, modern DOM APIs and (for automatic persistence) local storage. Export remains available when storage is restricted.
 
+## Integrate code without publishing
+
+Pull requests, pushes to `main`, and manual runs with `publish` left false execute validation without deploying. A passing check or merge is not a publication instruction or a record of human usability acceptance. The October 3 continuation keeps the actual-user and learning-outcome evidence gates open.
+
 ## Publish this repository or a fork
 
 1. In the repository’s **Settings → Pages**, select **GitHub Actions** as the source.
-2. Push or merge the reviewed change to `main`. The workflow also supports a manual run on `main`.
-3. Unit/content checks, production build and Chromium/Firefox/WebKit acceptance must pass. Pull requests execute those checks without deployment.
-4. The deployment job uploads `dist/` and publishes it through the `github-pages` environment. Use the URL reported by that successful workflow run.
+2. Review the intended main commit and record the publication decision separately from automated test results. Copy its full 40-character commit SHA.
+3. In Actions, run **Validate and publish SE Learning Quest** manually on `main`, select `publish`, and supply that exact SHA as `approved_sha`. Leave `publish` false for validation only.
+4. Unit/content checks, production build and Chromium/Firefox/WebKit acceptance must all pass. The deployment guard also checks that the requested SHA equals the workflow’s immutable checkout SHA. A missing, abbreviated or mismatched SHA refuses publication; a later main commit requires a new decision and dispatch.
+5. The deployment job uploads `dist/` and publishes through the existing `github-pages` environment. Use the URL reported by that successful run, then inspect the deployed version.
+
+This is a fail-closed intent/identity gate, not a signature service or proof of human usability or learning effectiveness. Existing environment protections are not changed. No public deployment is performed by the October 3 integration work.
 
 Vite uses `base: './'`. The generated entry and chunks resolve under `/SE-Learning-Quest/`, a renamed project path, or a custom-domain root without a source change. Only hash fragments select the optional earlier episodes, so refreshing does not require server-side route rewrites. Serve the directory with a trailing slash, as GitHub Pages does.
 
@@ -47,5 +54,6 @@ When changing a published content/schema version, implement and test migration o
 
 - [Vite static deployment](https://vite.dev/guide/static-deploy.html)
 - [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+- [GitHub workflow dispatch input types](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onworkflow_dispatchinputs)
 
 The project’s relative-base and subpath behavior is also exercised against the actual production output in its own browser tests.

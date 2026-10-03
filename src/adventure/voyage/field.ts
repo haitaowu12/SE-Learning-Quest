@@ -1,0 +1,50 @@
+import { socket, tile } from './content-helpers.ts';
+import type { Scene } from './types.ts';
+export const field: Scene[] = [
+  {
+    id: 'receiver', chapter: 5, region: 'field', title: 'What the receiver can prove', subtitle: 'Operate the bench. Keep its evidence within its boundary.', speaker: 'tavi', kind: 'trial',
+    brief: 'A temporary line brings Sera’s signed reply from the upper watch post. She is alive and maintaining the old watch until relief arrives. First, test the new receiver contract.',
+    objective: 'Fit the controller and run all three receiver checks.',
+    sources: [{ title: 'Receiver test card', text: 'Test a valid order, a repeated or expired order, and the west link unavailable. I-2 must accept a valid order once and reject an expired replay. These bench observations do not measure local perception.' }],
+    sockets: [socket('controller', 'Controller under test', 'Changing it clears the current test evidence.', [tile('v1', 'Old V1 module', 'No order identity or expiry check.', 'relay'), tile('v2', 'Agreed V2 module', 'Signature, order ID and expiry.', 'seal')], ['v2'], 'The old module does not implement I-2’s identity and expiry checks.')],
+    cases: [{ id: 'valid', label: 'Valid order', condition: 'Authenticated order · all links available' }, { id: 'replay', label: 'Expired replay', condition: 'Repeat the earlier order after expiry' }, { id: 'outage', label: 'West link out', condition: 'Authenticated order · west link unavailable' }],
+    artifact: 'Receiver verification record', result: 'V2 accepts the valid order, rejects the expired replay and receives over the selected alternate route. Local warning still needs observation.',
+    lesson: 'Verification asks whether the implemented item meets its specified contract. A passing test supports only the item, configuration and conditions actually exercised.',
+    topics: ['Verification', 'Measurement', 'Security', 'Evidence boundaries'],
+  },
+  {
+    id: 'warning', chapter: 5, region: 'field', title: 'A warning people can use', subtitle: 'Take the agreed target out to the quays.', speaker: 'mara', kind: 'trial',
+    brief: 'The receiver lamps are green. Mara takes the crew to all four inhabited quays. The old exposed lantern loses the Lower Quay sightline at night; try a field arrangement and observe the result.',
+    objective: 'Choose local warning provision, then run day, night and squall exercises.',
+    sources: [{ title: 'Field exercise plan', text: 'Observe a perceivable HOLD warning at each quay within 90 seconds of authenticated order. Include day and night crews and a 40-knot west squall with the west link unavailable. Record perception and action separately from receiver acknowledgements.' }, { title: 'Available arrangements', text: 'The shielded beacon includes a clear local repeater sightline. A local lookout uses a staffed voice-and-flag post. Both have cover available. The old exposed lantern lacks Lower Quay’s night sightline.' }],
+    sockets: [socket('warning', 'Local warning arrangement', 'Changing it requires new observations.', [tile('exposed', 'Exposed lantern', 'The old obstructed night sightline.', 'relay'), tile('beacon', 'Shielded beacon + repeater', 'Protected light and a visible local repeat.', 'eye'), tile('lookout', 'Staffed voice + flag post', 'Local lookout with rotating relief.', 'crew')], ['beacon', 'lookout'], 'The exposed lantern is not visible from Lower Quay’s night position. Change the arrangement and repeat the exercises.')],
+    cases: [{ id: 'day', label: 'Day watch', condition: 'Four inhabited quays · calm daylight' }, { id: 'night', label: 'Night watch', condition: 'Night crew at their actual working positions' }, { id: 'squall', label: 'West squall', condition: '40 knots · west link out · night positions' }],
+    artifact: 'Four-quay field observations', result: 'The recorded exercises show a perceived HOLD warning within 90 seconds at each of the four quays under the tested conditions. Crew actions are recorded alongside perception.',
+    lesson: 'Validation asks whether the solution serves the people and mission in its intended setting. Receiver evidence cannot replace observation at their working positions.',
+    topics: ['Validation', 'Human factors', 'Operational scenarios', 'Requirements traceability'],
+  },
+  {
+    id: 'release', chapter: 5, region: 'field', title: 'The keys change hands', subtitle: 'A working item still needs a prepared service.', speaker: 'mara', kind: 'choice',
+    brief: 'Mara reviews the build, receiver and field records. Before the cutover she needs a named watch owner and a fallback that still includes Lower Quay.',
+    objective: 'Prepare responsibility, fallback and acceptance on the handover board.',
+    sources: [{ title: 'C-18 service conditions', text: 'Mara accepts service after the recorded checks. A trained crew must own the watch. If cutover fails, use the staffed local warning posts at all four current addresses. Reverting to list B would reinstate the omission.' }],
+    sockets: [
+      socket('owner', 'Watch owner', 'Who accepts the duty?', [tile('maker', 'Tavi alone', 'Maker delivers the item, but has no operating watch.', 'tool'), tile('crew', 'Mara + trained crew', 'Roster, readback and relief coverage.', 'crew')], ['crew'], 'The maker has no operating watch. Mara and the trained crew must accept that responsibility.'),
+      socket('fallback', 'Fallback', 'Keep all four quays covered.', [tile('posts', 'Staffed local posts', 'Retain four-address coverage during rollback.', 'flag'), tile('list-b', 'Restore list B', 'Restores the omitted address boundary.', 'book')], ['posts'], 'Restoring B drops Lower Quay again. The staffed local fallback retains all four addresses.'),
+      socket('decision', 'Acceptance', 'Who owns the recorded service decision?', [tile('mara', 'Mara signs C-18 acceptance', 'Uses build, receiver, field and readiness records.', 'seal'), tile('auto', 'The green lamps', 'No named service acceptance decision.', 'relay')], ['mara'], 'The lamps are observations. C-18 assigns service acceptance to Mara.'),
+    ],
+    artifact: 'Accepted service and rollback plan', result: 'Mara accepts the tested arrangement, the trained roster and the all-quay fallback. Sera’s relief can now take the upper post.',
+    lesson: 'Transition includes responsibilities, training, support, contingency and acceptance. Delivery of an item does not automatically establish a usable service.',
+    topics: ['Transition', 'Operations readiness', 'Competence', 'Acceptance'],
+  },
+  {
+    id: 'relief', chapter: 5, region: 'field', title: 'Someone takes her watch', subtitle: 'Sera’s journey home begins with a handover.', speaker: 'sera', kind: 'sequence',
+    brief: 'Sera speaks over the temporary line: “I found the omission and stayed with the watch. I’ll board when the next keeper has the post.” Arrange the handover with Mara.',
+    objective: 'Put relief, readback, duty acceptance and departure in order.',
+    sources: [{ title: 'Upper-post handover', text: 'The trained relief first arrives at the post. They read back the current instructions and fallback. Sera then transfers the duty and records acceptance. Only after that can she leave on Mara’s ferry.' }],
+    sockets: [], sequence: [tile('arrive', 'Relief reaches the post', 'Do not leave an unattended watch.', 'crew'), tile('readback', 'Read back the instructions', 'Confirm the warning and fallback meanings.', 'book'), tile('accept', 'Accept the duty', 'Record the incoming keeper and handover.', 'seal'), tile('board', 'Sera boards the ferry', 'The incoming keeper now owns the post.', 'map')],
+    artifact: 'Upper-post relief record', result: 'The relief keeper accepts the watch. Sera steps onto the ferry and joins Iona. The repaired service does not depend on her remaining alone at the post.',
+    lesson: 'Human roles are part of the system. A handover transfers responsibility through demonstrated understanding and acceptance, not merely a name on a roster.',
+    topics: ['Human factors', 'Operations', 'Organizational learning', 'Responsibility'],
+  },
+];
