@@ -8,7 +8,8 @@ import type { ArchiveSave } from '../archive/types.ts';
 import { recallInTab, rememberInTab } from '../tab-memory.ts';
 import { chapters, scenes } from './content.ts';
 import { canSeal, currentRecord, dispatchVoyage, endingLines, freshVoyageSave, MAX_VOYAGE_BYTES, parseVoyageSave, replayVoyage, voyageObjective, voyageSaveKey } from './model.ts';
-import { consumeVoyageArrival, loadVoyage, parseVoyageImport, writeVoyage } from './persistence.ts';
+import { consumeVoyageArrival, loadVoyage, parseVoyageImport, readVoyageStorage, replaceVoyage, writeVoyage } from './persistence.ts';
+import type { VoyageStorageSnapshot } from './persistence.ts';
 import { Glyph, Landscape, SeraPortrait } from './Art.tsx';
 import { Workbench } from './Boards.tsx';
 import { JourneyJournal } from './Journal.tsx';
@@ -24,18 +25,22 @@ function download(raw: string, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const names = { tavi: 'Tavi', mara: 'Mara', neri: 'Neri', sera: 'Sera' };
+type PendingSource = 'arrival' | 'import' | 'stored' | 'reset';
+interface PendingReplacement { source: PendingSource; save: VoyageSave; baseline: VoyageStorageSnapshot }
 
 export default function VoyageApp() {
   const storage = useRef(browserStorage()), key = voyageSaveKey(location.pathname);
   const [initial] = useState(() => {
     const memory = recallInTab<ArchiveSave | null>(archiveSaveKey(location.pathname))?.save;
-    const arrival = consumeVoyageArrival() ?? (memory && replayArchive(memory).complete ? memory : null);
-    return loadVoyage(storage.current, location.pathname, arrival, recallInTab<VoyageSave | null>(key));
+    const prepared = consumeVoyageArrival();
+    const arrival = prepared ?? (memory && replayArchive(memory).complete ? memory : null);
+    return loadVoyage(storage.current, location.pathname, arrival, recallInTab<VoyageSave | null>(key), prepared !== null);
   });
   const [save, setSave] = useState(initial.save), [notice, setNotice] = useState(initial.notice);
   const raw = useRef(initial.raw), blocked = useRef(initial.blocked);
-  const [modal, setModal] = useState<'journal' | 'settings' | null>(null);
-  const [pending, setPending] = useState<VoyageSave | null>(null), [resetting, setResetting] = useState(false);
+  const [modal, setModal] = useState<'journal' | 'settings' | null>(initial.incoming ? 'settings' : null);
+  const [fileError, setFileError] = useState('');
+  const [pending, setPending] = useState<PendingReplacement | null>(initial.incoming ? { source: 'arrival', ...initial.incoming } : null);
   const [error, setError] = useState(''), [showHint, setShowHint] = useState(false), [boardEpoch, setBoardEpoch] = useState(0);
   const nonce = useRef(0), stageRef = useRef<HTMLHeadingElement>(null), reviewRef = useRef<HTMLHeadingElement>(null);
   const state = save ? replayVoyage(save) : null, scene = state ? scenes[state.index] : scenes[0];
@@ -43,6 +48,11 @@ export default function VoyageApp() {
   const lastScene = state && state.index > 0 ? scenes[state.index - 1] : null;
   const seraHome = state?.records.some(item => item.scene === 'relief' && item.sealed);
 
+  useEffect(() => {
+    if (initial.incoming) return;
+    const frame = requestAnimationFrame(() => stageRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [initial.incoming]);
   useEffect(() => { rememberInTab(key, { save, raw: raw.current, blocked: blocked.current, notice }); }, [key, save, notice]);
   useEffect(() => {
     const listener = (event: StorageEvent) => {
@@ -54,12 +64,8 @@ export default function VoyageApp() {
     return () => window.removeEventListener('storage', listener);
   }, [key]);
 
-  function update(next: VoyageSave, replace = false): void {
+  function update(next: VoyageSave): void {
     setSave(next);
-    if (replace) {
-      try { raw.current = storage.current.getItem(key); blocked.current = false; }
-      catch { blocked.current = true; setNotice('The journey is in memory. Export it before closing or reloading this tab.'); }
-    }
     if (blocked.current) return;
     const result = writeVoyage(storage.current, location.pathname, next, raw.current);
     if (result.ok) { raw.current = result.raw; setNotice(''); }
@@ -74,22 +80,54 @@ export default function VoyageApp() {
       return replayVoyage(next);
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'The action could not be recorded.'); return null; }
   }
-  function closeDialog(): void { nonce.current++; setModal(null); setPending(null); setResetting(false); }
-  function replaced(next: VoyageSave): void {
-    update(next, true); closeDialog(); setError(''); setShowHint(false); setBoardEpoch(value => value + 1);
+  function closeDialog(): void { nonce.current++; setFileError(''); setModal(null); setPending(null); }
+  function finishReplacement(candidate: PendingReplacement, result: { raw: string | null; blocked: boolean; notice: string }): void {
+    setSave(candidate.save); raw.current = result.raw; blocked.current = result.blocked; setNotice(result.notice);
+    closeDialog(); setError(''); setShowHint(false); setBoardEpoch(value => value + 1);
+    requestAnimationFrame(() => stageRef.current?.focus());
+  }
+  function confirmReplacement(candidate: PendingReplacement): void {
+    const result = replaceVoyage(storage.current, location.pathname, candidate.save, candidate.baseline);
+    if (result.ok) { finishReplacement(candidate, result); return; }
+    blocked.current = true; setFileError('');
+    if (candidate.source === 'stored') {
+      if (!result.current.readable || result.current.raw === null) {
+        setPending(null); setNotice('The stored journey changed while this confirmation was open and is no longer available. Nothing was overwritten.'); return;
+      }
+      try {
+        setPending({ source: 'stored', save: parseVoyageSave(result.current.raw), baseline: result.current });
+        setNotice('The stored journey changed while this confirmation was open. The stored copy was refreshed; review it and confirm again.');
+      } catch (cause) {
+        setPending(null); setNotice('The stored journey changed while this confirmation was open. Nothing was overwritten.');
+        setFileError(cause instanceof Error ? cause.message : 'The newer stored journey could not be read.');
+      }
+      return;
+    }
+    setPending({ ...candidate, baseline: result.current }); setNotice(result.notice);
+  }
+  function resumeIncoming(): void {
+    nonce.current++; setFileError(''); setPending(null); setModal(null);
     requestAnimationFrame(() => stageRef.current?.focus());
   }
   async function importFile(file?: File): Promise<void> {
     if (!file) return;
-    const request = ++nonce.current; setPending(null); setResetting(false);
-    if (file.size > MAX_VOYAGE_BYTES) { setNotice('This journey exceeds the 1 MB limit.'); return; }
-    try { const candidate = parseVoyageImport(await file.text()); if (request === nonce.current) { setPending(candidate); setNotice(''); } }
-    catch (cause) { if (request === nonce.current) setNotice(cause instanceof Error ? cause.message : 'The journey could not be read.'); }
+    const request = ++nonce.current; setPending(null);
+    if (file.size > MAX_VOYAGE_BYTES) { setFileError('This journey exceeds the 1 MB limit.'); return; }
+    try {
+      const candidate = parseVoyageImport(await file.text());
+      if (request === nonce.current) { setPending({ source: 'import', save: candidate, baseline: readVoyageStorage(storage.current, location.pathname) }); setFileError(''); }
+    }
+    catch (cause) { if (request === nonce.current) setFileError(cause instanceof Error ? cause.message : 'The journey could not be read.'); }
   }
   function loadStored(): void {
-    nonce.current++; setPending(null); setResetting(false);
-    try { const stored = storage.current.getItem(key); if (stored === null) throw new Error('No stored journey was found.'); setPending(parseVoyageSave(stored)); setNotice(''); }
-    catch (cause) { setNotice(cause instanceof Error ? cause.message : 'The stored journey could not be read.'); }
+    nonce.current++; setPending(null);
+    try {
+      const baseline = readVoyageStorage(storage.current, location.pathname);
+      if (!baseline.readable) throw new Error('Browser storage could not be read. The journey in this tab has not changed.');
+      if (baseline.raw === null) throw new Error('No stored journey was found.');
+      setPending({ source: 'stored', save: parseVoyageSave(baseline.raw), baseline }); setFileError('');
+    }
+    catch (cause) { setFileError(cause instanceof Error ? cause.message : 'The stored journey could not be read.'); }
   }
 
   return <div className={`adventure voyage ${save?.settings.largeText ? 'av-large-text' : ''} ${save?.settings.lessMotion ? 'av-less-motion' : ''}`}>
@@ -127,6 +165,7 @@ export default function VoyageApp() {
     </main>
     {modal && <JourneyDialog title={modal === 'journal' ? 'Your journey journal' : 'Save & settings'} onClose={closeDialog}>
       {notice && <p className="vy-dialog-notice" role="alert">{notice}</p>}
+      {fileError && <p className="vy-dialog-notice" role="alert">{fileError}</p>}
       {modal === 'journal' && save && state ? <JourneyJournal save={save} state={state}/> : <>
         <p>{blocked.current ? 'Saving is paused. Export this tab before reloading or closing it.' : 'The continuation save includes your opening, hearing and archive histories, plus every step recorded since Stormglass.'}</p>
         {save && <><label className="av-setting"><input type="checkbox" checked={save.settings.lessMotion} onChange={event => update({ ...save, settings: { ...save.settings, lessMotion: event.target.checked } })}/> Reduce motion</label><label className="av-setting"><input type="checkbox" checked={save.settings.largeText} onChange={event => update({ ...save, settings: { ...save.settings, largeText: event.target.checked } })}/> Larger text</label></>}

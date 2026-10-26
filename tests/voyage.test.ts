@@ -49,6 +49,25 @@ test('voyage: route support is a real constraint, and changing it invalidates ap
   save = dispatchVoyage(save, { type: 'choose', socket: 'support', tile: 'crews' });
   save = dispatchVoyage(save, { type: 'review' }); assert.ok(canSeal(replayVoyage(save)));
 });
+test('voyage: outage fallbacks must exist in the architecture that was actually built', () => {
+  let north = atScene('outage', { route: 'lookouts' });
+  north = dispatchVoyage(north, { type: 'choose', socket: 'fault', tile: 'west-joint' });
+  north = dispatchVoyage(north, { type: 'choose', socket: 'route', tile: 'east' });
+  assert.match(assessRecord(replayVoyage(north)).join(' '), /east detour belongs to the diverse/i);
+  north = dispatchVoyage(north, { type: 'review' }); assert.equal(canSeal(replayVoyage(north)), false);
+  north = dispatchVoyage(north, { type: 'choose', socket: 'route', tile: 'north' });
+  north = dispatchVoyage(north, { type: 'review' }); assert.equal(canSeal(replayVoyage(north)), true);
+
+  let diverse = atScene('outage', { route: 'diverse' });
+  diverse = dispatchVoyage(diverse, { type: 'choose', socket: 'fault', tile: 'west-joint' });
+  diverse = dispatchVoyage(diverse, { type: 'choose', socket: 'route', tile: 'north' });
+  assert.match(assessRecord(replayVoyage(diverse)).join(' '), /north relay chain was not part/i);
+
+  const northReceiver = currentRecord(replayVoyage(readyScene(atScene('receiver', { route: 'lookouts' })))).runs.find(run => run.caseId === 'outage')!;
+  assert.match(northReceiver.note, /north relay chain/i); assert.ok(northReceiver.observations.every(item => item.perceived === null));
+  const diverseReceiver = currentRecord(replayVoyage(readyScene(atScene('receiver', { route: 'diverse' })))).runs.find(run => run.caseId === 'outage')!;
+  assert.match(diverseReceiver.note, /east detour/i); assert.ok(diverseReceiver.observations.every(item => item.perceived === null));
+});
 test('voyage: a misplaced valid connector can be explored but cannot pass review', () => {
   let save = readyScene(atScene('interfaces'));
   save = dispatchVoyage(save, { type: 'choose', socket: 'order', tile: 'hold' });
@@ -110,6 +129,14 @@ test('voyage: sequence dependencies and relief remain enforced after portable re
   assert.throws(() => dispatchVoyage(parseVoyageSave(JSON.stringify(save)), { type: 'seal' }));
   const done = dispatchVoyage(readyScene(save), { type: 'seal' });
   assert.equal(replayVoyage(done).records.find(record => record.scene === 'relief')!.sealed, true);
+});
+test('voyage: retirement ends in controlled holding before the final disposition decision', () => {
+  const retirement = scenes.find(scene => scene.id === 'retirement')!, inheritance = scenes.find(scene => scene.id === 'inheritance')!;
+  assert.match(retirement.sequence!.at(-1)!.label, /controlled holding/i);
+  assert.match(retirement.result, /intact old core in controlled holding pending disposition/i);
+  assert.doesNotMatch(retirement.result, /dismantl|exhibit/i);
+  assert.match(inheritance.sources[0].text, /controlled holding/i);
+  assert.deepEqual(inheritance.sockets.find(socket => socket.id === 'legacy')!.accepts, ['exhibit', 'recover']);
 });
 test('voyage: bounded parser rejects forged inputs without modifying the original', () => {
   const save = freshTestVoyage(), raw = JSON.stringify(save);

@@ -27,7 +27,8 @@ export function simulateTrial(state: VoyageState, caseId: string): TrialRun {
   const scene = scenes[state.index], record = currentRecord(state);
   requireThat(scene.kind === 'trial' && scene.cases?.some(item => item.id === caseId), 'Choose an exercise available at this station.');
   requireThat(scene.sockets.every(socket => !!record.choices[socket.id]), 'Fit a configuration before running the exercise.');
-  const lookoutRoute = priorChoice(state, 'routes', 'route') === 'lookouts';
+  const selectedRoute = priorChoice(state, 'routes', 'route');
+  const northRelayRoute = selectedRoute === 'lookouts';
   const warning = scene.id === 'warning' ? record.choices.warning : priorChoice(state, 'warning', 'warning');
   const sites = ['Lower Quay', 'Crown Steps', 'East Landing', 'North Watch', 'Drift Quay'];
   let indices = scene.id === 'winter' ? [0, 1, 2, 3, 4] : [0, 1, 2, 3];
@@ -42,7 +43,7 @@ export function simulateTrial(state: VoyageState, caseId: string): TrialRun {
     const missing = scene.id === 'winter' && record.choices.scope !== 'five' && index === 4;
     const received = !missing && !(replay && rejectsReplay);
     const obscured = scene.id === 'warning' && warning === 'exposed' && night && index === 0;
-    const seconds = received ? [44, 32, 40, 48, 58][index] + (lookoutRoute ? 8 : 0) + (rough ? 18 : night ? 12 : 0) + (!receiver && warning === 'lookout' ? 2 : 0) + (scene.id === 'winter' && priorChoice(state, 'shelter', 'approach') === 'parallel' ? 2 : 0) : null;
+    const seconds = received ? [44, 32, 40, 48, 58][index] + (northRelayRoute ? 8 : 0) + (rough ? 18 : night ? 12 : 0) + (!receiver && warning === 'lookout' ? 2 : 0) + (scene.id === 'winter' && priorChoice(state, 'shelter', 'approach') === 'parallel' ? 2 : 0) : null;
     return {
       site: sites[index], received, seconds,
       perceived: receiver ? null : received && !obscured,
@@ -50,8 +51,15 @@ export function simulateTrial(state: VoyageState, caseId: string): TrialRun {
     };
   });
   const passed = replay ? rejectsReplay : observations.every(item => item.received && item.seconds !== null && item.seconds <= 90 && (receiver || item.perceived));
+  const receiverOutagePath = selectedRoute === 'diverse'
+    ? 'the east detour from the diverse relay build'
+    : selectedRoute === 'lookouts'
+      ? 'the staffed north relay chain’s independent short-hop path'
+      : 'the recorded alternate packet path';
   return { caseId, observations, passed, note: receiver
-    ? replay ? 'Expected result: reject the expired replay. No local warning should be issued.' : 'Receiver observations only. Perception and action have not been exercised here.'
+    ? replay ? 'Expected result: reject the expired replay. No local warning should be issued.' : caseId === 'outage'
+      ? `Receiver-only observation: ${receiverOutagePath} carried the test packet with the west link unavailable. Perception and local action have not been exercised here.`
+      : 'Receiver observations only. Perception and action have not been exercised here.'
     : 'Local warning and crew action observed at the listed positions in this authored exercise.' };
 }
 
@@ -60,7 +68,12 @@ export function assessRecord(state: VoyageState): string[] {
   for (const socket of scene.sockets) if (!socket.accepts.includes(record.choices[socket.id])) gaps.push(socket.gap);
   if (scene.id === 'routes') {
     const expected = record.choices.route === 'diverse' ? 'joint' : record.choices.route === 'lookouts' ? 'crews' : null;
-    if (expected && record.choices.support !== expected) gaps.push(expected === 'joint' ? 'The diverse relays need the spare joint specified in the design study.' : 'The lookout route needs two rotating crews; a spare relay joint does not provide duty cover.');
+    if (expected && record.choices.support !== expected) gaps.push(expected === 'joint' ? 'The diverse relays need the spare joint specified in the design study.' : 'The staffed north relay chain needs two rotating crews; a spare relay joint does not provide duty cover.');
+  }
+  if (scene.id === 'outage') {
+    const builtRoute = priorChoice(state, 'routes', 'route');
+    if (record.choices.route === 'east' && builtRoute !== 'diverse') gaps.push('The east detour belongs to the diverse east/west relay build. This journey built the staffed north relay chain; choose its north path or the accepted local-post fallback.');
+    if (record.choices.route === 'north' && builtRoute !== 'lookouts') gaps.push('The staffed north relay chain was not part of the diverse east/west build. Choose its east detour or the accepted local-post fallback.');
   }
   if (scene.sequence && scene.sequence.some((item, index) => record.order[index] !== item.id)) gaps.push('Follow the dependencies on the source card. ' + scene.sequence.map(item => item.label).join(' → ') + '.');
   for (const exercise of scene.cases ?? []) {
@@ -160,9 +173,9 @@ export function endingLines(state: VoyageState): string[] {
   const budget = state.records.find(record => record.scene === 'stewardship')!.allocations;
   const reserve = 6 - Object.values(budget).reduce((sum, amount) => sum + amount, 0);
   return [
-    priorChoice(state, 'routes', 'route') === 'diverse' ? 'You built east/west relays: six material crates and a spare joint supported the alternate path.' : 'You built a local lookout chain: four material crates and two rotating crews supported its duty cover.',
+    priorChoice(state, 'routes', 'route') === 'diverse' ? 'You built east/west relays: six material crates and a spare joint supported the alternate path.' : 'You built a staffed north relay chain: four material crates and two rotating crews supported its independent short-hop V2 packet path.',
     priorChoice(state, 'warning', 'warning') === 'beacon' ? 'A shielded beacon and local repeater made the HOLD warning visible at the tested working positions.' : 'Staffed voice-and-flag posts carried the HOLD warning, with relief as part of the arrangement.',
-    priorChoice(state, 'outage', 'route') === 'east' ? 'During the west-joint incident, the exercised east detour kept the watch covered.' : 'During the west-joint incident, staffed local posts kept coverage with additional handovers.',
+    priorChoice(state, 'outage', 'route') === 'east' ? 'During the west-joint incident, the exercised east detour kept the watch covered.' : priorChoice(state, 'outage', 'route') === 'north' ? 'During the west-joint incident, the staffed north relay chain kept the V2 packet path covered.' : 'During the west-joint incident, staffed local posts kept coverage with additional handovers.',
     priorChoice(state, 'shelter', 'approach') === 'extend' ? 'The winter shelter joined through an extension and planned cutover of the existing installation.' : 'The winter shelter joined through a parallel module, with additional hardware and support.',
     'The current service covers five inhabited quays. Its recorded exercises support the 90-second target under the exercised conditions; future changes still require review.',
     priorChoice(state, 'stewardship', 'governance') === 'council' ? 'A quay council owns decisions through a rotating chair, public records and its tie-break procedure.' : 'A harbour service lead owns decisions, with scheduled quay representation.',

@@ -6,7 +6,7 @@ This is the replacement direction after the owner found Signal Lab confusing and
 
 Open the site's `#adventure` route. Locally, run `npm run build` and `npm run preview:pages`, then open `http://127.0.0.1:4173/SE-Learning-Quest/#adventure`. The default route and `#classic` still open Classic; `#episodes` opens Coffee Lab and Harbour Line.
 
-This document describes the completed opening chapter. Its **Take Mara’s ferry** action continues into [The Missing Address](BRASS_QUARTER.md) at `#adventure/council`, followed by [The Green Tally](DISPATCH_ARCHIVE.md) at `#adventure/archive`. These three illustrated chapters are not a conversion of all 24 Classic quests. Classic keeps its separate progression and saves.
+This document describes the completed opening chapter. Its **Take Mara’s ferry** action continues into [The Missing Address](BRASS_QUARTER.md) at `#adventure/council`, followed by [The Green Tally](DISPATCH_ARCHIVE.md) at `#adventure/archive`. The archive now continues through four further chapters to complete the [seven-chapter illustrated campaign](ILLUSTRATED_CAMPAIGN.md). This is an alternative telling of the story, with its own activities and evidence, rather than a one-to-one conversion of all 24 Classic quests. Classic keeps its separate progression and saves.
 
 ## The playable chapter
 
@@ -66,4 +66,4 @@ The first Linux CI run additionally exposed a result-scope caption with contrast
 
 ## Continuing the story
 
-The Brass Quarter keeps the characters and short objectives while varying the activity: moving people into hearing seats, arranging relief or confirming a written account, and assembling a promise from graphical tiles. The dispatch archive continues with folio inspection, two views of the same district, source placement and a proposed address list. The rejected network-builder direction remains separate. The archive's Stormglass destination is a later story lead, not a playable fourth chapter.
+The Brass Quarter keeps the characters and short objectives while varying the activity: moving people into hearing seats, arranging relief or confirming a written account, and assembling a promise from graphical tiles. The dispatch archive continues with folio inspection, two views of the same district, source placement and a proposed address list. The rejected network-builder direction remains separate. The archive’s **Sail to Stormglass** action now continues into four playable chapters covering design, trials, handover, service, repair and retirement.
