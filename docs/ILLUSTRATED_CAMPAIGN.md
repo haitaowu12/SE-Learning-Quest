@@ -61,3 +61,10 @@ The continuation includes sixteen unit scenarios in `tests/voyage.test.ts`. The 
 The full-continuation browser scenario starts with a completed archive fixture, uses model-provided solution choices through UI controls, and checks the exported history against the resulting actions. It does not replay the first three chapters from scratch or independently validate the educational solutions. Existing earlier-chapter browser tests remain separate. The prior claim of ten voyage scenarios per engine, a fresh seven-chapter journey, voyage layout/accessibility scans, and dedicated voyage screenshots was unsupported and is withdrawn. Those checks remain unverified for the continuation. Playwright retains traces and screenshots on failures; no dedicated voyage screenshot suite is claimed.
 
 Software checks and screenshot inspection do not establish novice engagement, learning transfer or full assistive-technology usability. Those outcomes require observation with learners.
+
+
+## Source review hold — 26 October 2026
+
+The local continuation controls and guarded save-replacement work are committed in PR #7. TypeScript, 144 unit tests and the production build pass; the in-app browser exercised gated entry, actual-file import, explicit replacement and restart confirmation. This is source verification, not player acceptance or Pages publication.
+
+Do not merge this candidate until legacy replay is reconciled: an earlier supported version-1 journey could build `lookouts` and seal the `east` outage fallback. The new route constraint rejects that history during parsing without a save-version change. Retain the original save and add an explicit compatibility/migration policy with a fixture from the earlier accepted model before integration. This blocker is separate from the repaired unfinished confirmation UI.
