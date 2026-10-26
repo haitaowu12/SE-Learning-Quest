@@ -2,7 +2,7 @@
 
 Chapter three follows the completed Brass Quarter target and Sera's request to carry the old recipient list to Stormglass. Choose **Enter the dispatch archive** at the end of chapter two, or visit `#adventure/archive` with a completed crossing saved on the same site. A completed Brass Quarter version-1 export can also be imported. An unfinished earlier history does not unlock the archive.
 
-The illustrated path contains three chapters and nine scenes. The archive ends with a proposed correction and its source records ready for a crossing. Stormglass is the next story destination; a fourth illustrated chapter is not implemented. Classic remains the separate complete 24-quest campaign.
+The first three illustrated chapters contain nine scenes. The archive ends with a proposed correction and its source records ready for a crossing. **Sail to Stormglass** opens the [four-chapter continuation](ILLUSTRATED_CAMPAIGN.md), completing the illustrated path at seven chapters and 25 scenes. The continuation introduces a new change authority; it does not treat this chapter’s reading seal as permission to change or operate. Classic remains the separate complete 24-quest campaign.
 
 ## The investigation
 

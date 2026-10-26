@@ -20,17 +20,17 @@ export const stormglass: Scene[] = [
   },
   {
     id: 'routes', chapter: 4, region: 'stormglass', title: 'Two ways around the squall', subtitle: 'Move a warning through a network that can lose a link.', speaker: 'tavi', kind: 'network',
-    brief: 'A west squall can cut one inter-island link. Two of Tavi’s designs can meet the proposed target. Their material and staffing costs differ.',
-    objective: 'Choose a route and fund the support that makes it usable.',
+    brief: 'A west squall can cut one inter-island link. Two packet-route designs can support the proposed target. Their material and staffing costs differ; local perception is a later field obligation.',
+    objective: 'Choose a packet route and fund the support that makes it usable.',
     sources: [
-      { title: 'Design study · fictional estimates', text: 'West-only costs 3 crates but loses service when that link fails. Diverse east/west relays cost 6 crates plus a spare joint. Local lookouts cost 4 crates plus two rotating crews. The budget is 6 crates; crew cover is available.' },
+      { title: 'Design study · fictional estimates', text: 'West-only costs 3 crates but loses service when that link fails. Diverse east/west relays cost 6 crates plus a spare joint. A staffed north relay chain costs 4 crates plus two rotating crews; its independent short-hop V2 packet path avoids the west link. The budget is 6 crates; crew cover is available.' },
       { title: 'Target from the hearing', text: 'Perceivable warning at every inhabited quay within 90 seconds of an authenticated order, in a 40-knot west squall with one link unavailable. Design estimates are not field observations.' },
     ],
     sockets: [
-      socket('route', 'Warning route', 'Your path appears on the map.', [tile('single', 'West line only', '3 crates · no alternative when the west link fails.', 'link'), tile('diverse', 'East + west relays', '6 crates · alternate route and spare joint.', 'relay'), tile('lookouts', 'Local lookout chain', '4 crates · staffed posts with rotating cover.', 'crew')], ['diverse', 'lookouts'], 'A single west line cannot serve the stated link-out condition. Choose a diverse route or staffed lookout chain.'),
-      socket('support', 'Support commitment', 'Match support to your design.', [tile('crews', 'Two rotating crews', 'Fund posts and relief handovers.', 'crew'), tile('joint', 'A spare relay joint', 'Store the diverse route’s replacement part.', 'tool')], ['crews', 'joint'], 'Choose support for the selected route.'),
+      socket('route', 'Packet route', 'Your packet path appears on the map.', [tile('single', 'West line only', '3 crates · no alternative when the west link fails.', 'link'), tile('diverse', 'East + west relays', '6 crates · alternate route and spare joint.', 'relay'), tile('lookouts', 'Staffed north relay chain', '4 crates · short-hop V2 relays with two rotating operators.', 'relay')], ['diverse', 'lookouts'], 'A single west line cannot serve the stated link-out condition. Choose diverse east/west relays or the staffed north relay chain.'),
+      socket('support', 'Support commitment', 'Match support to your design.', [tile('crews', 'Two rotating relay crews', 'Staff the north-chain relays and relief handovers.', 'crew'), tile('joint', 'A spare relay joint', 'Store the diverse route’s replacement part.', 'tool')], ['crews', 'joint'], 'Choose support for the selected route.'),
     ],
-    artifact: 'Route and resource decision', result: 'The chosen route and its support cost travel together. Tavi will test that design with the west link unavailable.',
+    artifact: 'Packet route and resource decision', result: 'The chosen packet route and its support cost travel together. Tavi will test packet receipt with the west link unavailable; local warning still requires field observation.',
     lesson: 'Compare alternatives against the same mission, constraint and failure condition. Include operating burden alongside build cost.',
     topics: ['Architecture definition', 'System analysis', 'Risk management', 'Project planning', 'Infrastructure and resources'],
   },
