@@ -8,7 +8,8 @@ import type { ArchiveSave } from '../archive/types.ts';
 import { recallInTab, rememberInTab } from '../tab-memory.ts';
 import { chapters, scenes } from './content.ts';
 import { canSeal, currentRecord, dispatchVoyage, endingLines, freshVoyageSave, MAX_VOYAGE_BYTES, parseVoyageSave, replayVoyage, voyageObjective, voyageSaveKey } from './model.ts';
-import { consumeVoyageArrival, loadVoyage, parseVoyageImport, writeVoyage } from './persistence.ts';
+import { consumeVoyageArrival, loadVoyage, parseVoyageImport, readVoyageStorage, replaceVoyage, writeVoyage } from './persistence.ts';
+import type { VoyageStorageSnapshot } from './persistence.ts';
 import { Glyph, Landscape, SeraPortrait } from './Art.tsx';
 import { Workbench } from './Boards.tsx';
 import { JourneyJournal } from './Journal.tsx';
@@ -24,18 +25,22 @@ function download(raw: string, filename: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 const names = { tavi: 'Tavi', mara: 'Mara', neri: 'Neri', sera: 'Sera' };
+type PendingSource = 'arrival' | 'import' | 'stored' | 'reset';
+interface PendingReplacement { source: PendingSource; save: VoyageSave; baseline: VoyageStorageSnapshot }
 
 export default function VoyageApp() {
   const storage = useRef(browserStorage()), key = voyageSaveKey(location.pathname);
   const [initial] = useState(() => {
     const memory = recallInTab<ArchiveSave | null>(archiveSaveKey(location.pathname))?.save;
-    const arrival = consumeVoyageArrival() ?? (memory && replayArchive(memory).complete ? memory : null);
-    return loadVoyage(storage.current, location.pathname, arrival, recallInTab<VoyageSave | null>(key));
+    const prepared = consumeVoyageArrival();
+    const arrival = prepared ?? (memory && replayArchive(memory).complete ? memory : null);
+    return loadVoyage(storage.current, location.pathname, arrival, recallInTab<VoyageSave | null>(key), prepared !== null);
   });
   const [save, setSave] = useState(initial.save), [notice, setNotice] = useState(initial.notice);
   const raw = useRef(initial.raw), blocked = useRef(initial.blocked);
-  const [modal, setModal] = useState<'journal' | 'settings' | null>(null);
-  const [pending, setPending] = useState<VoyageSave | null>(null), [resetting, setResetting] = useState(false);
+  const [modal, setModal] = useState<'journal' | 'settings' | null>(initial.incoming ? 'settings' : null);
+  const [fileError, setFileError] = useState('');
+  const [pending, setPending] = useState<PendingReplacement | null>(initial.incoming ? { source: 'arrival', ...initial.incoming } : null);
   const [error, setError] = useState(''), [showHint, setShowHint] = useState(false), [boardEpoch, setBoardEpoch] = useState(0);
   const nonce = useRef(0), stageRef = useRef<HTMLHeadingElement>(null), reviewRef = useRef<HTMLHeadingElement>(null);
   const state = save ? replayVoyage(save) : null, scene = state ? scenes[state.index] : scenes[0];
@@ -43,6 +48,11 @@ export default function VoyageApp() {
   const lastScene = state && state.index > 0 ? scenes[state.index - 1] : null;
   const seraHome = state?.records.some(item => item.scene === 'relief' && item.sealed);
 
+  useEffect(() => {
+    if (initial.incoming) return;
+    const frame = requestAnimationFrame(() => stageRef.current?.focus());
+    return () => cancelAnimationFrame(frame);
+  }, [initial.incoming]);
   useEffect(() => { rememberInTab(key, { save, raw: raw.current, blocked: blocked.current, notice }); }, [key, save, notice]);
   useEffect(() => {
     const listener = (event: StorageEvent) => {
@@ -54,12 +64,8 @@ export default function VoyageApp() {
     return () => window.removeEventListener('storage', listener);
   }, [key]);
 
-  function update(next: VoyageSave, replace = false): void {
+  function update(next: VoyageSave): void {
     setSave(next);
-    if (replace) {
-      try { raw.current = storage.current.getItem(key); blocked.current = false; }
-      catch { blocked.current = true; setNotice('The journey is in memory. Export it before closing or reloading this tab.'); }
-    }
     if (blocked.current) return;
     const result = writeVoyage(storage.current, location.pathname, next, raw.current);
     if (result.ok) { raw.current = result.raw; setNotice(''); }
@@ -74,22 +80,54 @@ export default function VoyageApp() {
       return replayVoyage(next);
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'The action could not be recorded.'); return null; }
   }
-  function closeDialog(): void { nonce.current++; setModal(null); setPending(null); setResetting(false); }
-  function replaced(next: VoyageSave): void {
-    update(next, true); closeDialog(); setError(''); setShowHint(false); setBoardEpoch(value => value + 1);
+  function closeDialog(): void { nonce.current++; setFileError(''); setModal(null); setPending(null); }
+  function finishReplacement(candidate: PendingReplacement, result: { raw: string | null; blocked: boolean; notice: string }): void {
+    setSave(candidate.save); raw.current = result.raw; blocked.current = result.blocked; setNotice(result.notice);
+    closeDialog(); setError(''); setShowHint(false); setBoardEpoch(value => value + 1);
+    requestAnimationFrame(() => stageRef.current?.focus());
+  }
+  function confirmReplacement(candidate: PendingReplacement): void {
+    const result = replaceVoyage(storage.current, location.pathname, candidate.save, candidate.baseline);
+    if (result.ok) { finishReplacement(candidate, result); return; }
+    blocked.current = true; setFileError('');
+    if (candidate.source === 'stored') {
+      if (!result.current.readable || result.current.raw === null) {
+        setPending(null); setNotice('The stored journey changed while this confirmation was open and is no longer available. Nothing was overwritten.'); return;
+      }
+      try {
+        setPending({ source: 'stored', save: parseVoyageSave(result.current.raw), baseline: result.current });
+        setNotice('The stored journey changed while this confirmation was open. The stored copy was refreshed; review it and confirm again.');
+      } catch (cause) {
+        setPending(null); setNotice('The stored journey changed while this confirmation was open. Nothing was overwritten.');
+        setFileError(cause instanceof Error ? cause.message : 'The newer stored journey could not be read.');
+      }
+      return;
+    }
+    setPending({ ...candidate, baseline: result.current }); setNotice(result.notice);
+  }
+  function resumeIncoming(): void {
+    nonce.current++; setFileError(''); setPending(null); setModal(null);
     requestAnimationFrame(() => stageRef.current?.focus());
   }
   async function importFile(file?: File): Promise<void> {
     if (!file) return;
-    const request = ++nonce.current; setPending(null); setResetting(false);
-    if (file.size > MAX_VOYAGE_BYTES) { setNotice('This journey exceeds the 1 MB limit.'); return; }
-    try { const candidate = parseVoyageImport(await file.text()); if (request === nonce.current) { setPending(candidate); setNotice(''); } }
-    catch (cause) { if (request === nonce.current) setNotice(cause instanceof Error ? cause.message : 'The journey could not be read.'); }
+    const request = ++nonce.current; setPending(null);
+    if (file.size > MAX_VOYAGE_BYTES) { setFileError('This journey exceeds the 1 MB limit.'); return; }
+    try {
+      const candidate = parseVoyageImport(await file.text());
+      if (request === nonce.current) { setPending({ source: 'import', save: candidate, baseline: readVoyageStorage(storage.current, location.pathname) }); setFileError(''); }
+    }
+    catch (cause) { if (request === nonce.current) setFileError(cause instanceof Error ? cause.message : 'The journey could not be read.'); }
   }
   function loadStored(): void {
-    nonce.current++; setPending(null); setResetting(false);
-    try { const stored = storage.current.getItem(key); if (stored === null) throw new Error('No stored journey was found.'); setPending(parseVoyageSave(stored)); setNotice(''); }
-    catch (cause) { setNotice(cause instanceof Error ? cause.message : 'The stored journey could not be read.'); }
+    nonce.current++; setPending(null);
+    try {
+      const baseline = readVoyageStorage(storage.current, location.pathname);
+      if (!baseline.readable) throw new Error('Browser storage could not be read. The journey in this tab has not changed.');
+      if (baseline.raw === null) throw new Error('No stored journey was found.');
+      setPending({ source: 'stored', save: parseVoyageSave(baseline.raw), baseline }); setFileError('');
+    }
+    catch (cause) { setFileError(cause instanceof Error ? cause.message : 'The stored journey could not be read.'); }
   }
 
   return <div className={`adventure voyage ${save?.settings.largeText ? 'av-large-text' : ''} ${save?.settings.lessMotion ? 'av-less-motion' : ''}`}>
@@ -97,6 +135,7 @@ export default function VoyageApp() {
     <header className="av-header"><a className="av-brand" href="#adventure"><Glyph name="star"/><span>ASTERFALL<small>THE LAST RELAY</small></span></a><span className="vy-header-label">Illustrated RPG</span>
       <nav aria-label="Journey tools"><button disabled={!save} aria-label="Journey journal" onClick={() => setModal('journal')}><Glyph name="book"/><span>Journal</span></button><button aria-label="Save & settings" onClick={() => setModal('settings')}><Glyph name="seal"/><span>Save & settings</span></button><a href="#adventure/archive">Archive</a><a href="#adventure">Chapter one</a><a href="#classic">Classic ↗</a></nav>
     </header>
+    {save?.version === 1 && <div className="av-notice" role="status">Earlier journey rules · Your original history is preserved. New journeys check outage fallbacks against the route actually built.</div>}
     {notice && <div className="av-notice" role="alert"><span>{notice}</span><button onClick={() => setModal('settings')}>Save & recovery</button></div>}
     <main className="av-main vy-main">
       {!save || !state || !record ? <section className="vy-arrival"><Glyph name="map"/><p className="av-kicker">THE CROSSING TO STORMGLASS</p><h1 tabIndex={-1} ref={stageRef}>Bring the archive packet</h1><p>Seal your proposal in The Green Tally to continue the illustrated story. A completed archive export can also start the crossing here.</p><a className="av-button av-primary" href="#adventure/archive">Return to the archive <Glyph name="arrow"/></a><button className="av-button" onClick={() => setModal('settings')}>Import a saved journey</button></section> : <>
@@ -127,13 +166,19 @@ export default function VoyageApp() {
     </main>
     {modal && <JourneyDialog title={modal === 'journal' ? 'Your journey journal' : 'Save & settings'} onClose={closeDialog}>
       {notice && <p className="vy-dialog-notice" role="alert">{notice}</p>}
+      {fileError && <p className="vy-dialog-notice" role="alert">{fileError}</p>}
       {modal === 'journal' && save && state ? <JourneyJournal save={save} state={state}/> : <>
         <p>{blocked.current ? 'Saving is paused. Export this tab before reloading or closing it.' : 'The continuation save includes your opening, hearing and archive histories, plus every step recorded since Stormglass.'}</p>
         {save && <><label className="av-setting"><input type="checkbox" checked={save.settings.lessMotion} onChange={event => update({ ...save, settings: { ...save.settings, lessMotion: event.target.checked } })}/> Reduce motion</label><label className="av-setting"><input type="checkbox" checked={save.settings.largeText} onChange={event => update({ ...save, settings: { ...save.settings, largeText: event.target.checked } })}/> Larger text</label></>}
         <div className="av-save-actions">{save && <button className="av-button" onClick={() => download(JSON.stringify(save, null, 2), 'asterfall-last-relay.json')}>Export journey</button>}<label className="av-import-label">Import journey<input aria-label="Import journey" type="file" accept="application/json,.json" onChange={event => { void importFile(event.target.files?.[0]); event.target.value = ''; }}/></label><button className="av-button" onClick={loadStored}>Load stored journey</button>{raw.current !== null && <button className="av-button" onClick={() => download(raw.current!, 'asterfall-last-relay-original.json')}>Export original stored copy</button>}</div>
         <p>Accepts a completed archive export or a Last Relay continuation save. Unfinished earlier chapters cannot be skipped by import.</p>
-        {pending && <section className="av-confirm" aria-label="Replace journey confirmation"><h3>Replace this journey?</h3><p>Export first to keep both histories. The imported journey includes its own earlier chapter records.</p><button className="av-button av-primary" onClick={() => replaced(pending)}>Replace journey</button><button className="av-button" onClick={() => setPending(null)}>Cancel replacement</button></section>}
-        {save && (resetting ? <section className="av-confirm" aria-label="Restart continuation confirmation"><h3>Start from Stormglass again?</h3><p>The four continuation chapters will reset. The embedded first three chapters remain, and each original chapter keeps its separate stored copy.</p><button className="av-button" onClick={() => { const next = freshVoyageSave(save.arrival); next.settings = { ...save.settings }; replaced(next); }}>Confirm new continuation</button><button className="av-button" onClick={() => setResetting(false)}>Keep playing</button></section> : <button className="av-text-button" onClick={() => { nonce.current++; setPending(null); setResetting(true); }}>Start another continuation</button>)}
+        {pending && <section className="av-confirm" aria-label={pending.source === 'reset' ? 'Restart continuation confirmation' : 'Replace journey confirmation'}>
+          <h3>{pending.source === 'reset' ? 'Start from Stormglass again?' : pending.source === 'arrival' ? 'Continue with this archive packet?' : 'Replace this journey?'}</h3>
+          <p>{pending.source === 'reset' ? 'The four continuation chapters will reset. The embedded first three chapters remain, and each original chapter keeps its separate stored copy.' : pending.source === 'arrival' ? 'This archive packet has a different earlier history. Export first to keep both histories, or resume the existing continuation.' : 'Export first to keep both histories. The replacement journey includes its own earlier chapter records.'}</p>
+          <button className="av-button av-primary" onClick={() => confirmReplacement(pending)}>{pending.source === 'reset' ? 'Confirm new continuation' : 'Replace journey'}</button>
+          <button className="av-button" onClick={pending.source === 'arrival' ? resumeIncoming : () => setPending(null)}>{pending.source === 'reset' ? 'Keep playing' : pending.source === 'arrival' ? 'Resume existing continuation' : 'Cancel replacement'}</button>
+        </section>}
+        {save && pending?.source !== 'reset' && <button className="av-text-button" onClick={() => { nonce.current++; setFileError(''); const next = freshVoyageSave(save.arrival); next.settings = { ...save.settings }; setPending({ source: 'reset', save: next, baseline: readVoyageStorage(storage.current, location.pathname) }); }}>Start another continuation</button>}
       </>}
     </JourneyDialog>}
   </div>;

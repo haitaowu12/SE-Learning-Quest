@@ -57,3 +57,9 @@ When changing a published content/schema version, implement and test migration o
 - [GitHub workflow dispatch input types](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onworkflow_dispatchinputs)
 
 The project’s relative-base and subpath behavior is also exercised against the actual production output in its own browser tests.
+
+## Branch publication — 29 October 2026
+
+The owner now authorizes local build/verification followed by GitHub Pages branch hosting, replacing the custom Actions deployment requirement above. Run type/content/unit checks and the production build before publishing the exact verified `dist/` bytes to `gh-pages`. Select Deploy from a branch, root. Keep `.nojekyll`, the source commit and per-file SHA-256 manifest. The old manual workflow remains historical and is not the active publication route.
+
+This candidate passes TypeScript and 145 unit tests. Actual in-app browser file import accepted the original released version-1 north-relay/east-fallback fixture, showed the earlier-rules notice and all 25 recorded scenes, then exported exactly the original JSON. This directly checks the repaired compatibility failure. Broad cross-browser and learner acceptance are not newly established. Existing content and route limitations remain.

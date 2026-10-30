@@ -17,7 +17,7 @@ export interface RecordState {
   scene: string; choices: Record<string, string>; order: string[]; runs: TrialRun[];
   allocations: Record<string, number>; review: { gaps: string[] } | null; sealed: boolean;
 }
-export interface VoyageState { index: number; records: RecordState[]; complete: boolean }
+export interface VoyageState { rulesVersion?: 1 | 2; index: number; records: RecordState[]; complete: boolean }
 export type VoyageAction =
   | { type: 'choose'; socket: string; tile: string }
   | { type: 'move'; tile: string; direction: 'up' | 'down' }
@@ -26,6 +26,6 @@ export type VoyageAction =
   | { type: 'review' }
   | { type: 'seal' };
 export interface VoyageSave {
-  version: 1; campaign: 'asterfall-last-relay'; arrival: ArchiveSave;
+  version: 1 | 2; campaign: 'asterfall-last-relay'; arrival: ArchiveSave;
   actions: VoyageAction[]; settings: ArchiveSave['settings'];
 }

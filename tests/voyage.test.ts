@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { scenes } from '../src/adventure/voyage/content.ts';
 import { assessRecord, canSeal, currentRecord, dispatchVoyage, endingLines, freshVoyageSave, MAX_VOYAGE_ACTIONS, parseVoyageSave, replayVoyage, voyageSaveKey } from '../src/adventure/voyage/model.ts';
 import { loadVoyage, parseVoyageImport, writeVoyage } from '../src/adventure/voyage/persistence.ts';
@@ -48,6 +49,25 @@ test('voyage: route support is a real constraint, and changing it invalidates ap
   assert.throws(() => dispatchVoyage(save, { type: 'seal' }));
   save = dispatchVoyage(save, { type: 'choose', socket: 'support', tile: 'crews' });
   save = dispatchVoyage(save, { type: 'review' }); assert.ok(canSeal(replayVoyage(save)));
+});
+test('voyage: outage fallbacks must exist in the architecture that was actually built', () => {
+  let north = atScene('outage', { route: 'lookouts' });
+  north = dispatchVoyage(north, { type: 'choose', socket: 'fault', tile: 'west-joint' });
+  north = dispatchVoyage(north, { type: 'choose', socket: 'route', tile: 'east' });
+  assert.match(assessRecord(replayVoyage(north)).join(' '), /east detour belongs to the diverse/i);
+  north = dispatchVoyage(north, { type: 'review' }); assert.equal(canSeal(replayVoyage(north)), false);
+  north = dispatchVoyage(north, { type: 'choose', socket: 'route', tile: 'north' });
+  north = dispatchVoyage(north, { type: 'review' }); assert.equal(canSeal(replayVoyage(north)), true);
+
+  let diverse = atScene('outage', { route: 'diverse' });
+  diverse = dispatchVoyage(diverse, { type: 'choose', socket: 'fault', tile: 'west-joint' });
+  diverse = dispatchVoyage(diverse, { type: 'choose', socket: 'route', tile: 'north' });
+  assert.match(assessRecord(replayVoyage(diverse)).join(' '), /north relay chain was not part/i);
+
+  const northReceiver = currentRecord(replayVoyage(readyScene(atScene('receiver', { route: 'lookouts' })))).runs.find(run => run.caseId === 'outage')!;
+  assert.match(northReceiver.note, /north relay chain/i); assert.ok(northReceiver.observations.every(item => item.perceived === null));
+  const diverseReceiver = currentRecord(replayVoyage(readyScene(atScene('receiver', { route: 'diverse' })))).runs.find(run => run.caseId === 'outage')!;
+  assert.match(diverseReceiver.note, /east detour/i); assert.ok(diverseReceiver.observations.every(item => item.perceived === null));
 });
 test('voyage: a misplaced valid connector can be explored but cannot pass review', () => {
   let save = readyScene(atScene('interfaces'));
@@ -111,9 +131,17 @@ test('voyage: sequence dependencies and relief remain enforced after portable re
   const done = dispatchVoyage(readyScene(save), { type: 'seal' });
   assert.equal(replayVoyage(done).records.find(record => record.scene === 'relief')!.sealed, true);
 });
+test('voyage: retirement ends in controlled holding before the final disposition decision', () => {
+  const retirement = scenes.find(scene => scene.id === 'retirement')!, inheritance = scenes.find(scene => scene.id === 'inheritance')!;
+  assert.match(retirement.sequence!.at(-1)!.label, /controlled holding/i);
+  assert.match(retirement.result, /intact old core in controlled holding pending disposition/i);
+  assert.doesNotMatch(retirement.result, /dismantl|exhibit/i);
+  assert.match(inheritance.sources[0].text, /controlled holding/i);
+  assert.deepEqual(inheritance.sockets.find(socket => socket.id === 'legacy')!.accepts, ['exhibit', 'recover']);
+});
 test('voyage: bounded parser rejects forged inputs without modifying the original', () => {
   const save = freshTestVoyage(), raw = JSON.stringify(save);
-  for (const mutation of [{ version: 2 }, { actions: [{ type: 'teleport' }] }, { settings: { largeText: 'yes', lessMotion: false } }, { actions: Array(MAX_VOYAGE_ACTIONS + 1).fill({ type: 'review' }) }]) assert.throws(() => parseVoyageSave(JSON.stringify({ ...save, ...mutation })));
+  for (const mutation of [{ version: 3 }, { actions: [{ type: 'teleport' }] }, { settings: { largeText: 'yes', lessMotion: false } }, { actions: Array(MAX_VOYAGE_ACTIONS + 1).fill({ type: 'review' }) }]) assert.throws(() => parseVoyageSave(JSON.stringify({ ...save, ...mutation })));
   assert.throws(() => parseVoyageSave(' '.repeat(1_000_001)));
   assert.throws(() => parseVoyageImport('{}'));
   assert.equal(JSON.stringify(save), raw);
@@ -134,4 +162,18 @@ test('voyage: denied storage and changed bytes preserve the tab snapshot', () =>
   assert.equal(writeVoyage(denied, '/', save, null).ok, false);
   const changed = loadVoyage({ getItem: () => '{}', setItem() {} }, '/', null, remembered);
   assert.equal(changed.blocked, true); assert.deepEqual(changed.save, save);
+});
+
+// Captured through origin/main 0b8c65f's unmodified completedVoyage helper.
+test('voyage: the earlier version-1 north/east journey keeps its exact history and rules', () => {
+  const raw = readFileSync(new URL('./fixtures/legacy-north-east-v1.json', import.meta.url), 'utf8');
+  const old = parseVoyageSave(raw);
+  assert.equal(old.version, 1);
+  assert.deepEqual(old, JSON.parse(raw));
+  const state = replayVoyage(old);
+  assert.equal(state.complete, true);
+  assert.equal(state.records.find(r => r.scene === 'routes')!.choices.route, 'lookouts');
+  assert.equal(state.records.find(r => r.scene === 'outage')!.choices.route, 'east');
+  assert.throws(() => parseVoyageSave(JSON.stringify({...old, version: 2})), /Review/);
+  assert.equal(freshTestVoyage().version, 2);
 });

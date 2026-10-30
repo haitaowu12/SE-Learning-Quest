@@ -53,8 +53,11 @@ function Island({ x, y, scale = 1, tower = false, lit = false }: { x: number; y:
 
 export function Landscape({ scene, state }: { scene: Scene; state: VoyageState }) {
   const skyId = useId().replace(/:/g, ''), accepted = state.records.some(r => r.scene === 'release' && r.sealed);
-  const home = state.records.some(r => r.scene === 'relief' && r.sealed);
+  const seraWithCrew = state.records.some(r => r.scene === 'relief' && r.sealed);
   const retired = state.records.some(r => r.scene === 'retirement' && r.sealed);
+  const finalRecord = state.records.find(r => r.scene === 'inheritance');
+  const disposition = finalRecord?.sealed ? finalRecord.choices.legacy : null;
+  const coreStatus = disposition === 'exhibit' ? 'exhibit' : disposition === 'recover' ? 'recovered' : retired ? 'holding' : 'connected';
   const shelter = state.records.some(r => r.scene === 'shelter');
   const damaged = state.index >= 8 && !state.records.some(r => r.scene === 'repair' && r.sealed);
   return <svg className={`vy-landscape vy-region-${scene.region}`} viewBox="0 0 1200 310" aria-hidden="true">
@@ -66,8 +69,12 @@ export function Landscape({ scene, state }: { scene: Scene; state: VoyageState }
     <g className="vy-cloud"><path d="M19 55h154M45 41h59M434 40h119M754 52h108M775 39h39M1030 185h137" stroke="#eff0d8" strokeWidth="9" strokeLinecap="round" opacity=".65"/></g>
     <path d="M103 225q231-135 431-38T1085 208" fill="none" stroke="#738f80" strokeWidth="3" strokeDasharray="8 9"/>
     <Island x={150} y={218} scale={.9} lit={accepted}/><Island x={523} y={222} scale={1.22} tower lit={accepted}/>
-    <g data-voyage-old-core data-status={retired ? 'isolated' : 'connected'}><Island x={322} y={243} scale={.48} tower lit={!retired}/></g>
+    <g data-voyage-old-core data-status={coreStatus}>{coreStatus === 'recovered'
+      ? <g data-voyage-recovered-core transform="translate(322 244)"><rect x="-34" y="-9" width="30" height="20" rx="3" fill="#6f8e82" stroke="#405e59" strokeWidth="3"/><rect x="7" y="-4" width="27" height="15" rx="3" fill="#c29a61" stroke="#775c39" strokeWidth="3"/><circle cx="4" cy="-22" r="9" fill="none" stroke="#607d73" strokeWidth="5"/><path d="M-25-16l15-12 9 10M18-13l10-10" fill="none" stroke="#59766e" strokeWidth="4"/></g>
+      : <><Island x={322} y={243} scale={.48} tower lit={!retired}/>{coreStatus === 'exhibit' && <g data-voyage-core-exhibit transform="translate(322 276)"><rect x="-24" y="-6" width="48" height="12" rx="3" fill="#d9c08b" stroke="#6c715f" strokeWidth="2"/><path d="M-15 0h30" stroke="#6c715f" strokeWidth="2"/></g>}</>}
+    </g>
     <Island x={901} y={204} scale={.87} lit={accepted}/>
+    {seraWithCrew && <g data-voyage-sera-ashore transform="translate(846 202)"><path d="M-7 0v-20h14V0" fill="#658882"/><circle cy="-27" r="8" fill="#d3a77c"/><path d="M-9-29q3-15 15-5l3 10-9-5" fill="#c7d0bd"/></g>}
     {shelter && <g data-voyage-shelter><Island x={1084} y={256} scale={.52} lit={state.records.some(r => r.scene === 'winter' && r.sealed)}/></g>}
     {scene.region === 'stormglass' && <g stroke="#a68b60" strokeWidth="4" fill="none"><path d="M478 231V62h90v169M478 104h90M478 151h90M478 196h90M478 62l90 89M478 151l90 80"/></g>}
     {scene.region === 'field' && [116, 868].map(x => <g key={x} transform={`translate(${x} 167)`}><path d="M0 45V0" stroke="#647962" strokeWidth="4"/><path d="M1 0h28L18 12l10 12H1z" fill="#b88758"/></g>)}
@@ -76,20 +83,23 @@ export function Landscape({ scene, state }: { scene: Scene; state: VoyageState }
     <g transform="translate(712 248)"><path d="m-71 0 145-6-24 26H-47z" fill="#33595f"/><path d="M-32-5v-30h61v29" fill="#d6bb85" stroke="#4c6d6a" strokeWidth="3"/>
       <path d="M-39-37h75M-23-25h13M7-25h13" stroke="#597d78" strokeWidth="5"/>
       <path d="M-52-5v-52" stroke="#5a7165" strokeWidth="4"/><path d="m-52-56 26 5-26 12" fill="#b87952"/>
-      {home && <g data-voyage-sera-onboard transform="translate(40 -3)"><path d="M-7 0v-20h14V0" fill="#658882"/><circle cy="-27" r="8" fill="#d3a77c"/><path d="M-9-29q3-15 15-5l3 10-9-5" fill="#c7d0bd"/></g>}
     </g>
     <path d="M0 296q97-14 190 0t210 0 217 0 207 0 197 0 179 0v14H0z" fill="#dbe3c8" opacity=".55"/>
   </svg>;
 }
 
 export function RouteDrawing({ route }: { route: string }) {
-  const split = ['diverse', 'east', 'parallel', 'five', 'current'].includes(route);
-  const people = ['lookouts', 'posts', 'lookout', 'crews', 'crew'].includes(route);
+  const split = ['diverse', 'east'].includes(route);
+  const northRelay = ['lookouts', 'north'].includes(route);
+  const people = route === 'posts';
+  const label = route === 'diverse' ? 'EAST + WEST' : northRelay ? 'NORTH V2' : route === 'single' ? 'WEST ONLY' : route === 'east' ? 'EAST DETOUR' : route === 'posts' ? 'LOCAL POSTS' : route === 'stop' ? 'NO COVER' : '';
   return <svg className="vy-route-drawing" viewBox="0 0 260 108" aria-hidden="true">
-    <path d="M20 72q50-60 107-27t112 23" fill="none" stroke="#9cae97" strokeWidth="4" strokeDasharray={split || people ? undefined : '9 7'}/>
+    {label && <text x="130" y="13" textAnchor="middle" fontSize="10" fontWeight="700" letterSpacing="1" fill="currentColor">{label}</text>}
+    {!northRelay && <path d="M20 72q50-60 107-27t112 23" fill="none" stroke="#9cae97" strokeWidth="4" strokeDasharray={split || people ? undefined : '9 7'}/>}
     {split && <path d="M20 72q106 42 219-4" fill="none" stroke="#427872" strokeWidth="5"/>}
+    {northRelay && <><path d="M20 72q52-69 108-43t111 39" fill="none" stroke="#427872" strokeWidth="5"/>{[[39, 61], [98, 37], [164, 41], [222, 61]].map(([x, y]) => <g key={x} transform={`translate(${x} ${y})`}><circle r="13" fill="#f4e7be" stroke="#5c8377" strokeWidth="3"/><path d="M-5 4V-4h10V4M-7-4 0-11 7-4" fill="#649087" stroke="#456c65" strokeWidth="2"/><circle cx="12" cy="-11" r="4" fill="#bc905e"/></g>)}</>}
     {people && [39, 104, 169, 222].map(x => <g key={x} transform={`translate(${x} 54)`}><circle r="7" fill="#bc905e"/><path d="M-8 22V10q8-8 16 0v12" stroke="#446d68" strokeWidth="5" fill="none"/><path d="M14 24V-7l17 6-17 5" stroke="#896533" strokeWidth="3" fill="#d3b36f"/></g>)}
-    {!people && [25, 127, 236].map((x, i) => <g key={x} transform={`translate(${x} ${i === 1 ? 35 : 67})`}><circle r="16" fill="#f4e7be" stroke="#5c8377" strokeWidth="3"/><path d="M-6 5V-5h12V5M-9-5 0-13 9-5" fill="#649087" stroke="#456c65" strokeWidth="2"/></g>)}
-    {!split && !people && <g stroke="#a26448" strokeWidth="4"><path d="M69 27l15 15M84 27 69 42"/></g>}
+    {!people && !northRelay && [25, 127, 236].map((x, i) => <g key={x} transform={`translate(${x} ${i === 1 ? 35 : 67})`}><circle r="16" fill="#f4e7be" stroke="#5c8377" strokeWidth="3"/><path d="M-6 5V-5h12V5M-9-5 0-13 9-5" fill="#649087" stroke="#456c65" strokeWidth="2"/></g>)}
+    {!split && !people && !northRelay && <g stroke="#a26448" strokeWidth="4"><path d="M69 27l15 15M84 27 69 42"/></g>}
   </svg>;
 }

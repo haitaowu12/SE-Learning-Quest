@@ -4,11 +4,13 @@ A browser RPG about rebuilding a world by understanding its connections. Play as
 
 Part of **SE Learning Quest**. The existing Coffee Lab and Harbour Line episodes remain under **Other episodes**.
 
-An alternative [illustrated RPG](docs/ILLUSTRATED_RPG.md) starts at **`#adventure`**. Investigate scene objects with Iona and Pip, meet Mara, and rehearse a warning with her crew. **Take Mara’s ferry** continues to [The Missing Address](docs/BRASS_QUARTER.md) at **`#adventure/council`**: seat people at the hearing, carry their accounts, and assemble a warning promise on Tavi’s workbench. **Enter the dispatch archive** then opens [The Green Tally](docs/DISPATCH_ARCHIVE.md) at **`#adventure/archive`**: compare inhabited quays with a recipient list, place source records beside their claims, and prepare a correction for Stormglass. Three illustrated chapters are playable. Completed predecessor saves can continue or be imported; Classic remains the default full campaign and keeps its existing saves.
+The [illustrated RPG](docs/ILLUSTRATED_CAMPAIGN.md) is a complete **seven-chapter, 25-scene** journey starting at **`#adventure`**. Investigate objects with Iona and Pip, arrange a hearing, compare archive records, connect interface tiles, order a build, run warning exercises, hand over Sera’s watch, repair the service, include a new shelter, and leave the next keeper a support and retirement plan. Choices affect the exercised route, recurring resources and final charter.
 
-## The game
+**Sail to Stormglass** at the end of [The Green Tally](docs/DISPATCH_ARCHIVE.md) continues into chapters four to seven at **`#adventure/voyage`**. Completed earlier saves can continue or be imported. The [opening guide](docs/ILLUSTRATED_RPG.md) and [Brass Quarter guide](docs/BRASS_QUARTER.md) describe the first two chapters. **Classic remains the default 24-quest campaign**, preserved at `#classic` with its existing progression and saves.
 
-The complete first campaign has **24 connected quests**, **55 authored dialogue decisions** (48 regular and 7 conditional), **165 choices**, **19 workbench puzzles**, 24 evidence artifacts, 24 keepsakes, eight badges, five trainable skills, and three ending families. Earlier choices change later conversations and recovery challenges. The final support and governance decisions also change the epilogue.
+## Classic campaign
+
+The complete Classic campaign has **24 connected quests**, **55 authored dialogue decisions** (48 regular and 7 conditional), **165 choices**, **19 workbench puzzles**, 24 evidence artifacts, 24 keepsakes, eight badges, five trainable skills, and three ending families. Earlier choices change later conversations and recovery challenges. The final support and governance decisions also change the epilogue.
 
 You investigate a warning failure, listen to excluded communities, negotiate with a maker, define a testable promise, design interfaces, compare alternatives, integrate and prove the relay, bring it into service, validate its usefulness, operate and repair it, manage a changed mission, and retire the old core. Mistakes expose gaps; they do not consume lives or permanently block the story. Puzzles use evidence selection, matching, sequencing and weighted trade studies.
 
@@ -38,7 +40,7 @@ Open `http://127.0.0.1:4173/SE-Learning-Quest/`. The preview also serves `/renam
 
 Progress saves in browser storage scoped to this game and the hosting path. The previous episodes have separate storage. Clearing browser data removes that local copy; **Settings → Export expedition** creates a portable JSON backup. Import validates the complete history before asking to replace the current expedition. Unsupported versions and corrupted data are preserved for recovery rather than silently overwritten. A changed save in another tab pauses automatic saving until you choose how to reconcile it.
 
-Use Tab and Shift+Tab to move between controls, Enter or Space to activate them, and the labelled move buttons to order a workbench sequence. The skip link goes to the adventure. Settings offer 100–200% text size, increased contrast and reduced decorative motion; the operating system’s reduced-motion preference is respected. All challenges are untimed.
+Use Tab and Shift+Tab to move between controls, Enter or Space to activate them, and the labelled move buttons to order a workbench sequence. The skip link goes to the adventure. Settings offer 100–200% text size, increased contrast and reduced decorative motion; the operating system’s reduced-motion preference is respected. All challenges are untimed. These text-size and contrast controls describe Classic. The illustrated story provides **Larger text** and **Reduce motion** in **Save & settings**, with native buttons for every activity. Its continuation export embeds the original three chapter histories and all subsequent actions. A blocked-storage journey survives hash navigation in the current tab; export before reloading or closing that tab.
 
 ## GitHub Pages
 
@@ -48,7 +50,7 @@ After an explicit publication decision, run the workflow manually on `main`, sel
 
 ## Educational scope
 
-The shipped campaign maps **all 30 ISO/IEC/IEEE 15288:2023 lifecycle process areas** and **18 supporting systems-engineering concepts** to original scenarios, choices, feedback and unlocked field notes. [The curriculum map](docs/RPG_CURRICULUM.md) links those identifiers to the actual quest objectives, mechanics, decisions and recurring artifacts.
+The Classic campaign maps **all 30 ISO/IEC/IEEE 15288:2023 lifecycle process areas** and **18 supporting systems-engineering concepts** to original scenarios, choices, feedback and unlocked field notes. [The curriculum map](docs/RPG_CURRICULUM.md) links those identifiers to the actual quest objectives, mechanics, decisions and recurring artifacts.
 
 This is a playable introduction to lifecycle thinking, **not the complete ISO standard, the full INCOSE Handbook, or a certification assessment**. No licensed passages were copied into the game. Public process/topic descriptions do not establish exhaustive coverage of every normative task, outcome, handbook method or application-specific chapter. [Source provenance and limits](docs/RPG_SOURCES.md) distinguish what the original campaign teaches from what requires access to the licensed publications and further subject-matter validation.
 
@@ -63,6 +65,7 @@ This is a playable introduction to lifecycle thinking, **not the complete ISO st
 | `src/rpg/curriculum.ts`, `validation.ts` | Original field guide, process/topic map and integrity checks |
 | `src/rpg/App.tsx`, `rpg.css`, `world.ts` | DOM interface, original SVG world, character presentation and responsive styles |
 | `src/AppRouter.tsx`, `src/app/LegacyApp.tsx` | Hash entry routing and deferred loading of existing episodes |
+| `src/adventure/voyage/` | Illustrated chapters four to seven: authored cases, replayed state, graphical workbenches, journal and recovery |
 | `tests/`, `tests/e2e/` | Engine, persistence, content and production browser acceptance |
 | `scripts/` | Production preview and generated curriculum documentation |
 
