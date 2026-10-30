@@ -12,11 +12,11 @@ export function newRecord(scene: Scene): RecordState {
   const order = scene.sequence?.map(item => item.id) ?? [];
   return { scene: scene.id, choices: {}, order: order.length === 4 ? [order[2], order[0], order[3], order[1]] : order, runs: [], allocations: {}, review: null, sealed: false };
 }
-export const freshVoyage = (): VoyageState => ({ index: 0, records: [newRecord(scenes[0])], complete: false });
+export const freshVoyage = (rulesVersion: 1 | 2 = 2): VoyageState => ({ rulesVersion, index: 0, records: [newRecord(scenes[0])], complete: false });
 export function freshVoyageSave(arrival: ArchiveSave): VoyageSave {
   const checked = parseArchiveSave(JSON.stringify(arrival));
   requireThat(replayArchive(checked).complete, 'Seal the archive packet before travelling to Stormglass.');
-  return { version: 1, campaign: 'asterfall-last-relay', arrival: checked, actions: [], settings: { ...checked.settings } };
+  return { version: 2, campaign: 'asterfall-last-relay', arrival: checked, actions: [], settings: { ...checked.settings } };
 }
 export const currentRecord = (state: VoyageState): RecordState => state.records[state.index];
 export const priorChoice = (state: VoyageState, scene: string, socket: string): string | undefined => state.records.find(record => record.scene === scene)?.choices[socket];
@@ -70,7 +70,7 @@ export function assessRecord(state: VoyageState): string[] {
     const expected = record.choices.route === 'diverse' ? 'joint' : record.choices.route === 'lookouts' ? 'crews' : null;
     if (expected && record.choices.support !== expected) gaps.push(expected === 'joint' ? 'The diverse relays need the spare joint specified in the design study.' : 'The staffed north relay chain needs two rotating crews; a spare relay joint does not provide duty cover.');
   }
-  if (scene.id === 'outage') {
+  if (scene.id === 'outage' && state.rulesVersion !== 1) {
     const builtRoute = priorChoice(state, 'routes', 'route');
     if (record.choices.route === 'east' && builtRoute !== 'diverse') gaps.push('The east detour belongs to the diverse east/west relay build. This journey built the staffed north relay chain; choose its north path or the accepted local-post fallback.');
     if (record.choices.route === 'north' && builtRoute !== 'lookouts') gaps.push('The staffed north relay chain was not part of the diverse east/west build. Choose its east detour or the accepted local-post fallback.');
@@ -138,7 +138,7 @@ export function voyageStep(state: VoyageState, action: VoyageAction): VoyageStat
 }
 export function replayVoyage(save: VoyageSave): VoyageState {
   requireThat(replayArchive(save.arrival).complete, 'The continuation requires a completed archive packet.');
-  return save.actions.reduce(voyageStep, freshVoyage());
+  return save.actions.reduce(voyageStep, freshVoyage(save.version));
 }
 export function dispatchVoyage(save: VoyageSave, action: VoyageAction): VoyageSave {
   const before = replayVoyage(save), after = voyageStep(before, action);
@@ -154,7 +154,7 @@ export function parseVoyageSave(raw: string): VoyageSave {
   const input = data as VoyageSave;
   const fields = ['version', 'campaign', 'arrival', 'actions', 'settings'];
   requireThat(Object.keys(input).length === fields.length && Object.keys(input).every(key => fields.includes(key)), 'The journey has missing or unsupported fields.');
-  requireThat(input.version === 1 && input.campaign === 'asterfall-last-relay', 'This is not a supported Last Relay continuation save.');
+  requireThat((input.version === 1 || input.version === 2) && input.campaign === 'asterfall-last-relay', 'This is not a supported Last Relay continuation save.');
   const arrival = parseArchiveSave(JSON.stringify(input.arrival));
   requireThat(replayArchive(arrival).complete, 'Seal the archive packet before continuing to Stormglass.');
   requireThat(Array.isArray(input.actions) && input.actions.length <= MAX_VOYAGE_ACTIONS, 'The journey contains too many actions.');
