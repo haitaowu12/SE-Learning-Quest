@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" role="img" aria-labelledby="title desc">
+  <title id="title">Rail modernization quest map</title>
+  <desc id="desc">A stylized rail corridor connects seven systems engineering chapters through a V-shaped evidence path.</desc>
+  <defs>
+    <linearGradient id="railGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#b9d7c6"/>
+      <stop offset="1" stop-color="#2f6f56"/>
+    </linearGradient>
+    <style>
+      .rail { fill:none; stroke:#17211c; stroke-width:10; stroke-linecap:round; }
+      .rail2 { fill:none; stroke:#2f6f56; stroke-width:5; stroke-linecap:round; stroke-dasharray:18 18; animation: move 8s linear infinite; }
+      .node { fill:#ffffff; stroke:#17211c; stroke-width:2; }
+      .label { fill:#17211c; font-family:Inter, Arial, sans-serif; font-size:17px; font-weight:800; }
+      .small { fill:#596760; font-family:Inter, Arial, sans-serif; font-size:12px; font-weight:700; }
+      .signal { fill:url(#railGradient); stroke:#17211c; stroke-width:3; }
+      @keyframes move { to { stroke-dashoffset:-144; } }
+      @media (prefers-reduced-motion: reduce) { .rail2 { animation:none; } }
+    </style>
+  </defs>
+  <rect width="560" height="420" rx="34" fill="#f7f8f4"/>
+  <path class="rail" d="M60 305 C160 190 252 330 340 206 S455 143 502 75"/>
+  <path class="rail2" d="M60 305 C160 190 252 330 340 206 S455 143 502 75"/>
+  <g transform="translate(200 128)">
+    <path class="signal" d="M72 0h106c31 0 56 25 56 56v120c0 31-25 56-56 56H72c-31 0-56-25-56-56V56C16 25 41 0 72 0Z"/>
+    <circle cx="82" cy="78" r="25" fill="#d45d5d" stroke="#17211c" stroke-width="3"/>
+    <circle cx="168" cy="78" r="25" fill="#e8b55a" stroke="#17211c" stroke-width="3"/>
+    <circle cx="125" cy="154" r="25" fill="#58b77b" stroke="#17211c" stroke-width="3"/>
+    <text class="label" x="125" y="214" text-anchor="middle">Harbour Line</text>
+  </g>
+  <g transform="translate(34 284)">
+    <rect class="node" width="118" height="58" rx="12"/>
+    <text class="label" x="59" y="27" text-anchor="middle">Frame</text>
+    <text class="small" x="59" y="44" text-anchor="middle">boundary</text>
+  </g>
+  <g transform="translate(141 168)">
+    <rect class="node" width="124" height="58" rx="12"/>
+    <text class="label" x="62" y="27" text-anchor="middle">Define</text>
+    <text class="small" x="62" y="44" text-anchor="middle">baseline</text>
+  </g>
+  <g transform="translate(330 182)">
+    <rect class="node" width="126" height="58" rx="12"/>
+    <text class="label" x="63" y="27" text-anchor="middle">Integrate</text>
+    <text class="small" x="63" y="44" text-anchor="middle">interfaces</text>
+  </g>
+  <g transform="translate(420 54)">
+    <rect class="node" width="118" height="58" rx="12"/>
+    <text class="label" x="59" y="27" text-anchor="middle">Prove</text>
+    <text class="small" x="59" y="44" text-anchor="middle">evidence</text>
+  </g>
+</svg>

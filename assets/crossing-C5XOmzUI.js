@@ -1,0 +1,1 @@
+import{f as e,p as t}from"./adventure-C-FkaWQh.js";var n=null;function r(r){let i=e(JSON.stringify(r));if(!t(i).complete)throw Error(`Finish Mara’s watch handover before taking the ferry.`);n=i}function i(){let e=n;return n=null,e}export{r as n,i as t};

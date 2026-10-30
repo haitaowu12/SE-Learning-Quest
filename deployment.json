@@ -1,0 +1,316 @@
+{
+  "source_commit": "8238c3e13726430090281d80752991d3f38278d14",
+  "hosting": "GitHub Pages branch publishing",
+  "files": [
+    {
+      "path": "assets/App-BU81QqYQ.js",
+      "bytes": 33790,
+      "sha256": "9a355350d485e5b2412930c686467e346601c2909fdecce1b580fccc2042e1f2"
+    },
+    {
+      "path": "assets/App-BV_WSIbb.js",
+      "bytes": 35206,
+      "sha256": "3880a713fa08cd6b08144ec441872d9515c7f7ea557b4ee5b465d76d0e23d7dd"
+    },
+    {
+      "path": "assets/App-BXYTPjjD.css",
+      "bytes": 6820,
+      "sha256": "ae8cf22b34c74f8cb4d2f1d313b177753c600b396de51c0f4544cc89741a91e3"
+    },
+    {
+      "path": "assets/App-CcFywfrL.js",
+      "bytes": 39485,
+      "sha256": "e73e1f71dc2c0d50ec3ffd4bf93a6c20dc1ac31c2ad2584c08569e3a8ce4724f"
+    },
+    {
+      "path": "assets/App-D18NVWrD.css",
+      "bytes": 16966,
+      "sha256": "15038b0bd4e2899b3fdacfb0454e38d4952c948ed916bf582437dd997fad0e91"
+    },
+    {
+      "path": "assets/App-DDg9pcXE.css",
+      "bytes": 27227,
+      "sha256": "497f4386856b50e0aa513f36bb09f9960405a47a42a136d6979605e649f023b7"
+    },
+    {
+      "path": "assets/App-DuxWke97.css",
+      "bytes": 7304,
+      "sha256": "3ef56165638c28fa2644c4b3ba40e9000d23054223701f5d887fb6d93cc67e64"
+    },
+    {
+      "path": "assets/App-MgU4AhZp.js",
+      "bytes": 295104,
+      "sha256": "db90f61646c755c9cb615006664a061103108536f626d6dc6511b12e7cb49522"
+    },
+    {
+      "path": "assets/App-kRMgLT_F.js",
+      "bytes": 26476,
+      "sha256": "ecdcc6c201bef55cdcdd8c60c7908cea38ef1a4e8fa86c1c3e9ec6e64ad172fc"
+    },
+    {
+      "path": "assets/LegacyApp-D5oU4AIU.css",
+      "bytes": 28023,
+      "sha256": "669efb847fc4ff5bcae412c8efddf4e2b9240dccd1a885fcb970570e33305dbc"
+    },
+    {
+      "path": "assets/LegacyApp-Dit6bhu7.js",
+      "bytes": 1582532,
+      "sha256": "3f25c39863304f9281a45fb4e115d92d2df2b15e4a0218ef38d38889863e9aeb"
+    },
+    {
+      "path": "assets/adventure-B31Ea4YH.css",
+      "bytes": 21404,
+      "sha256": "9fd39698041fa745cf8dc5d9b7024afd3925012141a518619106d23aec4dd4c9"
+    },
+    {
+      "path": "assets/adventure-C-FkaWQh.js",
+      "bytes": 22616,
+      "sha256": "f6c05ec100dbb8493da288b77cb11bcf49d60c77cfc5cdee0dc6614bf14174c3"
+    },
+    {
+      "path": "assets/bg_blueprint.png",
+      "bytes": 990427,
+      "sha256": "d66425db4d5bdfeab68d42d810308eff7079a23197df505763aac46ca97ece9c"
+    },
+    {
+      "path": "assets/bg_terminal.png",
+      "bytes": 598407,
+      "sha256": "47385c99d3790f03a96aa75b70cb8339f341e0d9483bcc55c60a37410415a7cd"
+    },
+    {
+      "path": "assets/bg_title.png",
+      "bytes": 944346,
+      "sha256": "21710d5a08881c681ec23b5b7cfecd03148e7881048dfd6e29f67a0e5bfeaf20"
+    },
+    {
+      "path": "assets/coffee-lab/architect.png",
+      "bytes": 477797,
+      "sha256": "9ee84c7511a7779d25cea5dce1dc94fd1988992c2b7fb4ae43c0a0c93c3b041f"
+    },
+    {
+      "path": "assets/coffee-lab/architect.webp",
+      "bytes": 33832,
+      "sha256": "376cce4aae77fbb6602e47ae49eaa5b123f938ee01ed77d8a335aeb2d9244cb6"
+    },
+    {
+      "path": "assets/coffee-lab/atlas-crops-preview.png",
+      "bytes": 1805345,
+      "sha256": "313065e0c8390974ef90d7cf9b9271e9933e04620ca9cedfe0410d4d2a32f9a0"
+    },
+    {
+      "path": "assets/coffee-lab/choose.png",
+      "bytes": 260500,
+      "sha256": "0d65b0653e258ab48604fbb3ec24fdec9831802c65d1db058edd481b852fb721"
+    },
+    {
+      "path": "assets/coffee-lab/choose.webp",
+      "bytes": 26104,
+      "sha256": "a2ad1ea496784b56cf2de3d74e9330b2628ead390f85fccb5b5aaa10ed7f4b08"
+    },
+    {
+      "path": "assets/coffee-lab/coffee-lab-atlas-source.png",
+      "bytes": 2227908,
+      "sha256": "47d1b814e5b4ccd51ba750b6aca7160396b76e780ef2d256f824a3ee10fb1b9f"
+    },
+    {
+      "path": "assets/coffee-lab/decide.png",
+      "bytes": 336674,
+      "sha256": "79468237002161080817e4f295e14fe47d167958b19783be733ab5e230800723"
+    },
+    {
+      "path": "assets/coffee-lab/decide.webp",
+      "bytes": 41880,
+      "sha256": "51c166ebb7840e44cd0ee02fae17552032fce2c9b02f35dbc141ce8dcf6ebb08"
+    },
+    {
+      "path": "assets/coffee-lab/define.png",
+      "bytes": 570209,
+      "sha256": "cf254b518ac15c8a332aa68f8a8f7a7657502c7c820694344c521831b06cc6ff"
+    },
+    {
+      "path": "assets/coffee-lab/define.webp",
+      "bytes": 44048,
+      "sha256": "2c7bce1957b4e762d2712c9c9f5416219bb0cebcc4134c1f2ef65f3635fd469d"
+    },
+    {
+      "path": "assets/coffee-lab/frame.png",
+      "bytes": 515470,
+      "sha256": "5399b01828a4f239a72572537492d8ea85797d5e47799100c5e3507efb217fdc"
+    },
+    {
+      "path": "assets/coffee-lab/frame.webp",
+      "bytes": 40242,
+      "sha256": "daf32812463c51259bd454b8654628fae8e164e4a2cce3e0e293d7c16464f20a"
+    },
+    {
+      "path": "assets/coffee-lab/implement.png",
+      "bytes": 743103,
+      "sha256": "5abfb8bea829f2c63e856380a26c447de51406204e3c362c8b23f4a20e672a84"
+    },
+    {
+      "path": "assets/coffee-lab/implement.webp",
+      "bytes": 58198,
+      "sha256": "3c5a13bdbdf357c982bcda9c025c140d4fa2a3606b9473e084967b65c084c2c7"
+    },
+    {
+      "path": "assets/coffee-lab/integrate.png",
+      "bytes": 535524,
+      "sha256": "002f39dc1714d719b27b78d61f04858cf99125b6c7e82cb94d89f5bcabea17b7"
+    },
+    {
+      "path": "assets/coffee-lab/integrate.webp",
+      "bytes": 36318,
+      "sha256": "fa3ef4f152515c3356732213bd2bc078ae7d90e89a90db13206761e1f67e0767"
+    },
+    {
+      "path": "assets/coffee-lab/operate.png",
+      "bytes": 669252,
+      "sha256": "07f9b78809aac670242d51ff1dc205c67efe6b3041b96cf65fc858e91b9d0057"
+    },
+    {
+      "path": "assets/coffee-lab/operate.webp",
+      "bytes": 52260,
+      "sha256": "9100514035055c1b0d5ef5d691223714c82200acf2cd17766307cb67d784672d"
+    },
+    {
+      "path": "assets/coffee-lab/prove.png",
+      "bytes": 614127,
+      "sha256": "111df62eeaca2bdca60c9104ca936be759e6e9a5be3430addf8be784c0d6adff"
+    },
+    {
+      "path": "assets/coffee-lab/prove.webp",
+      "bytes": 49208,
+      "sha256": "87349be812b6f6c1d6fe572a6193330960e43744bfa074b6164893c93911c95b"
+    },
+    {
+      "path": "assets/coffee-lab/realize.png",
+      "bytes": 343497,
+      "sha256": "4aff402f81358ab6c9dff06c6dae72f151bc23ae33251e0a9e46156324d0a7a1"
+    },
+    {
+      "path": "assets/coffee-lab/realize.webp",
+      "bytes": 42016,
+      "sha256": "6fd2299ce1510f45ea4ce7620b5d1c8033f8ac015910f8113d605ad11899ca1d"
+    },
+    {
+      "path": "assets/coffee-lab/retire.png",
+      "bytes": 502688,
+      "sha256": "c3a41ec1ed8f04042a715ad05af6276e8fd2a60adb99449e8e9c5a6b2946d2f7"
+    },
+    {
+      "path": "assets/coffee-lab/retire.webp",
+      "bytes": 35096,
+      "sha256": "8bf76e536d98f89f153f6109b9d3b02a92d7cac1b54bd561a81e37e875809455"
+    },
+    {
+      "path": "assets/crossing-C5XOmzUI.js",
+      "bytes": 255,
+      "sha256": "61aada7bcb8fd84bc71b8540ed7543a7df9bfcb1506eb0842f186e204c211eda"
+    },
+    {
+      "path": "assets/index-RcR6eYgB.js",
+      "bytes": 194592,
+      "sha256": "6505e4996bf2a04881453ac1f463612c688ac673e6861a9da6ebe8a2e3948120"
+    },
+    {
+      "path": "assets/learning-quest/platform-hero.png",
+      "bytes": 1018593,
+      "sha256": "294e6dd8d1f81f42b511c49835dec4560d3541d2abdc0bbd5d5acdb387294a9b"
+    },
+    {
+      "path": "assets/learning-quest/platform-hero.webp",
+      "bytes": 88904,
+      "sha256": "10be9f64148b77769817915b503f514b6bf5aa3c1869b20f0d1dc82122818957"
+    },
+    {
+      "path": "assets/learning-quest/rail-debrief-readiness.png",
+      "bytes": 599486,
+      "sha256": "4f8e5763a7a6d2723e84ea62cda48eddbe2e14026f3fe29c95143a7af4994d56"
+    },
+    {
+      "path": "assets/learning-quest/rail-debrief-readiness.webp",
+      "bytes": 46294,
+      "sha256": "c71869092f634160eb778e6939c27f80fbcaf0d07cf0412abd727ede6b254195"
+    },
+    {
+      "path": "assets/learning-quest/rail-map.png",
+      "bytes": 1047026,
+      "sha256": "4c2e65c770200f1b79bb06c462d0327e75877d9fa5d75349275188db3f5aef92"
+    },
+    {
+      "path": "assets/learning-quest/rail-map.webp",
+      "bytes": 83526,
+      "sha256": "8c9333f57bb2f8c63008b10ecfbd1d65f08f71607b115d351ce6be63f9618154"
+    },
+    {
+      "path": "assets/learning-quest/rail-mission-anchor.png",
+      "bytes": 693486,
+      "sha256": "4f1a855f0df6920ba13bd6f6a94df58273624874d46365fbe5f8e913b0960ae1"
+    },
+    {
+      "path": "assets/learning-quest/rail-mission-anchor.webp",
+      "bytes": 54552,
+      "sha256": "b542caccc5a7669c3f131134f133294e3d922eb7225139cd61d83f7b97e4b76d"
+    },
+    {
+      "path": "assets/learning-quest/rail-title.png",
+      "bytes": 1201647,
+      "sha256": "016635f561e912fcdcfea9e945566245d09256069554ff7c80a48b6c3f74feb0"
+    },
+    {
+      "path": "assets/learning-quest/rail-title.webp",
+      "bytes": 100870,
+      "sha256": "fb2266b4b223d26914b92101d23bb5222e4e1ac679a70fadf39c945178dd91c4"
+    },
+    {
+      "path": "assets/model-GIn2oLIS.js",
+      "bytes": 43503,
+      "sha256": "8b9b20c13db2040fa8a148afa38c98cadf1380b524f264f65b55389f11462c85"
+    },
+    {
+      "path": "assets/persistence-CiIMuUZ2.js",
+      "bytes": 1738,
+      "sha256": "e94f5f1e59c7066bbac2cba84ba7912822388ded69b0dd77ba7f5c2a01651e7f"
+    },
+    {
+      "path": "assets/persistence-Dw0PHfvr.js",
+      "bytes": 47816,
+      "sha256": "dd7ae0950953599b2e2ecb8160f7b93c6f45c0e681863e70e9a6055f3524f33e"
+    },
+    {
+      "path": "assets/portrait_lead.png",
+      "bytes": 795692,
+      "sha256": "2ec4f936e1339d8f4c0dd8e75950a5280d813c30253c1d747d4414cb876dcb56"
+    },
+    {
+      "path": "assets/portrait_pm.png",
+      "bytes": 602609,
+      "sha256": "6236756c7f70694cd1651a8258e2c15831d0146aeed9d2f7e10d01762f1be0a0"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 9522,
+      "sha256": "61bc9a161de58248288e6905425d7180f0624c2865007b97d763fdac12043a66"
+    },
+    {
+      "path": "icons.svg",
+      "bytes": 5031,
+      "sha256": "b45fa506195cfcdef406ba9f0c77b36ddc1a7c224040926ec70abc2fdea7b93a"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1330,
+      "sha256": "f88c9f87deec1f25e581514c46d6176b07e2ee6550914c2765d030a61a479cac"
+    },
+    {
+      "path": "motion/coffee-lifecycle.svg",
+      "bytes": 4646,
+      "sha256": "3eab8c09309b551efa80c1198a00609f2f4e57850b08b17309d249465c34dede"
+    },
+    {
+      "path": "motion/rail-quest.svg",
+      "bytes": 2958,
+      "sha256": "b301d4fcb5242d4af9ceac45d5c84ceb85f3dc9d0823c6b89d5ebad1096b0b1c"
+    }
+  ]
+}

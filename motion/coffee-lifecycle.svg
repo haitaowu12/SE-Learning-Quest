@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="420" viewBox="0 0 560 420" role="img" aria-labelledby="title desc">
+  <title id="title">Coffee service systems lab map</title>
+  <desc id="desc">An office coffee service boundary with stakeholders, interfaces, artifact thread, evidence, and gate decision.</desc>
+  <defs>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#17211c" flood-opacity="0.16"/>
+    </filter>
+    <style>
+      .paper { fill:#f7f8f4; }
+      .floor { fill:#ffffff; stroke:#d7ded7; stroke-width:2; }
+      .boundary { fill:#edf6f1; stroke:#2f6f56; stroke-width:4; stroke-dasharray:12 9; animation: dash 12s linear infinite; }
+      .actor { fill:#fff8ef; stroke:#17211c; stroke-width:2; filter:url(#softShadow); }
+      .system { fill:#c7793d; stroke:#17211c; stroke-width:3; filter:url(#softShadow); }
+      .artifact { fill:#ffffff; stroke:#17211c; stroke-width:2; filter:url(#softShadow); }
+      .line { fill:none; stroke:#34699a; stroke-width:4; stroke-linecap:round; stroke-dasharray:8 9; animation: dash 10s linear infinite; }
+      .gate { fill:#183d31; stroke:#17211c; stroke-width:2; }
+      .titleText { fill:#17211c; font-family:Inter, Arial, sans-serif; font-size:18px; font-weight:900; }
+      .small { fill:#4d5c54; font-family:Inter, Arial, sans-serif; font-size:11px; font-weight:800; }
+      .gateText { fill:#ffffff; font-family:Inter, Arial, sans-serif; font-size:12px; font-weight:900; }
+      @keyframes dash { to { stroke-dashoffset:-120; } }
+      @media (prefers-reduced-motion: reduce) { .boundary,.line { animation:none; } }
+    </style>
+  </defs>
+  <rect class="paper" width="560" height="420" rx="34"/>
+  <rect class="floor" x="36" y="44" width="488" height="304" rx="28"/>
+  <rect class="boundary" x="164" y="86" width="238" height="190" rx="26"/>
+  <text class="titleText" x="283" y="118" text-anchor="middle">Coffee service system</text>
+  <g transform="translate(228 146)">
+    <path class="system" d="M34 60h96l-10 70c-3 18-18 31-36 31H80c-18 0-33-13-36-31L34 60Z"/>
+    <rect x="58" y="84" width="48" height="30" rx="8" fill="#ffffff" opacity=".86"/>
+    <path class="system" d="M130 80h24c18 0 29 13 27 29-3 17-17 29-36 29h-19l4-24h17c8 0 13-4 14-10 1-6-4-10-12-10h-21l2-14Z"/>
+    <text class="small" x="82" y="104" text-anchor="middle">Machine</text>
+  </g>
+  <g class="actor" transform="translate(58 92)">
+    <rect width="86" height="54" rx="16"/>
+    <text class="titleText" x="43" y="27" text-anchor="middle" font-size="13">Users</text>
+    <text class="small" x="43" y="42" text-anchor="middle">needs</text>
+  </g>
+  <g class="actor" transform="translate(418 92)">
+    <rect width="86" height="54" rx="16"/>
+    <text class="titleText" x="43" y="27" text-anchor="middle" font-size="13">Vendor</text>
+    <text class="small" x="43" y="42" text-anchor="middle">support</text>
+  </g>
+  <g class="actor" transform="translate(62 248)">
+    <rect width="92" height="54" rx="16"/>
+    <text class="titleText" x="46" y="27" text-anchor="middle" font-size="13">Finance</text>
+    <text class="small" x="46" y="42" text-anchor="middle">cost</text>
+  </g>
+  <g class="actor" transform="translate(410 248)">
+    <rect width="96" height="54" rx="16"/>
+    <text class="titleText" x="48" y="27" text-anchor="middle" font-size="13">Facilities</text>
+    <text class="small" x="48" y="42" text-anchor="middle">cleaning</text>
+  </g>
+  <path class="line" d="M144 120h58M402 120h42M154 275h72M402 275h48"/>
+  <path class="line" d="M102 348 C148 386 220 386 270 354 S400 316 456 348"/>
+  <g class="artifact" transform="translate(70 342)">
+    <rect width="74" height="42" rx="12"/>
+    <text class="small" x="37" y="19" text-anchor="middle">Need</text>
+    <text class="small" x="37" y="32" text-anchor="middle">trace</text>
+  </g>
+  <g class="artifact" transform="translate(184 342)">
+    <rect width="96" height="42" rx="12"/>
+    <text class="small" x="48" y="19" text-anchor="middle">Requirement</text>
+    <text class="small" x="48" y="32" text-anchor="middle">3 min wait</text>
+  </g>
+  <g class="artifact" transform="translate(316 342)">
+    <rect width="72" height="42" rx="12"/>
+    <text class="small" x="36" y="19" text-anchor="middle">Proof</text>
+    <text class="small" x="36" y="32" text-anchor="middle">pilot</text>
+  </g>
+  <g transform="translate(430 340)">
+    <rect class="gate" width="70" height="46" rx="14"/>
+    <text class="gateText" x="35" y="21" text-anchor="middle">Gate</text>
+    <text class="gateText" x="35" y="35" text-anchor="middle">decision</text>
+  </g>
+</svg>
