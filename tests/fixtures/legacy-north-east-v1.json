@@ -1,0 +1,579 @@
+{
+  "version": 1,
+  "campaign": "asterfall-last-relay",
+  "arrival": {
+    "version": 1,
+    "campaign": "asterfall-dispatch-archive",
+    "arrival": {
+      "version": 1,
+      "campaign": "asterfall-brass-quarter",
+      "arrival": {
+        "version": 1,
+        "campaign": "asterfall-illustrated",
+        "actions": [
+          {
+            "type": "inspect",
+            "clue": "lamp"
+          },
+          {
+            "type": "inspect",
+            "clue": "crystal"
+          },
+          {
+            "type": "travel",
+            "place": "quay"
+          },
+          {
+            "type": "inspect",
+            "clue": "mara"
+          },
+          {
+            "type": "inspect",
+            "clue": "crew"
+          },
+          {
+            "type": "observe"
+          },
+          {
+            "type": "travel",
+            "place": "bench"
+          },
+          {
+            "type": "equip",
+            "device": "beacon"
+          },
+          {
+            "type": "brief",
+            "meaning": "hold"
+          },
+          {
+            "type": "test"
+          },
+          {
+            "type": "pin",
+            "claim": "sent",
+            "clue": "lamp"
+          },
+          {
+            "type": "pin",
+            "claim": "acted",
+            "clue": "trial"
+          },
+          {
+            "type": "finish"
+          }
+        ],
+        "settings": {
+          "lessMotion": false,
+          "largeText": false
+        }
+      },
+      "actions": [
+        {
+          "type": "inspect",
+          "discovery": "roll"
+        },
+        {
+          "type": "inspect",
+          "discovery": "orren"
+        },
+        {
+          "type": "travel",
+          "scene": "hearing"
+        },
+        {
+          "type": "inspect",
+          "discovery": "mara"
+        },
+        {
+          "type": "inspect",
+          "discovery": "tavi"
+        },
+        {
+          "type": "inspect",
+          "discovery": "night"
+        },
+        {
+          "type": "seat",
+          "guest": "mara",
+          "seat": "left"
+        },
+        {
+          "type": "seat",
+          "guest": "tavi",
+          "seat": "middle"
+        },
+        {
+          "type": "seat",
+          "guest": "night",
+          "seat": "right"
+        },
+        {
+          "type": "relief"
+        },
+        {
+          "type": "hear"
+        },
+        {
+          "type": "travel",
+          "scene": "atelier"
+        },
+        {
+          "type": "inspect",
+          "discovery": "demo"
+        },
+        {
+          "type": "place",
+          "slot": "who",
+          "token": "inhabited"
+        },
+        {
+          "type": "place",
+          "slot": "what",
+          "token": "perceivable"
+        },
+        {
+          "type": "place",
+          "slot": "when",
+          "token": "ninety"
+        },
+        {
+          "type": "place",
+          "slot": "conditions",
+          "token": "west40-link-out"
+        },
+        {
+          "type": "review"
+        },
+        {
+          "type": "label",
+          "status": "planned"
+        },
+        {
+          "type": "finish"
+        }
+      ],
+      "settings": {
+        "lessMotion": false,
+        "largeText": false
+      }
+    },
+    "actions": [
+      {
+        "type": "inspect",
+        "record": "request"
+      },
+      {
+        "type": "inspect",
+        "record": "roll"
+      },
+      {
+        "type": "inspect",
+        "record": "survey"
+      },
+      {
+        "type": "inspect",
+        "record": "change"
+      },
+      {
+        "type": "travel",
+        "scene": "table"
+      },
+      {
+        "type": "inspect",
+        "record": "tally"
+      },
+      {
+        "type": "focus",
+        "quay": "lower"
+      },
+      {
+        "type": "pin",
+        "slot": "population",
+        "record": "survey"
+      },
+      {
+        "type": "pin",
+        "slot": "recipients",
+        "record": "roll"
+      },
+      {
+        "type": "pin",
+        "slot": "receipts",
+        "record": "tally"
+      },
+      {
+        "type": "review-evidence"
+      },
+      {
+        "type": "travel",
+        "scene": "dispatch"
+      },
+      {
+        "type": "choose-route",
+        "route": "amend"
+      },
+      {
+        "type": "address",
+        "quay": "lower",
+        "address": "LQ07"
+      },
+      {
+        "type": "finding",
+        "finding": "listed-only"
+      },
+      {
+        "type": "review-proposal"
+      },
+      {
+        "type": "label",
+        "status": "proposed"
+      },
+      {
+        "type": "finish"
+      }
+    ],
+    "settings": {
+      "lessMotion": false,
+      "largeText": false
+    }
+  },
+  "actions": [
+    {
+      "type": "choose",
+      "socket": "authority",
+      "tile": "c18"
+    },
+    {
+      "type": "choose",
+      "socket": "list",
+      "tile": "current"
+    },
+    {
+      "type": "choose",
+      "socket": "release",
+      "tile": "trial"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "route",
+      "tile": "lookouts"
+    },
+    {
+      "type": "choose",
+      "socket": "support",
+      "tile": "crews"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "order",
+      "tile": "signed"
+    },
+    {
+      "type": "choose",
+      "socket": "meaning",
+      "tile": "hold"
+    },
+    {
+      "type": "choose",
+      "socket": "ack",
+      "tile": "received"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "move",
+      "tile": "drawings",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "assemble",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "assemble",
+      "direction": "up"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "controller",
+      "tile": "v2"
+    },
+    {
+      "type": "run",
+      "caseId": "valid"
+    },
+    {
+      "type": "run",
+      "caseId": "replay"
+    },
+    {
+      "type": "run",
+      "caseId": "outage"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "warning",
+      "tile": "beacon"
+    },
+    {
+      "type": "run",
+      "caseId": "day"
+    },
+    {
+      "type": "run",
+      "caseId": "night"
+    },
+    {
+      "type": "run",
+      "caseId": "squall"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "owner",
+      "tile": "crew"
+    },
+    {
+      "type": "choose",
+      "socket": "fallback",
+      "tile": "posts"
+    },
+    {
+      "type": "choose",
+      "socket": "decision",
+      "tile": "mara"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "move",
+      "tile": "arrive",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "readback",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "readback",
+      "direction": "up"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "fault",
+      "tile": "west-joint"
+    },
+    {
+      "type": "choose",
+      "socket": "route",
+      "tile": "east"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "work",
+      "tile": "joint"
+    },
+    {
+      "type": "choose",
+      "socket": "checks",
+      "tile": "full"
+    },
+    {
+      "type": "choose",
+      "socket": "return",
+      "tile": "mara"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "scope",
+      "tile": "five"
+    },
+    {
+      "type": "choose",
+      "socket": "approach",
+      "tile": "extend"
+    },
+    {
+      "type": "choose",
+      "socket": "evidence",
+      "tile": "repeat"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "scope",
+      "tile": "five"
+    },
+    {
+      "type": "run",
+      "caseId": "shelter"
+    },
+    {
+      "type": "run",
+      "caseId": "regression"
+    },
+    {
+      "type": "run",
+      "caseId": "winter"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "governance",
+      "tile": "council"
+    },
+    {
+      "type": "allocate",
+      "role": "watch",
+      "amount": 2
+    },
+    {
+      "type": "allocate",
+      "role": "training",
+      "amount": 1
+    },
+    {
+      "type": "allocate",
+      "role": "spares",
+      "amount": 1
+    },
+    {
+      "type": "allocate",
+      "role": "review",
+      "amount": 1
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "support",
+      "tile": "maker"
+    },
+    {
+      "type": "choose",
+      "socket": "record",
+      "tile": "record"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "move",
+      "tile": "substitute",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "isolate",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "tile": "isolate",
+      "direction": "up"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    },
+    {
+      "type": "choose",
+      "socket": "legacy",
+      "tile": "exhibit"
+    },
+    {
+      "type": "choose",
+      "socket": "review",
+      "tile": "cycle"
+    },
+    {
+      "type": "review"
+    },
+    {
+      "type": "seal"
+    }
+  ],
+  "settings": {
+    "lessMotion": false,
+    "largeText": false
+  }
+}

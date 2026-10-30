@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { scenes } from '../src/adventure/voyage/content.ts';
 import { assessRecord, canSeal, currentRecord, dispatchVoyage, endingLines, freshVoyageSave, MAX_VOYAGE_ACTIONS, parseVoyageSave, replayVoyage, voyageSaveKey } from '../src/adventure/voyage/model.ts';
 import { loadVoyage, parseVoyageImport, writeVoyage } from '../src/adventure/voyage/persistence.ts';
@@ -140,7 +141,7 @@ test('voyage: retirement ends in controlled holding before the final disposition
 });
 test('voyage: bounded parser rejects forged inputs without modifying the original', () => {
   const save = freshTestVoyage(), raw = JSON.stringify(save);
-  for (const mutation of [{ version: 2 }, { actions: [{ type: 'teleport' }] }, { settings: { largeText: 'yes', lessMotion: false } }, { actions: Array(MAX_VOYAGE_ACTIONS + 1).fill({ type: 'review' }) }]) assert.throws(() => parseVoyageSave(JSON.stringify({ ...save, ...mutation })));
+  for (const mutation of [{ version: 3 }, { actions: [{ type: 'teleport' }] }, { settings: { largeText: 'yes', lessMotion: false } }, { actions: Array(MAX_VOYAGE_ACTIONS + 1).fill({ type: 'review' }) }]) assert.throws(() => parseVoyageSave(JSON.stringify({ ...save, ...mutation })));
   assert.throws(() => parseVoyageSave(' '.repeat(1_000_001)));
   assert.throws(() => parseVoyageImport('{}'));
   assert.equal(JSON.stringify(save), raw);
@@ -161,4 +162,18 @@ test('voyage: denied storage and changed bytes preserve the tab snapshot', () =>
   assert.equal(writeVoyage(denied, '/', save, null).ok, false);
   const changed = loadVoyage({ getItem: () => '{}', setItem() {} }, '/', null, remembered);
   assert.equal(changed.blocked, true); assert.deepEqual(changed.save, save);
+});
+
+// Captured through origin/main 0b8c65f's unmodified completedVoyage helper.
+test('voyage: the earlier version-1 north/east journey keeps its exact history and rules', () => {
+  const raw = readFileSync(new URL('./fixtures/legacy-north-east-v1.json', import.meta.url), 'utf8');
+  const old = parseVoyageSave(raw);
+  assert.equal(old.version, 1);
+  assert.deepEqual(old, JSON.parse(raw));
+  const state = replayVoyage(old);
+  assert.equal(state.complete, true);
+  assert.equal(state.records.find(r => r.scene === 'routes')!.choices.route, 'lookouts');
+  assert.equal(state.records.find(r => r.scene === 'outage')!.choices.route, 'east');
+  assert.throws(() => parseVoyageSave(JSON.stringify({...old, version: 2})), /Review/);
+  assert.equal(freshTestVoyage().version, 2);
 });
