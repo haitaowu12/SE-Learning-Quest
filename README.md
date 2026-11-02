@@ -74,3 +74,5 @@ See [architecture](docs/ARCHITECTURE.md), [content authoring](docs/CONTENT_MODEL
 ## License
 
 MIT for this project’s code and original content. Referenced standards and publications remain the property of their respective rights holders; this repository does not grant access to or reproduce their licensed contents.
+
+Built by [Tony Wu](https://haitaowu12.github.io/tony-wu-home/) · [More projects](https://haitaowu12.github.io/tony-wu-home/#work).
