@@ -1,6 +1,6 @@
 # Shipped curriculum and artifact map
 
-Generated from the shipped quest and field-guide data by `npm run curriculum`. This map identifies introductory gameplay coverage, not every normative task or all licensed handbook content. Read [source scope](RPG_SOURCES.md) and  with it.
+Generated from the shipped quest and field-guide data by `npm run curriculum`. This map identifies introductory gameplay coverage, not every normative task or all licensed handbook content. Read [source scope](RPG_SOURCES.md) and [independent review](RPG_CURRICULUM_REVIEW.md) with it.
 
 The campaign has 24 quests, 55 authored decisions (7 conditional), 165 choices and 19 workbench puzzles. Every completed quest contributes its own artifact and keepsake. Processes recur rather than serving as a prescribed one-pass waterfall; an ordered story is not a mandated engineering life-cycle model.
 
