@@ -1,5 +1,7 @@
 # GitHub Pages publishing
 
+Firebase Hosting is the primary destination for future releases. Use the checked-in `firebase.json` and the repository README’s Firebase instructions. The Pages procedure below is retained for the existing legacy host.
+
 ## Requirements
 
 The deployable artifact is `dist/`. It contains static HTML, JavaScript, CSS and local assets. There are no server functions, secrets, API keys, remote databases, external fonts or runtime package downloads. Reference links require internet only when a player elects to visit them.

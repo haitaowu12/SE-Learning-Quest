@@ -76,3 +76,13 @@ See [architecture](docs/ARCHITECTURE.md), [content authoring](docs/CONTENT_MODEL
 MIT for this project’s code and original content. Referenced standards and publications remain the property of their respective rights holders; this repository does not grant access to or reproduce their licensed contents.
 
 Built by [Tony Wu](https://haitaowu12.github.io/tony-wu-home/) · [More projects](https://haitaowu12.github.io/tony-wu-home/#work).
+
+## Firebase Hosting
+
+[Open the published project](https://asterfall.web.app/). Firebase Hosting is the primary destination for future releases. Run `npm test`, `npm run check`, the existing browser acceptance checks and `npm run build`; publish `dist/`. Keep Vite’s relative asset base.
+
+```sh
+firebase deploy --only hosting --project tony-wu-projects
+```
+
+The repository configuration selects the site and public output directory. Hosting uses the no-cost Spark plan; source pushes do not deploy automatically. Existing hosts remain available.
