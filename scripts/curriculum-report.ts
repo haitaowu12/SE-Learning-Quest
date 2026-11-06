@@ -13,7 +13,7 @@ const rows = (ids: { id: string; title: string }[]) => ids.map((concept) => {
 }).join('\n');
 const output = `# Shipped curriculum and artifact map
 
-Generated from the shipped quest and field-guide data by \`npm run curriculum\`. This map identifies introductory gameplay coverage, not every normative task or all licensed handbook content. Read [source scope](RPG_SOURCES.md) and [independent review](RPG_CURRICULUM_REVIEW.md) with it.
+Generated from the shipped quest and field-guide data by \`npm run curriculum\`. This map identifies introductory gameplay coverage, not every normative task or all licensed handbook content. Read [source scope](RPG_SOURCES.md) with it.
 
 The campaign has ${quests.length} quests, ${quests.reduce((sum, quest) => sum + quest.decisions.length, 0)} authored decisions (${quests.reduce((sum, quest) => sum + quest.decisions.filter((decision) => !!decision.when).length, 0)} conditional), ${quests.reduce((sum, quest) => sum + quest.decisions.reduce((count, decision) => count + decision.options.length, 0), 0)} choices and ${quests.filter((quest) => quest.puzzle).length} workbench puzzles. Every completed quest contributes its own artifact and keepsake. Processes recur rather than serving as a prescribed one-pass waterfall; an ordered story is not a mandated engineering life-cycle model.
 
