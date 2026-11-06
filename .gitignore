@@ -30,3 +30,5 @@ node_modules/
 .codex/
 .openai/
 output/playwright/
+.firebase/
+gha-creds-*.json
