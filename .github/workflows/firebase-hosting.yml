@@ -16,6 +16,9 @@ jobs:
   build:
     name: Check and package (${{ matrix.browser }})
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --init --shm-size=1gb
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -39,8 +42,6 @@ jobs:
           npm run curriculum -- --check
       - run: |
           npm run build
-      - run: |
-          npx playwright install --with-deps ${{ matrix.browser }}
       - run: |
           npm run test:e2e -- --project=${{ matrix.browser }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
