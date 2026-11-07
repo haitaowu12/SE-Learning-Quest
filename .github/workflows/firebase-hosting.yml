@@ -42,7 +42,10 @@ jobs:
           npm run curriculum -- --check
       - run: |
           npm run build
-      - run: |
+      - name: Check browser journeys
+        run: |
+          # Firefox requires the mounted home directory to belong to its user.
+          chown "$(id -u):$(id -g)" /github/home
           npm run test:e2e -- --project=${{ matrix.browser }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
