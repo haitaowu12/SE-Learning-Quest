@@ -188,6 +188,7 @@ test('responsive keyboard journey, 200% reflow, dialogs, save export/import/rese
   await noOverflow(page);
   await accessibility(page);
   await page.locator('[data-open-quest="q01"]').click();
+  await expect(page.locator('.rpg [data-scene-heading]')).toBeFocused();
   const first = quests[0].decisions[0].options.find((choice) => choice.quality === 'weak')!;
   await page.locator(`[data-choice="${first.id}"]`).focus();
   await page.keyboard.press('Enter');
